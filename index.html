@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=JetBrains+Mono:wght@400&amp;display=swap">
 <title>BDO Game Pilot</title>
 <style>
 :root { color-scheme: light dark; }
@@ -21,6 +24,84 @@ body { background: var(--bg); color: var(--fg); }
 button, input, textarea { background: var(--ctl); color: var(--fg); border: 1px solid var(--bd); }
 fieldset { border: 1px solid var(--bd); }
 [aria-selected="true"] { background: var(--sel-bg); color: var(--sel-fg); }
+
+/* Font */
+:root {
+  --font-ui: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+/* Responsif */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  margin: 0;
+  padding: clamp(0.75rem, 3vw, 2rem);
+  font: 0.9375rem/1.6 var(--font-ui);
+  overflow-wrap: break-word;
+}
+header, main { width: 100%; max-width: 52rem; margin-inline: auto; }
+h1 { margin: 0 0 1rem; font-size: clamp(1.25rem, 1rem + 1.2vw, 1.75rem); line-height: 1.2; }
+h2 { margin: 0 0 1rem; font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.25rem); line-height: 1.3; }
+
+button {
+  min-height: 2.75rem;
+  padding: 0.5rem 1rem;
+  font: inherit;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+nav[role="tablist"] {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  gap: 0.5rem;
+  margin: 1rem 0 1.5rem;
+}
+
+main > section { min-width: 0; }
+fieldset { min-width: 0; margin: 0 0 1.25rem; padding: 0.75rem 1rem 0.25rem; border-radius: 0.5rem; }
+legend { padding: 0 0.5rem; font-weight: 600; }
+fieldset fieldset { margin: 0 0 0.9rem; }
+p { margin: 0 0 0.9rem; }
+p:has(> label:first-child) { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.35rem; }
+label { overflow-wrap: anywhere; }
+
+input, textarea {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.75rem;
+  font: inherit;
+  border-radius: 0.5rem;
+}
+textarea { font-family: var(--font-mono); font-size: 0.875rem; line-height: 1.5; resize: none; }
+code, samp { font-family: var(--font-mono); font-size: 0.9em; overflow-wrap: anywhere; }
+summary { display: list-item; min-height: 2.75rem; padding: 0.5rem 0; font-weight: 600; cursor: pointer; }
+ul { padding-inline-start: 1.25rem; }
+li { margin-bottom: 0.25rem; }
+
+#note-images {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: 1rem;
+  margin: 0.5rem 0 1rem;
+}
+figure { min-width: 0; margin: 0; }
+img { display: block; max-width: 100%; height: auto; border: 1px solid var(--bd); border-radius: 0.5rem; }
+figcaption { margin-top: 0.5rem; font-size: 0.875rem; }
+
+details p:has(> label:only-child) { display: block; margin-bottom: 0.25rem; }
+details p:has(> label:only-child) > label { padding-top: 0; }
+
+@media (hover: none) and (pointer: coarse) {
+  input { font-size: 1rem; }
+}
+@media (min-width: 40rem) {
+  p:has(> label:first-child) { grid-template-columns: minmax(0, 15rem) minmax(0, 1fr); align-items: start; gap: 0.35rem 1rem; }
+  p:has(> label:first-child) > label { padding-top: 0.5rem; }
+}
 </style>
 <script>
 try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved === "dark") document.documentElement.setAttribute("data-theme", saved); } catch (e) {}
@@ -75,6 +156,19 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li>TL per jam sesuai note: <code>19000</code></li>
 <li>Progress: <samp>2 Hours 53 Minutes 41 Seconds</samp></li>
 </ul>
+<details>
+<summary>Perhitungan</summary>
+<p><label for="h-s1">Total TL dibagi TL per jam (waktu dalam jam)</label></p>
+<p><textarea id="h-s1" name="h-s1" rows="1" cols="50" readonly></textarea></p>
+<p><label for="h-s2">Waktu dalam jam dikali 3600, dibulatkan ke bawah (total detik)</label></p>
+<p><textarea id="h-s2" name="h-s2" rows="1" cols="50" readonly></textarea></p>
+<p><label for="h-s3">Total detik dibagi 3600, dibulatkan ke bawah (jam)</label></p>
+<p><textarea id="h-s3" name="h-s3" rows="1" cols="50" readonly></textarea></p>
+<p><label for="h-s4">Sisa total detik dibagi 3600, lalu dibagi 60 dan dibulatkan ke bawah (menit)</label></p>
+<p><textarea id="h-s4" name="h-s4" rows="1" cols="50" readonly></textarea></p>
+<p><label for="h-s5">Sisa total detik dibagi 60 (detik)</label></p>
+<p><textarea id="h-s5" name="h-s5" rows="1" cols="50" readonly></textarea></p>
+</details>
 </div>
 </section>
 
@@ -84,8 +178,11 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <fieldset>
 <legend>Input</legend>
 <p><label for="a-total">Total TL:</label> <input type="number" id="a-total" name="total" step="any" value="55000"></p>
+<fieldset>
+<legend>Patokan Agris</legend>
 <p><label for="a-rate">TL/hr dengan Agris:</label> <input type="number" id="a-rate" name="rate" step="any" value="19000"></p>
 <p><label for="a-cost">Agris yang digunakan per jam:</label> <input type="number" id="a-cost" name="cost" step="any" value="32000"></p>
+</fieldset>
 <p><label for="a-normal">TL/hr tanpa Agris:</label> <input type="number" id="a-normal" name="normal" step="any" value="11000"></p>
 <p><label for="a-current">Agris yang digunakan:</label> <input type="number" id="a-current" name="current" step="any" value="32000"></p>
 </fieldset>
@@ -96,6 +193,16 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <ul>
 <li>Harus ada patokan Agris yang digunakan dan total TL per jam</li>
 </ul>
+<div id="note-images">
+<figure>
+<img src="tidak-bisa-di-hitung.png" alt="Screenshot Note laporan dengan kotak merah: hanya ada TL per jam dengan Agris, tanpa Agris yang digunakan per jam" loading="lazy">
+<figcaption><strong>Tidak bisa dihitung.</strong> Pada kotak merah di Note, hanya TL per jam dengan Agris yang tercantum, sedangkan Agris yang digunakan per jam tidak ada. Tanpa patokan itu, perhitungan tidak bisa dijalankan. Solusinya, grinding sendiri dengan Agris berdasarkan TL per jam tersebut, maka akan terlihat berapa Agris yang digunakan. Setelah itu, tambahkan jumlah Agris tersebut ke Note di laporan supaya shift berikutnya bisa langsung dihitung.</figcaption>
+</figure>
+<figure>
+<img src="bisa-di-hitung.png" alt="Screenshot Note laporan dengan kotak biru: Agris yang digunakan per jam dan TL per jamnya tercantum" loading="lazy">
+<figcaption><strong>Bisa dihitung.</strong> Pada kotak biru di Note, tercantum Agris yang digunakan per jam beserta TL per jamnya. Dengan kedua patokan ini, perhitungan bisa langsung dijalankan.</figcaption>
+</figure>
+</div>
 <p>Contoh:</p>
 <ul>
 <li>Total TL selama shift: <code>55000</code></li>
@@ -107,6 +214,52 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li>Time with Agris: <samp>1 Hours 0 Minutes 0 Seconds</samp></li>
 <li>Time without Agris: <samp>3 Hours 16 Minutes 21 Seconds</samp></li>
 </ul>
+<details>
+<summary>Perhitungan</summary>
+<p><label for="a-s1">Agris yang digunakan dibagi Agris yang digunakan per jam (maks jam Agris)</label></p>
+<p><textarea id="a-s1" name="a-s1" rows="1" cols="50" readonly></textarea></p>
+<p><label for="a-s2">Maks jam Agris dikali TL/hr dengan Agris (maks TL Agris)</label></p>
+<p><textarea id="a-s2" name="a-s2" rows="1" cols="50" readonly></textarea></p>
+<p><label for="a-s3">Total TL dibandingkan dengan Maks TL Agris (≤ berarti Agris cukup, > berarti Agris tidak cukup)</label></p>
+<p><textarea id="a-s3" name="a-s3" rows="1" cols="50" readonly></textarea></p>
+<p><label for="a-s4" id="a-l4">(Total TL dikurangi Maks TL Agris) dibagi TL/hr tanpa Agris (waktu without Agris, dalam jam)</label></p>
+<p><textarea id="a-s4" name="a-s4" rows="1" cols="50" readonly></textarea></p>
+<p><label for="a-s5">Waktu with Agris ditambah waktu without Agris (total waktu, dalam jam)</label></p>
+<p><textarea id="a-s5" name="a-s5" rows="1" cols="50" readonly></textarea></p>
+<fieldset>
+<legend>Total Time</legend>
+<p><label for="a-t1">Waktu dalam jam dikali 3600, dibulatkan ke bawah (total detik)</label></p>
+<p><textarea id="a-t1" name="a-t1" rows="1" cols="50" readonly></textarea></p>
+<p><label for="a-t2">Total detik dibagi 3600, dibulatkan ke bawah (jam)</label></p>
+<p><textarea id="a-t2" name="a-t2" rows="1" cols="50" readonly></textarea></p>
+<p><label for="a-t3">Sisa total detik dibagi 3600, lalu dibagi 60 dan dibulatkan ke bawah (menit)</label></p>
+<p><textarea id="a-t3" name="a-t3" rows="1" cols="50" readonly></textarea></p>
+<p><label for="a-t4">Sisa total detik dibagi 60 (detik)</label></p>
+<p><textarea id="a-t4" name="a-t4" rows="1" cols="50" readonly></textarea></p>
+</fieldset>
+<fieldset>
+<legend>Time with Agris</legend>
+<p><label for="a-w1">Waktu dalam jam dikali 3600, dibulatkan ke bawah (total detik)</label></p>
+<p><textarea id="a-w1" name="a-w1" rows="1" cols="50" readonly></textarea></p>
+<p><label for="a-w2">Total detik dibagi 3600, dibulatkan ke bawah (jam)</label></p>
+<p><textarea id="a-w2" name="a-w2" rows="1" cols="50" readonly></textarea></p>
+<p><label for="a-w3">Sisa total detik dibagi 3600, lalu dibagi 60 dan dibulatkan ke bawah (menit)</label></p>
+<p><textarea id="a-w3" name="a-w3" rows="1" cols="50" readonly></textarea></p>
+<p><label for="a-w4">Sisa total detik dibagi 60 (detik)</label></p>
+<p><textarea id="a-w4" name="a-w4" rows="1" cols="50" readonly></textarea></p>
+</fieldset>
+<fieldset>
+<legend>Time without Agris</legend>
+<p><label for="a-o1">Waktu dalam jam dikali 3600, dibulatkan ke bawah (total detik)</label></p>
+<p><textarea id="a-o1" name="a-o1" rows="1" cols="50" readonly></textarea></p>
+<p><label for="a-o2">Total detik dibagi 3600, dibulatkan ke bawah (jam)</label></p>
+<p><textarea id="a-o2" name="a-o2" rows="1" cols="50" readonly></textarea></p>
+<p><label for="a-o3">Sisa total detik dibagi 3600, lalu dibagi 60 dan dibulatkan ke bawah (menit)</label></p>
+<p><textarea id="a-o3" name="a-o3" rows="1" cols="50" readonly></textarea></p>
+<p><label for="a-o4">Sisa total detik dibagi 60 (detik)</label></p>
+<p><textarea id="a-o4" name="a-o4" rows="1" cols="50" readonly></textarea></p>
+</fieldset>
+</details>
 </div>
 </section>
 
@@ -125,6 +278,19 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li>Progress sekarang: <code>8 H 30 M</code></li>
 <li>Total Hours: <samp>369 H 21 M</samp></li>
 </ul>
+<details>
+<summary>Perhitungan</summary>
+<p><label for="t-s1">Total progress sebelumnya diubah ke menit (jam dikali 60 ditambah menit)</label></p>
+<p><textarea id="t-s1" name="t-s1" rows="1" cols="50" readonly></textarea></p>
+<p><label for="t-s2">Progress sekarang diubah ke menit (jam dikali 60 ditambah menit)</label></p>
+<p><textarea id="t-s2" name="t-s2" rows="1" cols="50" readonly></textarea></p>
+<p><label for="t-s3">Menit sebelumnya ditambah menit sekarang (total menit)</label></p>
+<p><textarea id="t-s3" name="t-s3" rows="1" cols="50" readonly></textarea></p>
+<p><label for="t-s4">Total menit dibagi 60, dibulatkan ke bawah (jam)</label></p>
+<p><textarea id="t-s4" name="t-s4" rows="1" cols="50" readonly></textarea></p>
+<p><label for="t-s5">Sisa total menit dibagi 60 (menit)</label></p>
+<p><textarea id="t-s5" name="t-s5" rows="1" cols="50" readonly></textarea></p>
+</details>
 </div>
 </section>
 
@@ -132,6 +298,23 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <script>
 (function () {
   "use strict";
+
+  /* Tinggi textarea mengikuti isi */
+  var fit = function (el) {
+    if (!el.clientWidth) return;
+    el.style.height = "auto";
+    el.style.height = (el.scrollHeight + el.offsetHeight - el.clientHeight) + "px";
+  };
+  var fitAll = function () {
+    Array.prototype.forEach.call(document.querySelectorAll("textarea"), fit);
+  };
+
+  /* Isi textarea perhitungan per langkah */
+  var fill = function (prefix, lines, count) {
+    for (var k = 0; k < count; k++) {
+      document.getElementById(prefix + (k + 1)).value = lines[k] || "";
+    }
+  };
 
   /* Tema terang/gelap */
   var root = document.documentElement;
@@ -165,6 +348,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       t.tabIndex = on ? 0 : -1;
       document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
     });
+    fitAll();
   }
   tabs.forEach(function (t, i) {
     t.addEventListener("click", function () { activate(t); });
@@ -194,6 +378,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 
     if (!t || !p || t < 0 || p <= 0) {
       out.value = "Invalid input.";
+      fill("h-s", [], 5);
       return;
     }
 
@@ -203,6 +388,14 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     var seconds = totalSeconds % 60;
 
     out.value = hours + " Hours " + minutes + " Minutes " + seconds + " Seconds";
+
+    fill("h-s", [
+      t + " ÷ " + p + " = " + (t / p),
+      "floor(" + (t / p) + " × 3600) = " + totalSeconds,
+      "floor(" + totalSeconds + " ÷ 3600) = " + hours,
+      "floor((" + totalSeconds + " mod 3600) ÷ 60) = " + minutes,
+      totalSeconds + " mod 60 = " + seconds
+    ], 5);
   };
 
   /* 3. Progress hourly dengan Agris */
@@ -220,6 +413,10 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       out.value = "Invalid input.";
       withA.value = "";
       withoutA.value = "";
+      fill("a-s", [], 5);
+      fill("a-t", [], 4);
+      fill("a-w", [], 4);
+      fill("a-o", [], 4);
       return;
     }
 
@@ -257,6 +454,33 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     out.value = hours + " Hours " + minutes + " Minutes " + seconds + " Seconds";
     withA.value = formatHours(hoursWithAgris);
     withoutA.value = formatHours(hoursWithoutAgris);
+
+    var breakdown = function (h) {
+      var secs = Math.floor(h * 3600);
+      return [
+        "floor(" + h + " × 3600) = " + secs,
+        "floor(" + secs + " ÷ 3600) = " + Math.floor(secs / 3600),
+        "floor((" + secs + " mod 3600) ÷ 60) = " + Math.floor((secs % 3600) / 60),
+        secs + " mod 60 = " + (secs % 60)
+      ];
+    };
+    var enough = totalTL <= maxAgrisTL;
+
+    document.getElementById("a-l4").textContent = enough
+      ? "Total TL dibagi TL/hr dengan Agris (waktu with Agris, dalam jam)"
+      : "(Total TL dikurangi Maks TL Agris) dibagi TL/hr tanpa Agris (waktu without Agris, dalam jam)";
+    fill("a-s", [
+      currentAgris + " ÷ " + agrisCostPerHour + " = " + maxAgrisHours,
+      maxAgrisHours + " × " + agrisRate + " = " + maxAgrisTL,
+      totalTL + (enough ? " ≤ " : " > ") + maxAgrisTL,
+      enough
+        ? totalTL + " ÷ " + agrisRate + " = " + hoursWithAgris
+        : "(" + totalTL + " − " + maxAgrisTL + ") ÷ " + normalRate + " = " + hoursWithoutAgris,
+      hoursWithAgris + " + " + hoursWithoutAgris + " = " + (hoursWithAgris + hoursWithoutAgris)
+    ], 5);
+    fill("a-t", breakdown(hoursWithAgris + hoursWithoutAgris), 4);
+    fill("a-w", breakdown(hoursWithAgris), 4);
+    fill("a-o", breakdown(hoursWithoutAgris), 4);
   };
 
   /* 4. Total progress hourly */
@@ -268,17 +492,37 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       }, 0);
     };
 
+    var explain = function (s) {
+      var terms = [];
+      var sum = 0;
+      Array.from(s.matchAll(/(\d+)\s*([hm])/gi)).forEach(function (m) {
+        var isHour = m[2].toLowerCase() === "h";
+        sum += isHour ? Number(m[1]) * 60 : Number(m[1]);
+        terms.push(isHour ? m[1] + " × 60" : m[1]);
+      });
+      var expr = terms.join(" + ");
+      return (expr === String(sum) || !terms.length ? "" : expr + " = ") + sum;
+    };
+
     var i = document.getElementById("t-prev").value;
-    if (!i) { out.value = ""; return; }
+    if (!i) { out.value = ""; fill("t-s", [], 5); return; }
 
     var x = document.getElementById("t-now").value;
-    if (!x) { out.value = ""; return; }
+    if (!x) { out.value = ""; fill("t-s", [], 5); return; }
 
     var totalMinutes = p(i) + p(x);
     var hours = Math.floor(totalMinutes / 60);
     var minutes = totalMinutes % 60;
 
     out.value = hours + " H " + minutes + " M";
+
+    fill("t-s", [
+      explain(i),
+      explain(x),
+      p(i) + " + " + p(x) + " = " + totalMinutes,
+      "floor(" + totalMinutes + " ÷ 60) = " + hours,
+      totalMinutes + " mod 60 = " + minutes
+    ], 5);
   };
   /* Live update */
   [
@@ -287,9 +531,14 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     ["form-agris", calcAgris],
     ["form-total", calcTotal]
   ].forEach(function (x) {
-    document.getElementById(x[0]).addEventListener("input", x[1]);
+    document.getElementById(x[0]).addEventListener("input", function () { x[1](); fitAll(); });
     x[1]();
   });
+
+  fitAll();
+  window.addEventListener("resize", fitAll);
+  document.addEventListener("toggle", fitAll, true);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll);
 })();
 </script>
 </body>
