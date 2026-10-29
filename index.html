@@ -57,17 +57,6 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li>Buka browser console, tekan F12</li>
 <li>Paste, ketik <code>allow pasting</code> terus enter jika tidak bisa paste</li>
 </ul>
-<details>
-<summary>Penjelasan</summary>
-<p>Kode ini dipake buat ngubah waktu di Google Stopwatch jadi waktu yang udah kita set, jadi tidak perlu nunggu stopwatchnya jalan.</p>
-<p>Cara kerja:</p>
-<ul>
-<li>Isi jam, menit, dan detik di form, terus kode console langsung muncul otomatis di kotak Paste di browser console</li>
-<li>Menit dan detik otomatis jadi 2 digit, misal 5 jadi <code>05</code></li>
-<li>Waktu di stopwatch diganti jadi waktu yang kita isi, angka di belakang titik (milidetik) diambil dari tampilan stopwatch saat di play 1-3 detik</li>
-<li>Judul tab browser ikut berubah jadi waktu yang sudah di set, hanya tagline (Google Search, Google Penelusuran) saja tidak berubah</li>
-</ul>
-</details>
 </div>
 </section>
 
@@ -86,25 +75,6 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li>TL per jam sesuai note: <code>19000</code></li>
 <li>Progress: <samp>2 Hours 53 Minutes 41 Seconds</samp></li>
 </ul>
-<details>
-<summary>Penjelasan</summary>
-<p>Ini dipake buat ngitung berapa lama waktu yang dibutuhin buat dapetin total TL, berdasarkan TL per jam tanpa Agris.</p>
-<p>Rumus:</p>
-<ul>
-<li>Waktu (jam) = <code>Total TL ÷ TL per jam</code></li>
-<li>Total detik = <code>Waktu (jam) × 3600</code>, dibulatkan ke bawah</li>
-<li>Jam = <code>Total detik ÷ 3600</code>, dibulatkan ke bawah</li>
-<li>Menit = <code>(Total detik mod 3600) ÷ 60</code>, dibulatkan ke bawah</li>
-<li>Detik = <code>Total detik mod 60</code></li>
-<li>mod artinya sisa bagi</li>
-</ul>
-<p>Cara kerja:</p>
-<ul>
-<li>Isi Total TL dan TL per jam di form, terus hasilnya langsung muncul otomatis di Progress</li>
-<li>Detik dibulatkan ke bawah, jadi sisa pecahan detik dibuang</li>
-<li>Jika Total TL atau TL per jam kosong, 0, atau negatif, hasilnya <samp>Invalid input</samp></li>
-</ul>
-</details>
 </div>
 </section>
 
@@ -137,33 +107,6 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li>Time with Agris: <samp>1 Hours 0 Minutes 0 Seconds</samp></li>
 <li>Time without Agris: <samp>3 Hours 16 Minutes 21 Seconds</samp></li>
 </ul>
-<details>
-<summary>Penjelasan</summary>
-<p>Ini dipake buat ngitung berapa lama waktu yang dibutuhin buat dapetin total TL kalau sebagian waktunya pake Agris dan sisanya tanpa Agris, dipisah jadi Time with Agris dan Time without Agris.</p>
-<ul>
-<li>Total TL = total perolehan TL dalam satu shift</li>
-<li>TL/hr dengan Agris = TL per jam kalau pake Agris</li>
-<li>Agris yang digunakan per jam = berapa Agris yang kepake tiap jam</li>
-<li>TL/hr tanpa Agris = TL per jam kalau tanpa Agris</li>
-<li>Agris yang digunakan = Agris yang dipake selama shift</li>
-</ul>
-<p>Rumus:</p>
-<ul>
-<li>Maks jam Agris = <code>Agris yang digunakan ÷ Agris yang digunakan per jam</code></li>
-<li>Maks TL Agris = <code>Maks jam Agris × TL/hr dengan Agris</code></li>
-<li>Jika <code>Total TL ≤ Maks TL Agris</code>, semua TL dapet pake Agris: Jam with Agris = <code>Total TL ÷ TL/hr dengan Agris</code>, Jam without Agris = <code>0</code></li>
-<li>Jika <code>Total TL &gt; Maks TL Agris</code>, Agris kepake sampe habis: Jam with Agris = <code>Maks jam Agris</code>, Jam without Agris = <code>(Total TL − Maks TL Agris) ÷ TL/hr tanpa Agris</code></li>
-<li>Total Time = <code>Jam with Agris + Jam without Agris</code></li>
-<li>Tiap waktu (jam) diubah ke jam, menit, dan detik dengan rumus yang sama kayak Progress Hourly (Tanpa Agris): detik = <code>jam × 3600</code> dibulatkan ke bawah, terus dipecah jadi jam, menit, detik</li>
-</ul>
-<p>Cara kerja:</p>
-<ul>
-<li>Isi semua isian di form, terus hasilnya langsung muncul otomatis di Total Time, Time with Agris, dan Time without Agris</li>
-<li>Total Time, Time with Agris, dan Time without Agris dibulatkan ke bawah masing-masing, jadi total detiknya bisa beda 1 detik</li>
-<li>Jika Total TL, TL/hr dengan Agris, Agris yang digunakan per jam, atau TL/hr tanpa Agris kosong, 0, atau negatif, Total Time jadi <samp>Invalid input</samp></li>
-<li>Jika Agris yang digunakan kosong atau 0, semua TL dihitung tanpa Agris</li>
-</ul>
-</details>
 </div>
 </section>
 
@@ -182,38 +125,10 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li>Progress sekarang: <code>8 H 30 M</code></li>
 <li>Total Hours: <samp>369 H 21 M</samp></li>
 </ul>
-<details>
-<summary>Penjelasan</summary>
-<p>Ini dipake buat nambahin total progress sebelumnya dengan progress sekarang, hasilnya total jam dan menit.</p>
-<p>Format isian:</p>
-<ul>
-<li>Tulis angka diikuti huruf <code>H</code> (jam) atau <code>M</code> (menit), contoh <code>8 H 30 M</code></li>
-<li>Huruf besar atau kecil sama aja, spasi antara angka dan huruf boleh ada boleh tidak, contoh <code>8h30m</code></li>
-<li>Urutannya bebas, contoh <code>30 M 8 H</code></li>
-<li>Teks lain yang bukan pasangan angka dan huruf H atau M diabaikan</li>
-<li>Jika tidak ada pasangan angka dan huruf yang valid, nilainya dihitung <code>0</code></li>
-</ul>
-<p>Rumus:</p>
-<ul>
-<li>Menit isian = <code>(angka H × 60) + angka M</code>, dijumlahin semua pasangan yang ketemu</li>
-<li>Total menit = <code>Menit total progress sebelumnya + Menit progress sekarang</code></li>
-<li>Jam = <code>Total menit ÷ 60</code>, dibulatkan ke bawah</li>
-<li>Menit = <code>Total menit mod 60</code></li>
-<li>mod artinya sisa bagi</li>
-</ul>
-<p>Cara kerja:</p>
-<ul>
-<li>Isi total progress sebelumnya dan progress sekarang di form, terus hasilnya langsung muncul otomatis di Total Hours</li>
-<li>Jika salah satu isian kosong, Total Hours dikosongin</li>
-</ul>
-</details>
 </div>
 </section>
 
 </main>
-<footer>
-<p><a href="https://drive.google.com/drive/folders/1EUddiHjb89KC7TLjoLtjH1E9px8OkBUe?usp=sharing" target="_blank" rel="noopener noreferrer">https://drive.google.com/drive/folders/1EUddiHjb89KC7TLjoLtjH1E9px8OkBUe?usp=sharing</a></p>
-</footer>
 <script>
 (function () {
   "use strict";
