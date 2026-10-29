@@ -1,0 +1,19 @@
+(()=>{
+  const t = prompt("Enter H:MM:SS", "1:41:49");
+  if (!t) return;
+  
+  const e = document.querySelector('[jsname="LQ3Xe"]');
+  if (!e) {
+    console.error('Element with selector [jsname="LQ3Xe"] was not found on this page.');
+    return;
+  }
+  
+  const suffix = document.title.replace(/^[\d:\s]+/, '');
+  const f = (e.textContent.match(/\.\d+$/) || [".00"])[0];
+  
+  const timeOutput = `${t}${f}`;
+  e.textContent = timeOutput;
+  document.title = `${t.padStart(8, "0")} ${suffix.trim()}`;
+  
+  console.log(timeOutput);
+})();

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>BDO Game Pilot</title>
+<style>
+:root { color-scheme: light dark; }
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
+:root {
+  --bg: light-dark(#ffffff, #121212);
+  --fg: light-dark(#1a1a1a, #ededed);
+  --ctl: light-dark(#f3f3f3, #262626);
+  --bd: light-dark(#6b6b6b, #9a9a9a);
+  --sel-bg: light-dark(#1a1a1a, #ededed);
+  --sel-fg: light-dark(#ffffff, #121212);
+}
+body { background: var(--bg); color: var(--fg); }
+button, input, textarea { background: var(--ctl); color: var(--fg); border: 1px solid var(--bd); }
+fieldset { border: 1px solid var(--bd); }
+[aria-selected="true"] { background: var(--sel-bg); color: var(--sel-fg); }
+</style>
+<script>
+try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved === "dark") document.documentElement.setAttribute("data-theme", saved); } catch (e) {}
+</script>
+</head>
+<body>
+<header>
+<h1>BDO Game Pilot</h1>
+<button type="button" id="theme-toggle"><span id="theme-icon" aria-hidden="true">☾</span> <span id="theme-label">Mode Gelap</span></button>
+<nav role="tablist" aria-label="Tab">
+<button type="button" role="tab" id="tab-stopwatch" aria-controls="panel-stopwatch" aria-selected="true">Google Stopwatch</button>
+<button type="button" role="tab" id="tab-hourly" aria-controls="panel-hourly" aria-selected="false" tabindex="-1">Progress Hourly (Tanpa Agris)</button>
+<button type="button" role="tab" id="tab-agris" aria-controls="panel-agris" aria-selected="false" tabindex="-1">Progress Hourly (Dengan Agris)</button>
+<button type="button" role="tab" id="tab-total" aria-controls="panel-total" aria-selected="false" tabindex="-1">Total Progress Hourly</button>
+</nav>
+</header>
+<main>
+
+<section role="tabpanel" id="panel-stopwatch" aria-labelledby="tab-stopwatch">
+<h2>Google Stopwatch</h2>
+<div id="form-stopwatch">
+<fieldset>
+<legend>Enter H:MM:SS</legend>
+<p><label for="sw-h">Jam (H)</label> <input type="number" id="sw-h" name="h" min="0" step="1" value="1" required></p>
+<p><label for="sw-m">Menit (MM)</label> <input type="number" id="sw-m" name="m" min="0" max="59" step="1" value="41" required></p>
+<p><label for="sw-s">Detik (SS)</label> <input type="number" id="sw-s" name="s" min="0" max="59" step="1" value="49" required></p>
+</fieldset>
+<p><label for="sw-out">Paste di browser console</label></p>
+<p><textarea id="sw-out" name="out" rows="8" cols="80" readonly></textarea></p>
+<p>Note:</p>
+<ul>
+<li>Buka tab baru, search <code>Stopwatch</code> di Google</li>
+<li>Play dulu 1–3 detik, yang penting stopwatch udah jalan</li>
+<li>Buka browser console, tekan F12</li>
+<li>Paste, ketik <code>allow pasting</code> terus enter jika tidak bisa paste</li>
+</ul>
+<details>
+<summary>Penjelasan</summary>
+<p>Kode ini dipake buat ngubah waktu di Google Stopwatch jadi waktu yang udah kita set, jadi tidak perlu nunggu stopwatchnya jalan.</p>
+<p>Cara kerja:</p>
+<ul>
+<li>Isi jam, menit, dan detik di form, terus kode console langsung muncul otomatis di kotak Paste di browser console</li>
+<li>Menit dan detik otomatis jadi 2 digit, misal 5 jadi <code>05</code></li>
+<li>Waktu di stopwatch diganti jadi waktu yang kita isi, angka di belakang titik (milidetik) diambil dari tampilan stopwatch saat di play 1-3 detik</li>
+<li>Judul tab browser ikut berubah jadi waktu yang sudah di set, hanya tagline (Google Search, Google Penelusuran) saja tidak berubah</li>
+</ul>
+</details>
+</div>
+</section>
+
+<section role="tabpanel" id="panel-hourly" aria-labelledby="tab-hourly" hidden>
+<h2>Progress Hourly (Tanpa Agris)</h2>
+<div id="form-hourly">
+<fieldset>
+<legend>Input</legend>
+<p><label for="h-total">Total TL:</label> <input type="number" id="h-total" name="total" step="any" value="55000"></p>
+<p><label for="h-rate">TL per jam:</label> <input type="number" id="h-rate" name="rate" step="any" value="19000"></p>
+</fieldset>
+<p><label for="h-out">Progress:</label> <textarea id="h-out" name="progress" rows="1" cols="50" readonly></textarea></p>
+<p>Contoh:</p>
+<ul>
+<li>Total perolehan TL dalam satu shift: <code>55000</code></li>
+<li>TL per jam sesuai note: <code>19000</code></li>
+<li>Progress: <samp>2 Hours 53 Minutes 41 Seconds</samp></li>
+</ul>
+<details>
+<summary>Penjelasan</summary>
+<p>Ini dipake buat ngitung berapa lama waktu yang dibutuhin buat dapetin total TL, berdasarkan TL per jam tanpa Agris.</p>
+<p>Rumus:</p>
+<ul>
+<li>Waktu (jam) = <code>Total TL ÷ TL per jam</code></li>
+<li>Total detik = <code>Waktu (jam) × 3600</code>, dibulatkan ke bawah</li>
+<li>Jam = <code>Total detik ÷ 3600</code>, dibulatkan ke bawah</li>
+<li>Menit = <code>(Total detik mod 3600) ÷ 60</code>, dibulatkan ke bawah</li>
+<li>Detik = <code>Total detik mod 60</code></li>
+<li>mod artinya sisa bagi</li>
+</ul>
+<p>Cara kerja:</p>
+<ul>
+<li>Isi Total TL dan TL per jam di form, terus hasilnya langsung muncul otomatis di Progress</li>
+<li>Detik dibulatkan ke bawah, jadi sisa pecahan detik dibuang</li>
+<li>Jika Total TL atau TL per jam kosong, 0, atau negatif, hasilnya <samp>Invalid input.</samp></li>
+</ul>
+</details>
+</div>
+</section>
+
+<section role="tabpanel" id="panel-agris" aria-labelledby="tab-agris" hidden>
+<h2>Progress Hourly (Dengan Agris)</h2>
+<div id="form-agris">
+<fieldset>
+<legend>Input</legend>
+<p><label for="a-total">Total TL:</label> <input type="number" id="a-total" name="total" step="any" value="55000"></p>
+<p><label for="a-rate">TL/hr dengan Agris:</label> <input type="number" id="a-rate" name="rate" step="any" value="19000"></p>
+<p><label for="a-cost">Agris yang digunakan per jam:</label> <input type="number" id="a-cost" name="cost" step="any" value="32000"></p>
+<p><label for="a-normal">TL/hr tanpa Agris:</label> <input type="number" id="a-normal" name="normal" step="any" value="11000"></p>
+<p><label for="a-current">Agris yang digunakan:</label> <input type="number" id="a-current" name="current" step="any" value="32000"></p>
+</fieldset>
+<p><label for="a-out">Total Time:</label> <textarea id="a-out" name="total-time" rows="1" cols="40" readonly></textarea></p>
+<p><label for="a-with">Time with Agris:</label> <textarea id="a-with" name="time-with-agris" rows="1" cols="40" readonly></textarea></p>
+<p><label for="a-without">Time without Agris:</label> <textarea id="a-without" name="time-without-agris" rows="1" cols="40" readonly></textarea></p>
+<p>Note:</p>
+<ul>
+<li>Harus ada patokan Agris yang digunakan dan total TL per jam</li>
+</ul>
+<p>Contoh:</p>
+<ul>
+<li>Total TL selama shift: <code>55000</code></li>
+<li>Note dari TL per jam pake Agris: <code>19000</code></li>
+<li>Note dari TL per jam berapa Agris: <code>32000</code></li>
+<li>Note dari TL per jam tanpa Agris: <code>11000</code></li>
+<li>Agris yang digunakan selama shift: <code>32000</code></li>
+<li>Total Time: <samp>4 Hours 16 Minutes 21 Seconds</samp></li>
+<li>Time with Agris: <samp>1 Hours 0 Minutes 0 Seconds</samp></li>
+<li>Time without Agris: <samp>3 Hours 16 Minutes 21 Seconds</samp></li>
+</ul>
+<details>
+<summary>Penjelasan</summary>
+<p>Ini dipake buat ngitung berapa lama waktu yang dibutuhin buat dapetin total TL kalau sebagian waktunya pake Agris dan sisanya tanpa Agris, dipisah jadi Time with Agris dan Time without Agris.</p>
+<ul>
+<li>Total TL = total perolehan TL dalam satu shift</li>
+<li>TL/hr dengan Agris = TL per jam kalau pake Agris</li>
+<li>Agris yang digunakan per jam = berapa Agris yang kepake tiap jam</li>
+<li>TL/hr tanpa Agris = TL per jam kalau tanpa Agris</li>
+<li>Agris yang digunakan = Agris yang dipake selama shift</li>
+</ul>
+<p>Rumus:</p>
+<ul>
+<li>Maks jam Agris = <code>Agris yang digunakan ÷ Agris yang digunakan per jam</code></li>
+<li>Maks TL Agris = <code>Maks jam Agris × TL/hr dengan Agris</code></li>
+<li>Jika <code>Total TL ≤ Maks TL Agris</code>, semua TL dapet pake Agris: Jam with Agris = <code>Total TL ÷ TL/hr dengan Agris</code>, Jam without Agris = <code>0</code></li>
+<li>Jika <code>Total TL &gt; Maks TL Agris</code>, Agris kepake sampe habis: Jam with Agris = <code>Maks jam Agris</code>, Jam without Agris = <code>(Total TL − Maks TL Agris) ÷ TL/hr tanpa Agris</code></li>
+<li>Total Time = <code>Jam with Agris + Jam without Agris</code></li>
+<li>Tiap waktu (jam) diubah ke jam, menit, dan detik dengan rumus yang sama kayak Progress Hourly (Tanpa Agris): detik = <code>jam × 3600</code> dibulatkan ke bawah, terus dipecah jadi jam, menit, detik</li>
+</ul>
+<p>Cara kerja:</p>
+<ul>
+<li>Isi semua isian di form, terus hasilnya langsung muncul otomatis di Total Time, Time with Agris, dan Time without Agris</li>
+<li>Total Time, Time with Agris, dan Time without Agris dibulatkan ke bawah masing-masing, jadi total detiknya bisa beda 1 detik</li>
+<li>Jika Total TL, TL/hr dengan Agris, Agris yang digunakan per jam, atau TL/hr tanpa Agris kosong, 0, atau negatif, Total Time jadi <samp>Invalid input</samp></li>
+<li>Jika Agris yang digunakan kosong atau 0, semua TL dihitung tanpa Agris</li>
+</ul>
+</details>
+</div>
+</section>
+
+<section role="tabpanel" id="panel-total" aria-labelledby="tab-total" hidden>
+<h2>Total Progress Hourly</h2>
+<div id="form-total">
+<fieldset>
+<legend>Input</legend>
+<p><label for="t-prev">Total progress sebelumnya:</label> <input type="text" id="t-prev" name="prev" value="360 H 51 M"></p>
+<p><label for="t-now">Progress:</label> <input type="text" id="t-now" name="now" value="8 H 30 M"></p>
+</fieldset>
+<p><label for="t-out">Total Hours:</label> <textarea id="t-out" name="total-hours" rows="1" cols="40" readonly></textarea></p>
+<p>Contoh:</p>
+<ul>
+<li>Total progress sebelumnya adalah <code>360 H 51 M</code></li>
+<li>Progress sekarang: <code>8 H 30 M</code></li>
+<li>Total Hours: <samp>369 H 21 M</samp></li>
+</ul>
+<details>
+<summary>Penjelasan</summary>
+<p>Ini dipake buat nambahin total progress sebelumnya dengan progress sekarang, hasilnya total jam dan menit.</p>
+<p>Format isian:</p>
+<ul>
+<li>Tulis angka diikuti huruf <code>H</code> (jam) atau <code>M</code> (menit), contoh <code>8 H 30 M</code></li>
+<li>Huruf besar atau kecil sama aja, spasi antara angka dan huruf boleh ada boleh tidak, contoh <code>8h30m</code></li>
+<li>Urutannya bebas, contoh <code>30 M 8 H</code></li>
+<li>Teks lain yang bukan pasangan angka dan huruf H atau M diabaikan</li>
+<li>Jika tidak ada pasangan angka dan huruf yang valid, nilainya dihitung <code>0</code></li>
+</ul>
+<p>Rumus:</p>
+<ul>
+<li>Menit isian = <code>(angka H × 60) + angka M</code>, dijumlahin semua pasangan yang ketemu</li>
+<li>Total menit = <code>Menit total progress sebelumnya + Menit progress sekarang</code></li>
+<li>Jam = <code>Total menit ÷ 60</code>, dibulatkan ke bawah</li>
+<li>Menit = <code>Total menit mod 60</code></li>
+<li>mod artinya sisa bagi</li>
+</ul>
+<p>Cara kerja:</p>
+<ul>
+<li>Isi total progress sebelumnya dan progress sekarang di form, terus hasilnya langsung muncul otomatis di Total Hours</li>
+<li>Jika salah satu isian kosong, Total Hours dikosongin</li>
+</ul>
+</details>
+</div>
+</section>
+
+</main>
+<footer>
+<p><a href="https://drive.google.com/drive/folders/1EUddiHjb89KC7TLjoLtjH1E9px8OkBUe?usp=sharing" target="_blank" rel="noopener noreferrer">https://drive.google.com/drive/folders/1EUddiHjb89KC7TLjoLtjH1E9px8OkBUe?usp=sharing</a></p>
+</footer>
+<script>
+(function () {
+  "use strict";
+
+  /* Tema terang/gelap */
+  var root = document.documentElement;
+  var themeBtn = document.getElementById("theme-toggle");
+  var themeIcon = document.getElementById("theme-icon");
+  var themeLabel = document.getElementById("theme-label");
+  var mq = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
+  var currentTheme = function () {
+    return root.getAttribute("data-theme") || (mq && mq.matches ? "dark" : "light");
+  };
+  var renderTheme = function () {
+    var dark = currentTheme() === "dark";
+    themeIcon.textContent = dark ? "\u2600\uFE0E" : "\u263E";
+    themeLabel.textContent = dark ? "Mode Terang" : "Mode Gelap";
+  };
+  themeBtn.addEventListener("click", function () {
+    var next = currentTheme() === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem("theme", next); } catch (e) {}
+    renderTheme();
+  });
+  if (mq && mq.addEventListener) mq.addEventListener("change", renderTheme);
+  renderTheme();
+
+  /* Tabs */
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+  function activate(tab) {
+    tabs.forEach(function (t) {
+      var on = t === tab;
+      t.setAttribute("aria-selected", on ? "true" : "false");
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
+    });
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener("click", function () { activate(t); });
+    t.addEventListener("keydown", function (ev) {
+      var n = null;
+      if (ev.key === "ArrowRight") n = tabs[(i + 1) % tabs.length];
+      if (ev.key === "ArrowLeft") n = tabs[(i + tabs.length - 1) % tabs.length];
+      if (n) { ev.preventDefault(); activate(n); n.focus(); }
+    });
+  });
+
+  /* 1. Google Stopwatch */
+  var calcStopwatch = function () {
+    var h = String(Number(document.getElementById("sw-h").value));
+    var m = String(Number(document.getElementById("sw-m").value)).padStart(2, "0");
+    var s = String(Number(document.getElementById("sw-s").value)).padStart(2, "0");
+    var t = h + ":" + m + ":" + s;
+    var code = '(()=>{const t=' + JSON.stringify(t) + ',e=document.querySelector(\'[jsname="LQ3Xe"]\');if(!e){console.error(\'Element with selector [jsname="LQ3Xe"] was not found on this page.\');return}const s=document.title.replace(/^[\\d:\\s]+/,""),f=(e.textContent.match(/\\.\\d+$/)||[".00"])[0],o=`${t}${f}`;e.textContent=o;document.title=`${t.padStart(8,"0")} ${s.trim()}`;console.log(o)})();';
+    document.getElementById("sw-out").value = code;
+  };
+
+  /* 2. Progress hourly tanpa Agris */
+  var calcHourly = function () {
+    var out = document.getElementById("h-out");
+    var t = Number(document.getElementById("h-total").value);
+    var p = Number(document.getElementById("h-rate").value);
+
+    if (!t || !p || t < 0 || p <= 0) {
+      out.value = "Invalid input.";
+      return;
+    }
+
+    var totalSeconds = Math.floor((t / p) * 3600);
+    var hours = Math.floor(totalSeconds / 3600);
+    var minutes = Math.floor((totalSeconds % 3600) / 60);
+    var seconds = totalSeconds % 60;
+
+    out.value = hours + " Hours " + minutes + " Minutes " + seconds + " Seconds";
+  };
+
+  /* 3. Progress hourly dengan Agris */
+  var calcAgris = function () {
+    var out = document.getElementById("a-out");
+    var withA = document.getElementById("a-with");
+    var withoutA = document.getElementById("a-without");
+    var totalTL = Number(document.getElementById("a-total").value);
+    var agrisRate = Number(document.getElementById("a-rate").value);
+    var agrisCostPerHour = Number(document.getElementById("a-cost").value);
+    var normalRate = Number(document.getElementById("a-normal").value);
+    var currentAgris = Number(document.getElementById("a-current").value);
+
+    if (!totalTL || !agrisRate || !agrisCostPerHour || !normalRate || totalTL < 0 || agrisRate <= 0 || agrisCostPerHour <= 0 || normalRate <= 0) {
+      out.value = "Invalid input.";
+      withA.value = "";
+      withoutA.value = "";
+      return;
+    }
+
+    var maxAgrisHours = currentAgris / agrisCostPerHour;
+    var maxAgrisTL = maxAgrisHours * agrisRate;
+
+    var agrisTL = 0;
+    var normalTL = 0;
+    var hoursWithAgris = 0;
+    var hoursWithoutAgris = 0;
+
+    if (totalTL <= maxAgrisTL) {
+      agrisTL = totalTL;
+      hoursWithAgris = agrisTL / agrisRate;
+    } else {
+      agrisTL = maxAgrisTL;
+      normalTL = totalTL - maxAgrisTL;
+      hoursWithAgris = maxAgrisHours;
+      hoursWithoutAgris = normalTL / normalRate;
+    }
+
+    var formatHours = function (h) {
+      var totalSecs = Math.floor(h * 3600);
+      var hrs = Math.floor(totalSecs / 3600);
+      var mins = Math.floor((totalSecs % 3600) / 60);
+      var secs = totalSecs % 60;
+      return hrs + " Hours " + mins + " Minutes " + secs + " Seconds";
+    };
+
+    var totalSeconds = Math.floor((hoursWithAgris + hoursWithoutAgris) * 3600);
+    var hours = Math.floor(totalSeconds / 3600);
+    var minutes = Math.floor((totalSeconds % 3600) / 60);
+    var seconds = totalSeconds % 60;
+
+    out.value = hours + " Hours " + minutes + " Minutes " + seconds + " Seconds";
+    withA.value = formatHours(hoursWithAgris);
+    withoutA.value = formatHours(hoursWithoutAgris);
+  };
+
+  /* 4. Total progress hourly */
+  var calcTotal = function () {
+    var out = document.getElementById("t-out");
+    var p = function (s) {
+      return Array.from(s.matchAll(/(\d+)\s*([hm])/gi)).reduce(function (a, m) {
+        return a + (m[2].toLowerCase() === "h" ? Number(m[1]) * 60 : Number(m[1]));
+      }, 0);
+    };
+
+    var i = document.getElementById("t-prev").value;
+    if (!i) { out.value = ""; return; }
+
+    var x = document.getElementById("t-now").value;
+    if (!x) { out.value = ""; return; }
+
+    var totalMinutes = p(i) + p(x);
+    var hours = Math.floor(totalMinutes / 60);
+    var minutes = totalMinutes % 60;
+
+    out.value = hours + " H " + minutes + " M";
+  };
+  /* Live update */
+  [
+    ["form-stopwatch", calcStopwatch],
+    ["form-hourly", calcHourly],
+    ["form-agris", calcAgris],
+    ["form-total", calcTotal]
+  ].forEach(function (x) {
+    document.getElementById(x[0]).addEventListener("input", x[1]);
+    x[1]();
+  });
+})();
+</script>
+</body>
+</html>
