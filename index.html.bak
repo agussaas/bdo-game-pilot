@@ -492,14 +492,18 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
   renderTheme();
 
   /* Tabs */
+  var TAB_KEY = "bdo-game-pilot:tab";
   var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
-  function activate(tab) {
+  function activate(tab, skipSave) {
     tabs.forEach(function (t) {
       var on = t === tab;
       t.setAttribute("aria-selected", on ? "true" : "false");
       t.tabIndex = on ? 0 : -1;
       document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
     });
+    if (!skipSave) {
+      try { localStorage.setItem(TAB_KEY, tab.id); } catch (e) {}
+    }
     fitAll();
   }
   tabs.forEach(function (t, i) {
@@ -511,6 +515,12 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       if (n) { ev.preventDefault(); activate(n); n.focus(); }
     });
   });
+
+  /* Pulihkan tab terakhir yang dibuka */
+  var savedTab = null;
+  try { savedTab = localStorage.getItem(TAB_KEY); } catch (e) {}
+  var lastTab = tabs.filter(function (t) { return t.id === savedTab; })[0];
+  if (lastTab) activate(lastTab, true);
 
   /* 1. Google Stopwatch */
   var calcStopwatch = function () {
