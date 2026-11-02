@@ -151,9 +151,9 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <div id="form-stopwatch">
 <fieldset>
 <legend>Enter H:MM:SS</legend>
-<p><label for="sw-h">Jam (H)</label> <input type="number" id="sw-h" name="h" min="0" step="1" value="1" required></p>
-<p><label for="sw-m">Menit (MM)</label> <input type="number" id="sw-m" name="m" min="0" max="59" step="1" value="41" required></p>
-<p><label for="sw-s">Detik (SS)</label> <input type="number" id="sw-s" name="s" min="0" max="59" step="1" value="49" required></p>
+<p><label for="sw-h">Jam (H)</label> <input type="text" inputmode="decimal" id="sw-h" name="h" value="1" required></p>
+<p><label for="sw-m">Menit (MM)</label> <input type="text" inputmode="decimal" id="sw-m" name="m" value="41" required></p>
+<p><label for="sw-s">Detik (SS)</label> <input type="text" inputmode="decimal" id="sw-s" name="s" value="49" required></p>
 <p><button type="button" id="reset-stopwatch">Reset</button> <button type="button" id="clear-stopwatch">Clear</button></p>
 </fieldset>
 <p><label for="sw-out">Paste di browser console</label></p>
@@ -167,7 +167,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 </ul>
 <figure>
 <img src="browser-console.png" alt="Screenshot browser console" loading="lazy">
-<figcaption>Jika <strong>F12</strong> membuka tab <em>Elements</em>, klik pada tab <em>Console</em> untuk membuka browser console</figcaption>
+<figcaption>Jika <strong>F12</strong> membuka tab <em>Elements</em>, klik pada tab <em>Console</em> untuk membuka browser console.</figcaption>
 </figure>
 </div>
 </section>
@@ -177,15 +177,15 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <div id="form-hourly">
 <fieldset>
 <legend>Input</legend>
-<p><label for="h-total">Total TL:</label> <input type="number" id="h-total" name="total" step="any" value="55000"></p>
-<p><label for="h-rate">TL per jam:</label> <input type="number" id="h-rate" name="rate" step="any" value="19000"></p>
+<p><label for="h-total">Total TL:</label> <input type="text" inputmode="decimal" id="h-total" name="total" value="55,000"></p>
+<p><label for="h-rate">TL per jam:</label> <input type="text" inputmode="decimal" id="h-rate" name="rate" value="19,000"></p>
 <p><button type="button" id="reset-hourly">Reset</button> <button type="button" id="clear-hourly">Clear</button></p>
 </fieldset>
 <p><label for="h-out">Progress:</label> <textarea id="h-out" name="progress" rows="1" cols="50" readonly></textarea></p>
 <p>Contoh:</p>
 <ul>
-<li>Total perolehan TL dalam satu shift: <code>55000</code></li>
-<li><em>TL per jam sesuai note: <code>19000</code></em></li>
+<li>Total perolehan TL dalam satu shift: <code>55,000</code></li>
+<li><em>TL per jam sesuai note: <code>19,000</code></em></li>
 <li>Progress: <samp>2 Hours 53 Minutes 41 Seconds</samp></li>
 </ul>
 <details>
@@ -209,14 +209,14 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <div id="form-agris">
 <fieldset>
 <legend>Input</legend>
-<p><label for="a-total">Total TL:</label> <input type="number" id="a-total" name="total" step="any" value="55000"></p>
+<p><label for="a-total">Total TL:</label> <input type="text" inputmode="decimal" id="a-total" name="total" value="55,000"></p>
 <fieldset>
 <legend>Patokan Agris</legend>
-<p><label for="a-rate">TL/hr dengan Agris:</label> <input type="number" id="a-rate" name="rate" step="any" value="19000"></p>
-<p><label for="a-cost">Agris yang digunakan per jam:</label> <input type="number" id="a-cost" name="cost" step="any" value="32000"></p>
+<p><label for="a-rate">TL/hr dengan Agris:</label> <input type="text" inputmode="decimal" id="a-rate" name="rate" value="19,000"></p>
+<p><label for="a-cost">Agris yang digunakan per jam:</label> <input type="text" inputmode="decimal" id="a-cost" name="cost" value="32,000"></p>
 </fieldset>
-<p><label for="a-normal">TL/hr tanpa Agris:</label> <input type="number" id="a-normal" name="normal" step="any" value="11000"></p>
-<p><label for="a-current">Agris yang digunakan:</label> <input type="number" id="a-current" name="current" step="any" value="32000"></p>
+<p><label for="a-normal">TL/hr tanpa Agris:</label> <input type="text" inputmode="decimal" id="a-normal" name="normal" value="11,000"></p>
+<p><label for="a-current">Agris yang digunakan:</label> <input type="text" inputmode="decimal" id="a-current" name="current" value="32,000"></p>
 <p><button type="button" id="reset-agris">Reset</button> <button type="button" id="clear-agris">Clear</button></p>
 </fieldset>
 <p><label for="a-out">Total Time:</label> <textarea id="a-out" name="total-time" rows="1" cols="40" readonly></textarea></p>
@@ -238,11 +238,11 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 </div>
 <p>Contoh:</p>
 <ul>
-<li>Total TL selama shift: <code>55000</code></li>
-<li><em>Note dari TL per jam pake Agris: <code>19000</code></em></li>
-<li><em>Note dari TL per jam berapa Agris: <code>32000</code></em></li>
-<li><em>Note dari TL per jam tanpa Agris: <code>11000</code></em></li>
-<li>Agris yang digunakan selama shift: <code>32000</code></li>
+<li>Total TL selama shift: <code>55,000</code></li>
+<li><em>Note dari TL per jam pake Agris: <code>19,000</code></em></li>
+<li><em>Note dari TL per jam berapa Agris: <code>32,000</code></em></li>
+<li><em>Note dari TL per jam tanpa Agris: <code>11,000</code></em></li>
+<li>Agris yang digunakan selama shift: <code>32,000</code></li>
 <li>Total Time: <samp>4 Hours 16 Minutes 21 Seconds</samp></li>
 <li>Time with Agris: <samp>1 Hours 0 Minutes 0 Seconds</samp></li>
 <li>Time without Agris: <samp>3 Hours 16 Minutes 21 Seconds</samp></li>
@@ -474,15 +474,15 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <div id="form-totaltl">
 <fieldset>
 <legend>Input</legend>
-<p><label for="tl-start">TL awal:</label> <input type="number" id="tl-start" name="start" step="any" value="250000"></p>
-<p><label for="tl-end">TL akhir:</label> <input type="number" id="tl-end" name="end" step="any" value="315000"></p>
+<p><label for="tl-start">TL awal:</label> <input type="text" inputmode="decimal" id="tl-start" name="start" value="250,000"></p>
+<p><label for="tl-end">TL akhir:</label> <input type="text" inputmode="decimal" id="tl-end" name="end" value="315,000"></p>
 <p><button type="button" id="reset-totaltl">Reset</button> <button type="button" id="clear-totaltl">Clear</button></p>
 </fieldset>
 <p><label for="tl-out">Total perolehan TL:</label> <textarea id="tl-out" name="total-tl" rows="1" cols="40" readonly></textarea></p>
 <p>Contoh:</p>
 <ul>
-<li>TL awal: <code>250000</code></li>
-<li>TL akhir: <code>315000</code></li>
+<li>TL awal: <code>250,000</code></li>
+<li>TL akhir: <code>315,000</code></li>
 <li>Total perolehan TL: <samp>65,000</samp></li>
 </ul>
 <details>
@@ -502,7 +502,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li><a href="https://t.me/+Xmmz3gE42BYzNmM1" target="_blank" rel="noopener noreferrer">Telegram Channel</a></li>
 <li><a href="http://t.me/Agus_HK059" target="_blank" rel="noopener noreferrer">AGUS</a></li>
 </ul>
-<p><button type="button" id="help-close"><span aria-hidden="true">Tutup</button></p>
+<p><button type="button" id="help-close">Tutup</button></p>
 </dialog>
 <script>
 (function () {
@@ -522,6 +522,40 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
   var fill = function (prefix, lines, count) {
     for (var k = 0; k < count; k++) {
       document.getElementById(prefix + (k + 1)).value = lines[k] || "";
+    }
+  };
+
+  /* Input angka: pemisah ribuan otomatis (koma), koma yang diketik diabaikan saat menghitung */
+  var readNum = function (id) {
+    var t = document.getElementById(id).value.replace(/,/g, "").trim();
+    return /^-?(\d+\.?\d*|\.\d+)(e[+-]?\d+)?$/i.test(t) ? t : "";
+  };
+  var isNumInput = function (el) {
+    return el && el.tagName === "INPUT" && el.getAttribute("inputmode") === "decimal";
+  };
+  var formatNumber = function (el) {
+    var raw = el.value;
+    var compact = raw.replace(/[,\s]/g, "");
+    if (/e/i.test(compact) && /^[-+]?[\d.]*e[+-]?\d*$/i.test(compact)) return;
+    var caret = typeof el.selectionStart === "number" ? el.selectionStart : raw.length;
+    var before = raw.slice(0, caret).replace(/[^\d.]/g, "").length;
+    var neg = /^\s*-/.test(raw);
+    var cleaned = raw.replace(/[^\d.]/g, "");
+    var dot = cleaned.indexOf(".");
+    var intPart = dot === -1 ? cleaned : cleaned.slice(0, dot);
+    var decPart = dot === -1 ? null : cleaned.slice(dot + 1).replace(/\./g, "");
+    intPart = intPart.replace(/^0+(?=\d)/, "");
+    var out = (neg ? "-" : "") + intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (decPart === null ? "" : "." + decPart);
+    if (out === raw) return;
+    el.value = out;
+    if (document.activeElement === el && el.setSelectionRange) {
+      var pos = 0;
+      var seen = 0;
+      while (pos < out.length && seen < before) {
+        if (/[\d.]/.test(out.charAt(pos))) seen++;
+        pos++;
+      }
+      el.setSelectionRange(pos, pos);
     }
   };
 
@@ -600,9 +634,9 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 
   /* 1. Google Stopwatch */
   var calcStopwatch = function () {
-    var h = String(Number(document.getElementById("sw-h").value));
-    var m = String(Number(document.getElementById("sw-m").value)).padStart(2, "0");
-    var s = String(Number(document.getElementById("sw-s").value)).padStart(2, "0");
+    var h = String(Number(readNum("sw-h")));
+    var m = String(Number(readNum("sw-m"))).padStart(2, "0");
+    var s = String(Number(readNum("sw-s"))).padStart(2, "0");
     var t = h + ":" + m + ":" + s;
     var code = '(()=>{const t=' + JSON.stringify(t) + ',e=document.querySelector(\'[jsname="LQ3Xe"]\');if(!e){console.error(\'Element with selector [jsname="LQ3Xe"] was not found on this page.\');return}const s=document.title.replace(/^[\\d:\\s]+/,""),f=(e.textContent.match(/\\.\\d+$/)||[".00"])[0],o=`${t}${f}`;e.textContent=o;document.title=`${t.padStart(8,"0")} ${s.trim()}`;console.log(o)})();';
     document.getElementById("sw-out").value = code;
@@ -611,8 +645,8 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
   /* 2. Progress hourly tanpa Agris */
   var calcHourly = function () {
     var out = document.getElementById("h-out");
-    var t = Number(document.getElementById("h-total").value);
-    var p = Number(document.getElementById("h-rate").value);
+    var t = Number(readNum("h-total"));
+    var p = Number(readNum("h-rate"));
 
     if (!t || !p || t < 0 || p <= 0) {
       out.value = "Invalid input.";
@@ -641,11 +675,11 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     var out = document.getElementById("a-out");
     var withA = document.getElementById("a-with");
     var withoutA = document.getElementById("a-without");
-    var totalTL = Number(document.getElementById("a-total").value);
-    var agrisRate = Number(document.getElementById("a-rate").value);
-    var agrisCostPerHour = Number(document.getElementById("a-cost").value);
-    var normalRate = Number(document.getElementById("a-normal").value);
-    var currentAgris = Number(document.getElementById("a-current").value);
+    var totalTL = Number(readNum("a-total"));
+    var agrisRate = Number(readNum("a-rate"));
+    var agrisCostPerHour = Number(readNum("a-cost"));
+    var normalRate = Number(readNum("a-normal"));
+    var currentAgris = Number(readNum("a-current"));
 
     if (!totalTL || !agrisRate || !agrisCostPerHour || !normalRate || totalTL < 0 || agrisRate <= 0 || agrisCostPerHour <= 0 || normalRate <= 0) {
       out.value = "Invalid input.";
@@ -746,10 +780,10 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       return (expr === String(sum) || !terms.length ? "" : expr + " = ") + sum;
     };
 
-    var i = document.getElementById("t-prev").value;
+    var i = document.getElementById("t-prev").value.replace(/,/g, "");
     if (!i) { out.value = ""; fill("t-s", [], 5); return; }
 
-    var x = document.getElementById("t-now").value;
+    var x = document.getElementById("t-now").value.replace(/,/g, "");
     if (!x) { out.value = ""; fill("t-s", [], 5); return; }
 
     var totalMinutes = p(i) + p(x);
@@ -1075,8 +1109,8 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
   /* 7. Total TL */
   var calcTotalTL = function () {
     var out = document.getElementById("tl-out");
-    var a = document.getElementById("tl-start").value;
-    var b = document.getElementById("tl-end").value;
+    var a = readNum("tl-start");
+    var b = readNum("tl-end");
 
     if (a === "" || b === "" || Number(a) < 0 || Number(b) < 0) {
       out.value = "Invalid input.";
@@ -1114,10 +1148,15 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     Array.prototype.forEach.call(document.querySelectorAll("main input"), function (el) {
       if (Object.prototype.hasOwnProperty.call(data, el.id) && typeof data[el.id] === "string") {
         el.value = data[el.id];
+        if (isNumInput(el)) formatNumber(el);
       }
     });
   };
   restoreInputs();
+
+  document.querySelector("main").addEventListener("input", function (ev) {
+    if (isNumInput(ev.target)) formatNumber(ev.target);
+  }, true);
 
   document.querySelector("main").addEventListener("input", function (ev) {
     var el = ev.target;
