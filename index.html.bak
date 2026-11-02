@@ -11,7 +11,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
+<link rel="manifest" href="site.webmanifest">
 <style>
 :root { color-scheme: light dark; }
 :root[data-theme="light"] { color-scheme: light; }
@@ -47,6 +47,7 @@ body {
 }
 header, main { width: 100%; max-width: 52rem; margin-inline: auto; }
 h1 { margin: 0 0 1rem; font-size: clamp(1.25rem, 1rem + 1.2vw, 1.75rem); line-height: 1.2; }
+h1 a { color: inherit; text-decoration: none; }
 h2 { margin: 0 0 1rem; font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.25rem); line-height: 1.3; }
 
 button {
@@ -86,6 +87,21 @@ code, samp { font-family: var(--font-mono); font-size: 0.9em; overflow-wrap: any
 summary { display: list-item; min-height: 2.75rem; padding: 0.5rem 0; font-weight: 600; cursor: pointer; }
 ul { padding-inline-start: 1.25rem; }
 li { margin-bottom: 0.25rem; }
+p > button + button { margin-inline-start: 0.5rem; }
+header > button + button { margin-inline-start: 0.5rem; }
+
+dialog {
+  width: min(24rem, calc(100% - 2rem));
+  max-height: calc(100% - 2rem);
+  overflow: auto;
+  padding: 1rem 1.25rem;
+  background: var(--bg);
+  color: var(--fg);
+  border: 1px solid var(--bd);
+  border-radius: 0.5rem;
+}
+dialog::backdrop { background: rgba(0, 0, 0, 0.5); }
+dialog a { display: inline-block; padding: 0.25rem 0; }
 
 #note-images {
   display: grid;
@@ -114,8 +130,9 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 </head>
 <body>
 <header>
-<h1>BDO Game Pilot</h1>
+<h1><a href="./">BDO Game Pilot</a></h1>
 <button type="button" id="theme-toggle"><span id="theme-icon" aria-hidden="true">☾</span> <span id="theme-label">Mode Gelap</span></button>
+<button type="button" id="help-open" aria-haspopup="dialog"><span aria-hidden="true">?</span> <span>Help</span></button>
 <nav role="tablist" aria-label="Tab">
 <button type="button" role="tab" id="tab-stopwatch" aria-controls="panel-stopwatch" aria-selected="true">Google Stopwatch</button>
 <button type="button" role="tab" id="tab-hourly" aria-controls="panel-hourly" aria-selected="false" tabindex="-1">Progress Hourly (Tanpa Agris)</button>
@@ -123,6 +140,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <button type="button" role="tab" id="tab-total" aria-controls="panel-total" aria-selected="false" tabindex="-1">Total Progress Hourly</button>
 <button type="button" role="tab" id="tab-buff" aria-controls="panel-buff" aria-selected="false" tabindex="-1">Buff Counter</button>
 <button type="button" role="tab" id="tab-tax" aria-controls="panel-tax" aria-selected="false" tabindex="-1">BDO Tax Calculator</button>
+<button type="button" role="tab" id="tab-totaltl" aria-controls="panel-totaltl" aria-selected="false" tabindex="-1">Total TL</button>
 </nav>
 </header>
 <main>
@@ -135,7 +153,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><label for="sw-h">Jam (H)</label> <input type="number" id="sw-h" name="h" min="0" step="1" value="1" required></p>
 <p><label for="sw-m">Menit (MM)</label> <input type="number" id="sw-m" name="m" min="0" max="59" step="1" value="41" required></p>
 <p><label for="sw-s">Detik (SS)</label> <input type="number" id="sw-s" name="s" min="0" max="59" step="1" value="49" required></p>
-<p><button type="button" id="reset-stopwatch">Reset input</button></p>
+<p><button type="button" id="reset-stopwatch">Reset</button> <button type="button" id="clear-stopwatch">Clear</button></p>
 </fieldset>
 <p><label for="sw-out">Paste di browser console</label></p>
 <p><textarea id="sw-out" name="out" rows="8" cols="80" readonly></textarea></p>
@@ -146,6 +164,10 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li>Buka browser console, tekan <strong>F12</strong></li>
 <li>Paste, ketik <code>allow pasting</code> terus enter jika tidak bisa paste</li>
 </ul>
+<figure>
+<img src="browser-console.png" alt="Screenshot browser console" loading="lazy">
+<figcaption>Screenshot browser console</figcaption>
+</figure>
 </div>
 </section>
 
@@ -156,7 +178,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <legend>Input</legend>
 <p><label for="h-total">Total TL:</label> <input type="number" id="h-total" name="total" step="any" value="55000"></p>
 <p><label for="h-rate">TL per jam:</label> <input type="number" id="h-rate" name="rate" step="any" value="19000"></p>
-<p><button type="button" id="reset-hourly">Reset input</button></p>
+<p><button type="button" id="reset-hourly">Reset</button> <button type="button" id="clear-hourly">Clear</button></p>
 </fieldset>
 <p><label for="h-out">Progress:</label> <textarea id="h-out" name="progress" rows="1" cols="50" readonly></textarea></p>
 <p>Contoh:</p>
@@ -194,7 +216,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 </fieldset>
 <p><label for="a-normal">TL/hr tanpa Agris:</label> <input type="number" id="a-normal" name="normal" step="any" value="11000"></p>
 <p><label for="a-current">Agris yang digunakan:</label> <input type="number" id="a-current" name="current" step="any" value="32000"></p>
-<p><button type="button" id="reset-agris">Reset input</button></p>
+<p><button type="button" id="reset-agris">Reset</button> <button type="button" id="clear-agris">Clear</button></p>
 </fieldset>
 <p><label for="a-out">Total Time:</label> <textarea id="a-out" name="total-time" rows="1" cols="40" readonly></textarea></p>
 <p><label for="a-with">Time with Agris:</label> <textarea id="a-with" name="time-with-agris" rows="1" cols="40" readonly></textarea></p>
@@ -205,12 +227,12 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 </ul>
 <div id="note-images">
 <figure>
-<img src="tidak-bisa-di-hitung.png" alt="Screenshot Note laporan dengan kotak merah: hanya ada TL per jam dengan Agris, tanpa Agris yang digunakan per jam" loading="lazy">
+<img src="tidak-bisa-di-hitung.png" alt="Screenshot TL yang tidak bisa dihitung" loading="lazy">
 <figcaption><strong>Tidak bisa dihitung.</strong> Pada kotak merah di note, hanya TL per jam dengan Agris, sedangkan Agris yang digunakan per jam tidak ada. Tanpa patokan itu, perhitungannya tidak akan bisa. Solusinya, grinding sendiri dengan Agris berdasarkan TL per jam yang ada di note.</figcaption>
 </figure>
 <figure>
-<img src="bisa-di-hitung.png" alt="Screenshot Note laporan dengan kotak biru: Agris yang digunakan per jam dan TL per jamnya tercantum" loading="lazy">
-<figcaption><strong>Bisa dihitung.</strong> Pada kotak biru di note, ada patokan Agris yang digunakan per jam beserta TL per jamnya. Dengan kedua patokan ini, perhitungan total time, time with Agris, dan time without Agris bisa dijalankan.</figcaption>
+<img src="bisa-di-hitung.png" alt="Screenshot TL yang bisa dihitung" loading="lazy">
+<figcaption><strong>Bisa dihitung.</strong> Pada kotak biru di note, ada patokan Agris yang digunakan per jam beserta TL per jamnya. Dengan kedua patokan ini, perhitungan total time, time with Agris, dan time without Agris akan menampilkan hasil.</figcaption>
 </figure>
 </div>
 <p>Contoh:</p>
@@ -280,7 +302,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <legend>Input</legend>
 <p><label for="t-prev">Total progress sebelumnya:</label> <input type="text" id="t-prev" name="prev" value="360 H 51 M"></p>
 <p><label for="t-now">Progress:</label> <input type="text" id="t-now" name="now" value="8 H 30 M"></p>
-<p><button type="button" id="reset-total">Reset input</button></p>
+<p><button type="button" id="reset-total">Reset</button> <button type="button" id="clear-total">Clear</button></p>
 </fieldset>
 <p><label for="t-out">Total Hours:</label> <textarea id="t-out" name="total-hours" rows="1" cols="40" readonly></textarea></p>
 <p>Contoh:</p>
@@ -314,7 +336,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><label for="b-duration">Buff duration:</label> <input type="text" id="b-duration" name="duration" value="15m"></p>
 <p><label for="b-cooldown">Cooldown:</label> <input type="text" id="b-cooldown" name="cooldown" value="10s"></p>
 <p><label for="b-price">Price per buff (opsional):</label> <input type="text" id="b-price" name="price" value="27.5m"></p>
-<p><button type="button" id="reset-buff">Reset input</button></p>
+<p><button type="button" id="reset-buff">Reset</button> <button type="button" id="clear-buff">Clear</button></p>
 </fieldset>
 <p><label for="b-o1">Shift:</label> <textarea id="b-o1" name="shift-out" rows="1" cols="40" readonly></textarea></p>
 <p><label for="b-o2">Buff:</label> <textarea id="b-o2" name="buff-out" rows="1" cols="40" readonly></textarea></p>
@@ -365,7 +387,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <legend>Input</legend>
 <p><label for="d-price">Price:</label> <input type="text" id="d-price" name="price" value="5m"></p>
 <p><label for="d-options">Options (opsional):</label> <input type="text" id="d-options" name="options" value="vp ring 4500"></p>
-<p><button type="button" id="reset-tax">Reset input</button></p>
+<p><button type="button" id="reset-tax">Reset</button> <button type="button" id="clear-tax">Clear</button></p>
 </fieldset>
 <p><label for="d-o1">Sale price:</label> <textarea id="d-o1" name="d-o1" rows="1" cols="40" readonly></textarea></p>
 <p><label for="d-o2">Tax (35%):</label> <textarea id="d-o2" name="d-o2" rows="1" cols="40" readonly></textarea></p>
@@ -446,7 +468,41 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 </div>
 </section>
 
+<section role="tabpanel" id="panel-totaltl" aria-labelledby="tab-totaltl" hidden>
+<h2>Total TL</h2>
+<div id="form-totaltl">
+<fieldset>
+<legend>Input</legend>
+<p><label for="tl-start">TL awal:</label> <input type="number" id="tl-start" name="start" step="any" value="250000"></p>
+<p><label for="tl-end">TL akhir:</label> <input type="number" id="tl-end" name="end" step="any" value="315000"></p>
+<p><button type="button" id="reset-totaltl">Reset</button> <button type="button" id="clear-totaltl">Clear</button></p>
+</fieldset>
+<p><label for="tl-out">Total perolehan TL:</label> <textarea id="tl-out" name="total-tl" rows="1" cols="40" readonly></textarea></p>
+<p>Contoh:</p>
+<ul>
+<li>TL awal: <code>250000</code></li>
+<li>TL akhir: <code>315000</code></li>
+<li>Total TL perolehan: <samp>65000</samp></li>
+</ul>
+<details>
+<summary>Perhitungan</summary>
+<p><label for="tl-s1">TL akhir dikurangi TL awal <strong>(total perolehan TL)</strong></label></p>
+<p><textarea id="tl-s1" name="tl-s1" rows="1" cols="50" readonly></textarea></p>
+</details>
+</div>
+</section>
+
 </main>
+<dialog id="help-dialog" aria-labelledby="help-title">
+<h2 id="help-title">Help</h2>
+<ul>
+<li><a href="https://github.com/aagusspurwantoro/gamepilot-telegram-bot" target="_blank" rel="noopener noreferrer">Telegram Bot</a></li>
+<li><a href="https://drive.google.com/drive/folders/1EUddiHjb89KC7TLjoLtjH1E9px8OkBUe?usp=sharing" target="_blank" rel="noopener noreferrer">Google Drive</a></li>
+<li><a href="https://t.me/+Xmmz3gE42BYzNmM1" target="_blank" rel="noopener noreferrer">Telegram Channel</a></li>
+<li><a href="http://t.me/Agus_HK059" target="_blank" rel="noopener noreferrer">AGUS</a></li>
+</ul>
+<p><button type="button" id="help-close"><span aria-hidden="true">✕</span> Tutup</button></p>
+</dialog>
 <script>
 (function () {
   "use strict";
@@ -490,6 +546,25 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
   });
   if (mq && mq.addEventListener) mq.addEventListener("change", renderTheme);
   renderTheme();
+
+  /* Help (dialog) */
+  var helpDlg = document.getElementById("help-dialog");
+  var closeHelp = function () {
+    if (typeof helpDlg.close === "function") helpDlg.close();
+    else helpDlg.removeAttribute("open");
+  };
+  document.getElementById("help-open").addEventListener("click", function () {
+    if (helpDlg.open) return;
+    if (typeof helpDlg.showModal === "function") helpDlg.showModal();
+    else helpDlg.setAttribute("open", "");
+  });
+  document.getElementById("help-close").addEventListener("click", closeHelp);
+  helpDlg.addEventListener("click", function (ev) {
+    if (ev.target !== helpDlg) return;
+    var r = helpDlg.getBoundingClientRect();
+    var inside = ev.clientX >= r.left && ev.clientX <= r.right && ev.clientY >= r.top && ev.clientY <= r.bottom;
+    if (!inside) closeHelp();
+  });
 
   /* Tabs */
   var TAB_KEY = "bdo-game-pilot:tab";
@@ -996,6 +1071,26 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     }
   };
 
+  /* 7. Total TL */
+  var calcTotalTL = function () {
+    var out = document.getElementById("tl-out");
+    var a = document.getElementById("tl-start").value;
+    var b = document.getElementById("tl-end").value;
+
+    if (a === "" || b === "" || Number(a) < 0 || Number(b) < 0) {
+      out.value = "Invalid input.";
+      fill("tl-s", [], 1);
+      return;
+    }
+
+    var start = Number(a);
+    var end = Number(b);
+    var gain = end - start;
+
+    out.value = gain.toLocaleString("en-US");
+    fill("tl-s", [end + " − " + start + " = " + gain], 1);
+  };
+
   /* Simpan input di localStorage (hanya nilai yang berbeda dari default) */
   var STORE_KEY = "bdo-game-pilot:inputs";
   var readStore = function () {
@@ -1039,7 +1134,8 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     ["form-agris", calcAgris],
     ["form-total", calcTotal],
     ["form-buff", calcBuff],
-    ["form-tax", calcTax]
+    ["form-tax", calcTax],
+    ["form-totaltl", calcTotalTL]
   ].forEach(function (x) {
     var form = document.getElementById(x[0]);
     form.addEventListener("input", function () { x[1](); fitAll(); });
@@ -1049,6 +1145,18 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       Array.prototype.forEach.call(form.querySelectorAll("input"), function (el) {
         el.value = el.defaultValue;
         delete data[el.id];
+      });
+      writeStore(data);
+      x[1]();
+      fitAll();
+    });
+
+    document.getElementById("clear-" + x[0].replace("form-", "")).addEventListener("click", function () {
+      var data = readStore();
+      Array.prototype.forEach.call(form.querySelectorAll("input"), function (el) {
+        el.value = "";
+        if (el.value === el.defaultValue) delete data[el.id];
+        else data[el.id] = el.value;
       });
       writeStore(data);
       x[1]();
