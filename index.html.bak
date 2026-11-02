@@ -101,6 +101,7 @@ dialog {
   border-radius: 0.5rem;
 }
 dialog::backdrop { background: rgba(0, 0, 0, 0.5); }
+dialog ul {list-style: none; padding-left: 0; }
 dialog a { display: inline-block; padding: 0.25rem 0; }
 
 #note-images {
@@ -166,7 +167,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 </ul>
 <figure>
 <img src="browser-console.png" alt="Screenshot browser console" loading="lazy">
-<figcaption>Screenshot browser console</figcaption>
+<figcaption>Jika <strong>F12</strong> membuka tab <em>Elements</em>, klik pada tab <em>Console</em> untuk membuka browser console</figcaption>
 </figure>
 </div>
 </section>
@@ -482,7 +483,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <ul>
 <li>TL awal: <code>250000</code></li>
 <li>TL akhir: <code>315000</code></li>
-<li>Total TL perolehan: <samp>65000</samp></li>
+<li>Total perolehan TL: <samp>65,000</samp></li>
 </ul>
 <details>
 <summary>Perhitungan</summary>
@@ -501,7 +502,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li><a href="https://t.me/+Xmmz3gE42BYzNmM1" target="_blank" rel="noopener noreferrer">Telegram Channel</a></li>
 <li><a href="http://t.me/Agus_HK059" target="_blank" rel="noopener noreferrer">AGUS</a></li>
 </ul>
-<p><button type="button" id="help-close"><span aria-hidden="true">✕</span> Tutup</button></p>
+<p><button type="button" id="help-close"><span aria-hidden="true">Tutup</button></p>
 </dialog>
 <script>
 (function () {
