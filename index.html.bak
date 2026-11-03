@@ -110,6 +110,7 @@ dialog a { display: inline-block; padding: 0.25rem 0; }
   gap: 1rem;
   margin: 0.5rem 0 1rem;
 }
+input[type="range"] { padding: 0; border: 0; background: transparent; }
 figure { min-width: 0; margin: 0; }
 img { display: block; max-width: 100%; height: auto; border: 1px solid var(--bd); border-radius: 0.5rem; }
 figcaption { margin-top: 0.5rem; font-size: 0.875rem; }
@@ -142,6 +143,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <button type="button" role="tab" id="tab-buff" aria-controls="panel-buff" aria-selected="false" tabindex="-1">Buff Counter</button>
 <button type="button" role="tab" id="tab-tax" aria-controls="panel-tax" aria-selected="false" tabindex="-1">BDO Tax Calculator</button>
 <button type="button" role="tab" id="tab-totaltl" aria-controls="panel-totaltl" aria-selected="false" tabindex="-1">Total TL</button>
+<button type="button" role="tab" id="tab-compen" aria-controls="panel-compen" aria-selected="false" tabindex="-1">Compen</button>
 </nav>
 </header>
 <main>
@@ -479,6 +481,13 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><button type="button" id="reset-totaltl">Reset</button> <button type="button" id="clear-totaltl">Clear</button></p>
 </fieldset>
 <p><label for="tl-out">Total perolehan TL:</label> <textarea id="tl-out" name="total-tl" rows="1" cols="40" readonly></textarea></p>
+<p>Note:</p>
+<ul>
+<li>Total TL ini fungsinya untuk mengetahui total perolehan TL jika di storage sudah ada TL-nya</li>
+<li><em>TL awal</em> adalah TL yang sudah ada di storage</li>
+<li><em>TL akhir</em> adalah TL setelah grinding selama shift</li>
+<li>Total perolehan TL didapat dari TL akhir dikurangi TL awal</li>
+</ul>
 <p>Contoh:</p>
 <ul>
 <li>TL awal: <code>250,000</code></li>
@@ -493,12 +502,72 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 </div>
 </section>
 
+<section role="tabpanel" id="panel-compen" aria-labelledby="tab-compen" hidden>
+<h2>Compen</h2>
+<div id="form-compen">
+<fieldset>
+<legend>Input</legend>
+<p><label for="cp-compen">Compen berapa silver?</label> <input type="text" id="cp-compen" name="compen" value="3b"></p>
+<p><label for="cp-price">Harga TL per biji (opsional):</label> <input type="text" id="cp-price" name="price" value="181,042"></p>
+<p><label for="cp-pct">Persen TL:</label> <input type="range" id="cp-pct" name="pct" min="0" max="100" step="1" value="50"></p>
+<p><button type="button" id="reset-compen">Reset</button> <button type="button" id="clear-compen">Clear</button></p>
+</fieldset>
+<p><label for="cp-o1">Compen:</label> <textarea id="cp-o1" name="cp-o1" rows="1" cols="40" readonly></textarea></p>
+<fieldset id="cp-tl">
+<legend>TL</legend>
+<p><label for="cp-o2">Persen:</label> <textarea id="cp-o2" name="cp-o2" rows="1" cols="40" readonly></textarea></p>
+<p><label for="cp-o3">Silver:</label> <textarea id="cp-o3" name="cp-o3" rows="1" cols="40" readonly></textarea></p>
+<p><label for="cp-o4">Jumlah TL yang harus disell:</label> <textarea id="cp-o4" name="cp-o4" rows="1" cols="40" readonly></textarea></p>
+</fieldset>
+<fieldset id="cp-rng">
+<legend>RNG</legend>
+<p><label for="cp-o5">Persen:</label> <textarea id="cp-o5" name="cp-o5" rows="1" cols="40" readonly></textarea></p>
+<p><label for="cp-o6">Silver:</label> <textarea id="cp-o6" name="cp-o6" rows="1" cols="40" readonly></textarea></p>
+</fieldset>
+<p>Note:</p>
+<ul>
+<li>Compen bisa diisi angka biasa, pemisah ribuan, atau akhiran <code>k</code>, <code>m</code>, <code>b</code>, contoh <code>500k</code>, <code>100m</code>, <code>3b</code></li>
+<li>Harga TL per biji adalah harga satu TL dalam silver, bisa diisi dengan format yang sama. Jika dikosongkan, Jumlah TL yang harus disell tidak akan dihitung</li>
+<li>Slider Persen TL mengatur pembagian compen antara <em>TL</em> dan <em>RNG</em>: paling kiri <em>0%</em> TL (semuanya RNG) dan paling kanan <em>100%</em> TL (semuanya TL), misal <em>40%</em> TL berarti <em>60%</em> RNG</li>
+<li>Jumlah TL yang harus disell dibulatkan ke atas supaya silver dari TL mencapai bagian compen TL</li>
+<li>Sisa compen di luar bagian TL adalah bagian <em>RNG</em></li>
+</ul>
+<p>Contoh:</p>
+<ul>
+<li>Misal yang pecah Corrupted Glutony Crystal, harga di central market <code>3b</code> dan patokan compen <em>50%</em> RNG dan <em>50%</em> TL</li>
+<li>Grind di Magaia, harga TL per item <code>181,042</code></li>
+<li>Compen: <code>3b</code>, Harga TL per biji: <code>181,042</code>, Persen TL: <code>50%</code></li>
+<li>Compen: <samp>3,000,000,000 silver</samp></li>
+<li>TL, Persen: <samp>50%</samp></li>
+<li>TL, Silver: <samp>1,500,000,000 silver</samp></li>
+<li>TL, Jumlah TL yang harus disell: <samp>8,286 TL</samp></li>
+<li>RNG, Persen: <samp>50%</samp></li>
+<li>RNG, Silver: <samp>1,500,000,000 silver</samp></li>
+</ul>
+<details>
+<summary>Perhitungan</summary>
+<p><label for="cp-s1">Compen diubah ke silver <strong>(nilai dikali pengali, dibulatkan ke bawah)</strong></label></p>
+<p><textarea id="cp-s1" name="cp-s1" rows="1" cols="50" readonly></textarea></p>
+<p><label for="cp-s2">Harga TL per biji diubah ke silver <strong>(nilai dikali pengali, dibulatkan ke bawah)</strong></label></p>
+<p><textarea id="cp-s2" name="cp-s2" rows="1" cols="50" readonly></textarea></p>
+<p><label for="cp-s3">Compen TL: compen dikali persen TL, dibagi 100 <strong>(dibulatkan ke bawah)</strong></label></p>
+<p><textarea id="cp-s3" name="cp-s3" rows="1" cols="50" readonly></textarea></p>
+<p><label for="cp-s4">Compen RNG: compen dikurangi compen TL</label></p>
+<p><textarea id="cp-s4" name="cp-s4" rows="1" cols="50" readonly></textarea></p>
+<p><label for="cp-s5">Jumlah TL: compen TL dibagi harga TL per biji <strong>(dibulatkan ke atas)</strong></label></p>
+<p><textarea id="cp-s5" name="cp-s5" rows="1" cols="50" readonly></textarea></p>
+<p><label for="cp-s6">Total silver dari TL: jumlah TL dikali harga TL per biji</label></p>
+<p><textarea id="cp-s6" name="cp-s6" rows="1" cols="50" readonly></textarea></p>
+</details>
+</div>
+</section>
+
 </main>
 <dialog id="help-dialog" aria-labelledby="help-title">
 <h2 id="help-title">Help</h2>
 <ul>
 <li><a href="https://github.com/aagusspurwantoro/gamepilot-telegram-bot" target="_blank" rel="noopener noreferrer">Telegram Bot</a></li>
-<li><a href="https://drive.google.com/drive/folders/1EUddiHjb89KC7TLjoLtjH1E9px8OkBUe?usp=sharing" target="_blank" rel="noopener noreferrer">Google Drive</a></li>
+<li><a href="https://github.com/agussaas/bdo-game-pilot" target="_blank" rel="noopener noreferrer">GitHub</a></li>
 <li><a href="https://t.me/+Xmmz3gE42BYzNmM1" target="_blank" rel="noopener noreferrer">Telegram Channel</a></li>
 <li><a href="http://t.me/Agus_HK059" target="_blank" rel="noopener noreferrer">AGUS</a></li>
 </ul>
@@ -641,6 +710,15 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     var code = '(()=>{const t=' + JSON.stringify(t) + ',e=document.querySelector(\'[jsname="LQ3Xe"]\');if(!e){console.error(\'Element with selector [jsname="LQ3Xe"] was not found on this page.\');return}const s=document.title.replace(/^[\\d:\\s]+/,""),f=(e.textContent.match(/\\.\\d+$/)||[".00"])[0],o=`${t}${f}`;e.textContent=o;document.title=`${t.padStart(8,"0")} ${s.trim()}`;console.log(o)})();';
     document.getElementById("sw-out").value = code;
   };
+
+  /* Klik/fokus pada kode stopwatch: seluruh isi langsung terpilih untuk disalin */
+  var swOut = document.getElementById("sw-out");
+  var selectSwOut = function () {
+    swOut.select();
+    swOut.setSelectionRange(0, swOut.value.length);
+  };
+  swOut.addEventListener("click", selectSwOut);
+  swOut.addEventListener("focus", selectSwOut);
 
   /* 2. Progress hourly tanpa Agris */
   var calcHourly = function () {
@@ -1126,6 +1204,71 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     fill("tl-s", [end + " − " + start + " = " + gain], 1);
   };
 
+  /* 8. Compen */
+  var parseSilver = function (text, label) {
+    var cleaned = text.trim().toLowerCase().replace(/[,_]/g, "");
+    if (!cleaned) throw new Error("missing " + label);
+
+    var mult = 1;
+    var last = cleaned.charAt(cleaned.length - 1);
+    if (PRICE_SUFFIXES.hasOwnProperty(last)) {
+      mult = PRICE_SUFFIXES[last];
+      cleaned = cleaned.slice(0, -1);
+    }
+
+    var value = pyFloat(cleaned);
+    if (isNaN(value)) throw new Error("'" + text + "' is not a valid " + label);
+    var amount = value * mult;
+
+    if (!isFinite(amount)) throw new Error("'" + text + "' is not a valid " + label);
+    if (amount <= 0) throw new Error(label + " must be greater than zero");
+    if (amount > 1e15) throw new Error(label + " is too large");
+    var whole = BigInt(Math.trunc(amount));
+    if (whole === 0n) throw new Error(label + " must be greater than zero");
+    return { value: value, mult: mult, amount: whole };
+  };
+
+  var calcCompen = function () {
+    var outs = ["cp-o1", "cp-o2", "cp-o3", "cp-o4", "cp-o5", "cp-o6"];
+    var steps = ["cp-s1", "cp-s2", "cp-s3", "cp-s4", "cp-s5", "cp-s6"];
+    var groups = [document.getElementById("cp-tl"), document.getElementById("cp-rng")];
+    var compen, price;
+
+    try {
+      compen = parseSilver(document.getElementById("cp-compen").value, "compen");
+      var priceText = document.getElementById("cp-price").value;
+      price = priceText.trim() ? parseSilver(priceText, "TL price") : null;
+    } catch (e) {
+      outs.forEach(function (id) { put(id, null); });
+      steps.forEach(function (id) { put(id, null); });
+      groups.forEach(function (g) { g.hidden = true; });
+      put("cp-o1", e.message);
+      return;
+    }
+
+    var pct = Math.min(100, Math.max(0, Number(document.getElementById("cp-pct").value) || 0));
+    var total = compen.amount;
+    var tlSilver = total * BigInt(pct) / 100n;
+    var rngSilver = total - tlSilver;
+    var count = price ? (tlSilver + price.amount - 1n) / price.amount : null;
+    var silver = function (v) { return v.toLocaleString("en-US") + " silver"; };
+
+    groups.forEach(function (g) { g.hidden = false; });
+    put("cp-o1", silver(total));
+    put("cp-o2", pct + "%");
+    put("cp-o3", silver(tlSilver));
+    put("cp-o4", count === null ? null : count.toLocaleString("en-US") + " TL");
+    put("cp-o5", (100 - pct) + "%");
+    put("cp-o6", silver(rngSilver));
+
+    put("cp-s1", "floor(" + compen.value + " × " + compen.mult + ") = " + total);
+    put("cp-s2", price ? "floor(" + price.value + " × " + price.mult + ") = " + price.amount : null);
+    put("cp-s3", "floor(" + total + " × " + pct + " ÷ 100) = " + tlSilver);
+    put("cp-s4", total + " − " + tlSilver + " = " + rngSilver);
+    put("cp-s5", price ? "ceil(" + tlSilver + " ÷ " + price.amount + ") = " + count : null);
+    put("cp-s6", price ? count + " × " + price.amount + " = " + (count * price.amount) : null);
+  };
+
   /* Simpan input di localStorage (hanya nilai yang berbeda dari default) */
   var STORE_KEY = "bdo-game-pilot:inputs";
   var readStore = function () {
@@ -1175,7 +1318,8 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     ["form-total", calcTotal],
     ["form-buff", calcBuff],
     ["form-tax", calcTax],
-    ["form-totaltl", calcTotalTL]
+    ["form-totaltl", calcTotalTL],
+    ["form-compen", calcCompen]
   ].forEach(function (x) {
     var form = document.getElementById(x[0]);
     form.addEventListener("input", function () { x[1](); fitAll(); });
@@ -1194,6 +1338,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     document.getElementById("clear-" + x[0].replace("form-", "")).addEventListener("click", function () {
       var data = readStore();
       Array.prototype.forEach.call(form.querySelectorAll("input"), function (el) {
+        if (el.type === "range") return;
         el.value = "";
         if (el.value === el.defaultValue) delete data[el.id];
         else data[el.id] = el.value;
