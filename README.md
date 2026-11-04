@@ -1,5 +1,3 @@
-[Telegram Bot](https://github.com/aagusspurwantoro/gamepilot-telegram-bot)
-
 [BDO Game Pilot](https://agussaas.github.io/bdo-game-pilot)
 
 [Telegram Channel](https://t.me/+Xmmz3gE42BYzNmM1)
