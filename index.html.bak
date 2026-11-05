@@ -150,6 +150,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <button type="button" role="tab" id="tab-compen" aria-controls="panel-compen" aria-selected="false" tabindex="-1">Compen</button>
 <button type="button" role="tab" id="tab-silver" aria-controls="panel-silver" aria-selected="false" tabindex="-1">Silver</button>
 <button type="button" role="tab" id="tab-tips" aria-controls="panel-tips" aria-selected="false" tabindex="-1">Tips & Tricks</button>
+<button type="button" role="tab" id="tab-grinding" aria-controls="panel-grinding" aria-selected="false" tabindex="-1">Grinding Spot</button>
 </nav>
 </header>
 <main>
@@ -687,6 +688,41 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li><a href="https://www.bdoclasshub.com" target="_blank" rel="noopener noreferrer">BDO Class Hub</a></li>
 <li><a href="https://korbdo.co.kr" target="_blank" rel="noopener noreferrer">Tachyon</a></li>
 </ul>
+</section>
+
+<!-- Grinding Spot -->
+<section role="tabpanel" id="panel-grinding" aria-labelledby="tab-grinding" hidden>
+<h2>Grinding Spot</h2>
+<p><strong>Rusalka Coral</strong></p>
+<ul>
+<li>1 Jam <code>500</code> Coral</li>
+</ul>
+<p><strong>Event Horizon</strong></p>
+<ul>
+<li>1 Jam LS2 <code>11,000</code> TL</li>
+<li>1 Jam LS2 <code>x</code> Agris <code>19,000</code> TL</li>
+</ul>
+<p><strong>Magaia Temple</strong></p>
+<ul>
+<li>1 Jam LS2 <code>11,000</code> TL</li>
+</ul>
+<p><strong>Hermesia</strong></p>
+<ul>
+<li>1 Jam LS2 <code>11,000</code> TL</li>
+<li>1 Jam LS2 <code>x</code> Agris <code>20,000</code> TL</li>
+</ul>
+<p><strong>Aphrodon</strong></p>
+<ul>
+<li>1 Jam LS2 <code>11,000</code> TL</li>
+<li>1 Jam LS2 <code>x</code> Agris <code>19,000</code> TL</li>
+</ul>
+<p><strong>Aresion</strong></p>
+<ul>
+<li>1 Jam LS2 <code>11,000</code> TL</li>
+<li>1 Jam LS2 <code>34,000</code> Agris <code>20,000</code> TL</li>
+</ul>
+<p><em>Jika patokan Agris masih berupa variabel <code>x</code>, grinding sendiri dulu dengan Agris berdasarkan patokan TL per jam-nya (jangan lupa update note).</em></p>
+<p><code>x = Agris awal - Agris akhir</code></p>
 </section>
 
 </main>
@@ -1627,6 +1663,15 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
   document.addEventListener("toggle", fitAll, true);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll);
 })();
+</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CNZKP0WWJ8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-CNZKP0WWJ8');
 </script>
 </body>
 </html>
