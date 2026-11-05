@@ -671,8 +671,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li>Jika ada Guild Manor <em>pencet G</em> coba pergi kesana, barangkali ada buff yang bisa digunakan untuk grinding</li>
 <li>Baik hourly maupun silver, usahakan tetap membeli buff drop rate 50% di tenda</li>
 <li>Usahakan selalu mengecek persen drop rate ketika mau grinding karena ini berpengaruh sekali ke progress</li>
-<li>Hati hati jika pakai buff <strong>Blessing of Old Moon Scroll</strong> karena ini seperti memakai Agris</li>
-<li>Buff Guild Manor tidak bisa di stack</li>
+<li>Hati hati jika pakai buff <em>Blessing of Old Moon Scroll</em> karena ini seperti memakai Agris <em>(100% Drop Amount)</em></li>
 </ul>
 <p><strong>Death</strong></p>
 <ul>
