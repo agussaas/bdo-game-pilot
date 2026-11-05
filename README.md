@@ -3,3 +3,5 @@
 [Telegram Channel](https://t.me/+Xmmz3gE42BYzNmM1)
 
 [AGUS](http://t.me/Agus_HK059)
+
+Use at on your own risk!
