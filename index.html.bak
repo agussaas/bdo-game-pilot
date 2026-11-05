@@ -35,7 +35,7 @@ fieldset { border: 1px solid var(--bd); }
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
 }
 
-/* Responsif */
+/* Responsive */
 *, *::before, *::after { box-sizing: border-box; }
 [hidden] { display: none !important; }
 html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
@@ -154,17 +154,18 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 </header>
 <main>
 
+<!-- Google Stopwatch -->
 <section role="tabpanel" id="panel-stopwatch" aria-labelledby="tab-stopwatch">
 <h2>Google Stopwatch</h2>
 <div id="form-stopwatch">
 <fieldset>
-<legend>Input</legend>
+<legend>Input (H:MM:SS)</legend>
 <p><label for="sw-h">Jam (H)</label> <input type="text" inputmode="decimal" id="sw-h" name="h" value="8" required></p>
 <p><label for="sw-m">Menit (MM)</label> <input type="text" inputmode="decimal" id="sw-m" name="m" value="45" required></p>
 <p><label for="sw-s">Detik (SS)</label> <input type="text" inputmode="decimal" id="sw-s" name="s" value="21" required></p>
 <p><button type="button" id="reset-stopwatch">Reset</button> <button type="button" id="clear-stopwatch">Clear</button></p>
 </fieldset>
-<p><label for="sw-out"><strong>Result</strong></label></p>
+<p><label for="sw-out"><strong>Paste di browser console</strong></label></p>
 <p><textarea id="sw-out" name="out" rows="8" cols="80" readonly></textarea></p>
 <p><strong>Note:</strong></p>
 <ul>
@@ -180,6 +181,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 </div>
 </section>
 
+<!-- Progress Hourly no Agris -->
 <section role="tabpanel" id="panel-hourly" aria-labelledby="tab-hourly" hidden>
 <h2>Progress Hourly (Tanpa Agris)</h2>
 <div id="form-hourly">
@@ -212,6 +214,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 </div>
 </section>
 
+<!-- Progress Hourly with Agris -->
 <section role="tabpanel" id="panel-agris" aria-labelledby="tab-agris" hidden>
 <h2>Progress Hourly (Dengan Agris)</h2>
 <div id="form-agris">
@@ -304,6 +307,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 </div>
 </section>
 
+<!-- Total Progress Hourly -->
 <section role="tabpanel" id="panel-total" aria-labelledby="tab-total" hidden>
 <h2>Total Progress Hourly</h2>
 <div id="form-total">
@@ -336,6 +340,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 </div>
 </section>
 
+<!-- Buff Counter -->
 <section role="tabpanel" id="panel-buff" aria-labelledby="tab-buff" hidden>
 <h2>Buff Counter</h2>
 <div id="form-buff">
@@ -389,6 +394,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 </div>
 </section>
 
+<!-- BDO Tax Calculator -->
 <section role="tabpanel" id="panel-tax" aria-labelledby="tab-tax" hidden>
 <h2>BDO Tax Calculator</h2>
 <div id="form-tax">
@@ -479,6 +485,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 </div>  
 </section>
 
+<!-- Total TL -->
 <section role="tabpanel" id="panel-totaltl" aria-labelledby="tab-totaltl" hidden>
 <h2>Total TL</h2>
 <div id="form-totaltl">
@@ -510,6 +517,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 </div>
 </section>
 
+<!-- Compen -->
 <section role="tabpanel" id="panel-compen" aria-labelledby="tab-compen" hidden>
 <h2>Compen</h2>
 <div id="form-compen">
@@ -570,13 +578,14 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 </div>
 </section>
 
+<!-- Silver -->
 <section role="tabpanel" id="panel-silver" aria-labelledby="tab-silver" hidden>
 <h2>Silver</h2>
 <div id="form-silver">
 <fieldset>
 <legend>Input</legend>
 <fieldset>
-<legend>Screenshot awal</legend>
+<legend>Awal shift</legend>
 <p><label for="sv-c0">Silver di Central Market:</label> <input type="text" id="sv-c0" name="c0" value="120b"></p>
 <p><label><input type="checkbox" id="sv-i0-on" name="sv-i0-on" aria-controls="sv-i0"> Silver di Inventory (opsional):</label> <input type="text" id="sv-i0" name="i0" value="5b" disabled aria-label="Silver di Inventory (opsional, screenshot awal)"></p>
 </fieldset>
@@ -588,7 +597,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><label><input type="checkbox" id="sv-o4-on" name="sv-o4-on" aria-controls="sv-o4"> Keep owner:</label> <input type="text" id="sv-o4" name="o4" value="2.1b" disabled aria-label="Keep owner"></p>
 </fieldset>
 <fieldset>
-<legend>Screenshot akhir</legend>
+<legend>End shift</legend>
 <p><label for="sv-c1">Silver di Central Market:</label> <input type="text" id="sv-c1" name="c1" value="118b"></p>
 <p><label><input type="checkbox" id="sv-i1-on" name="sv-i1-on" aria-controls="sv-i1"> Silver di Inventory (opsional):</label> <input type="text" id="sv-i1" name="i1" value="2.5b" disabled aria-label="Silver di Inventory (opsional, screenshot akhir)"></p>
 </fieldset>
@@ -601,8 +610,8 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 </fieldset>
 <fieldset id="sv-cmp">
 <legend>Perbandingan silver (CM)</legend>
-<p><label for="sv-r1">Silver awal:</label> <textarea id="sv-r1" name="sv-r1" rows="1" cols="40" readonly></textarea></p>
-<p><label for="sv-r2">Silver akhir:</label> <textarea id="sv-r2" name="sv-r2" rows="1" cols="40" readonly></textarea></p>
+<p><label for="sv-r1">Awal shift:</label> <textarea id="sv-r1" name="sv-r1" rows="1" cols="40" readonly></textarea></p>
+<p><label for="sv-r2">End shift:</label> <textarea id="sv-r2" name="sv-r2" rows="1" cols="40" readonly></textarea></p>
 <p><label for="sv-r3">Selisih:</label> <textarea id="sv-r3" name="sv-r3" rows="1" cols="40" readonly></textarea></p>
 <p><label for="sv-r4">Keterangan:</label> <textarea id="sv-r4" name="sv-r4" rows="1" cols="40" readonly></textarea></p>
 </fieldset>
@@ -610,23 +619,24 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><label for="sv-r6">Total Progress:</label> <textarea id="sv-r6" name="sv-r6" rows="1" cols="40" readonly></textarea></p>
 <p><strong>Note:</strong></p>
 <ul>
-<li>Silver di Central Market <em>(screenshot awal dan akhir)</em> wajib diisi. Silver di Inventory (opsional) dan semua opsi boleh dicentang atau tidak: jika dicentang, kolomnya aktif, jika tidak, kolomnya nonaktif dan dihitung <code>0</code></li>
+<li>Silver di Central Market <em>(awal dan akhir shift)</em> wajib diisi. Silver di Inventory (opsional) dan semua opsi boleh dicentang atau tidak: jika dicentang, kolomnya aktif, jika tidak, kolomnya nonaktif dan otomatis dihitung <code>0</code></li>
 <li>Silver bisa diisi angka biasa, pemisah ribuan, atau akhiran <code>k</code>, <code>m</code>, <code>b</code>, contoh <code>500k</code>, <code>100m</code>, <code>1.5b</code></li>
-<li>Silver awal dan akhir dijumlahkan dari Central Market dan Inventory, jadi perpindahan silver antara keduanya tidak memengaruhi hasil</li>
-<li>Perbandingan di screenshot menampilkan silver awal, silver akhir, dan selisihnya: <em>hijau</em> jika bertambah dan <em>merah</em> jika berkurang. Berkurang itu wajar karena ada biaya saat atau sebelum grinding, seperti repair gear dan beli buff. Bertambah perlu dicek karena bisa jadi ada aktivitas di luar grinding <em>(wajib tanyakan owner)</em>, yang ikut menambah total perolehan silver</li>
+<li>Silver pada awal dan end shift dijumlahkan dari Central Market dan Inventory, jadi perpindahan silver antara keduanya tidak memengaruhi hasil</li>
+<li>Perbandingan silver di CM menampilkan silver pada saat awal shift, end shift, dan selisihnya: <em>hijau</em> jika bertambah dan <em>merah</em> jika berkurang. Berkurang itu wajar karena ada biaya saat atau sebelum grinding, seperti repair gear dan beli buff. Bertambah perlu dicek karena bisa jadi ada aktivitas di luar grinding <em>(wajib tanyakan owner)</em>, yang ikut menambah total perolehan silver</li>
 <li>Total perolehan silver adalah <em>selisih</em> ditambah total <em>TL & RNG</em></li>
+<li>Awal shift dan end shift <em>beda banget</em> dengan screenshot awal dan akhir, jangan menginput awal shift dengan screenshot awal dan end shift dengan screenshot akhir biar perhitungannya akurat</li>
 <li>Total Progress adalah total progress sebelumnya ditambah total perolehan silver, dibandingkan dengan total progress keseluruhan. Formatnya <code>57.4 B / 150 B</code>: kiri progress yang didapat, kanan total keseluruhan. <code>B</code> berarti miliar, <code>M</code> juta, dan <code>K</code> ribu</li>
 <li>Total progress sebelumnya boleh dikosongkan, dihitung <code>0</code></li>
 </ul>
 <p><strong>Contoh:</strong></p>
 <ul>
-<li>Central Market (awal): <code>120b</code>, Central Market (akhir): <code>118b</code></li>
+<li>Central Market (awal shift): <code>120b</code>, Central Market (end shift): <code>118b</code></li>
 <li>Total progress sebelumnya: <code>59.4b</code>, Total progress keseluruhan: <code>150b</code></li>
 <li>Selisih: <samp>-2,000,000,000 silver (-2 B)</samp> (merah karena berkurang)</li>
 <li>Total perolehan silver: <samp>-2,000,000,000 silver (-2 B)</samp></li>
 <li>Total Progress: <samp>57.4 B / 140 B</samp></li>
 <li>Jika <em>Sell in storage</em> dicentang dan diisi <code>7.6b</code>, Total perolehan silver menjadi <samp>5,600,000,000 silver (5.6 B)</samp> dan Total Progress <samp>65 B / 150 B</samp></li>
-<li>Jika Central Market (akhir) <code>118b</code>, Selisih <samp>-2,000,000,000 silver (-2 B)</samp> (merah karena berkurang)</li>
+<li>Jika Central Market (end shift) <code>118b</code>, Selisih <samp>-2,000,000,000 silver (-2 B)</samp> (merah karena berkurang)</li>
 </ul>
 <details>
 <summary>Perhitungan</summary>
@@ -646,14 +656,15 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 </div>
 </section>
 
+<!-- Tips & Tricks -->
 <section role="tabpanel" id="panel-tips" aria-labelledby="tab-tips" hidden>
 <h2>Tips & Tricks</h2>
 <p><strong>Grinding</strong></p>
 <ul>
 <li>Jika Maid sedikit, TL bisa ditaruh di kuda. Jadi pada saat inventory sudah penuh pergi ke kuda dan pencet <strong>F6</strong> di keyboard lalu pindahkan semua TL-nya disana</li>
-<li>Jika Maid-nya banyak jangan pergi ke kota, taruh aja di spot grinding dan usahakan jauh dari mob</li>
-<li>Jangan letakkan TL di kuda jika Maid-nya banyak, taruh aja di storage</li>
-<li>Jika total TL di storage sudah mencapai ratusan ribu <em>k</em> arahkan mouse ke TL-nya jika ingin mengetahui total TL-nya</li>
+<li>Jika Maid-nya banyak jangan pergi ke kota, taruh aja di spot grinding dan usahakan jauh dari mob agar pas owner mau login atau shift berikutnya <em>gak kaget</em></li>
+<li>Jangan letakkan TL di kuda jika Maid-nya banyak, taruh aja di storage <em>(wasting time banget)</em></li>
+<li>Jika total TL di storage sudah mencapai ratusan ribu <em>k</em> arahkan mouse ke TL-nya jika ingin mengetahui total TL-nya secara akurat</li>
 </ul>
 <p><strong>Buff</strong></p>
 <ul>
@@ -661,14 +672,22 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li>Baik hourly maupun silver, usahakan tetap membeli buff drop rate 50% di tenda</li>
 <li>Usahakan selalu mengecek persen drop rate ketika mau grinding karena ini berpengaruh sekali ke progress</li>
 <li>Hati hati jika pakai buff <strong>Blessing of Old Moon Scroll</strong> karena ini seperti memakai Agris</li>
+<li>Buff Guild Manor tidak bisa di stack</li>
 </ul>
+<p><strong>Death</strong></p>
+<ul>
+<li>Selalu <em>cek Elion's Tear</em> dan <em>Elion's Blessing</em> sebelum grinding buat jaga-jaga kalau pas character mati dan <em>Fairy Tear</em> gak ada bisa pakai ini</li>
+</ul>
+<li>Jangan pernah dan mencoba untuk restore crystal pada saat character mati, boleh restore jika sudah mendapatkan persetujuan dari owner</li>
+<li>Compen crystal pecah pedomannya untuk saat ini adalah <em>50% TL dan 50% RNG</em></li>
+<li>Gunakan <em>Fairy Tear</em> jika character mati, ini wajib banget dan jangan lupa kalau ada itu ya pakai</li>
+<li>Jika <em>Elion's Tear, Elion's Blessing, maupun Fairy Tear</em> gak ada pada saat character mati, ya pilihan terakhir ya ke safe zone</li>
 </section>
 
 </main>
 <dialog id="help-dialog" aria-labelledby="help-title">
 <h2 id="help-title">Help</h2>
 <ul>
-<li><a href="https://github.com/aagusspurwantoro/gamepilot-telegram-bot" target="_blank" rel="noopener noreferrer">Telegram Bot</a></li>
 <li><a href="https://github.com/agussaas/bdo-game-pilot" target="_blank" rel="noopener noreferrer">GitHub</a></li>
 <li><a href="https://t.me/+Xmmz3gE42BYzNmM1" target="_blank" rel="noopener noreferrer">Telegram Channel</a></li>
 <li><a href="http://t.me/Agus_HK059" target="_blank" rel="noopener noreferrer">AGUS</a></li>
@@ -814,7 +833,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     document.getElementById("sw-out").value = code;
   };
 
-  /* Klik/fokus pada kode stopwatch: seluruh isi langsung terpilih untuk disalin */
+  /* Klik/fokus pada kode stopwatch: seluruh isi langsung tersorot dan siap di copy */
   var swOut = document.getElementById("sw-out");
   var selectSwOut = function () {
     swOut.select();
