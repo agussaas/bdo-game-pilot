@@ -676,11 +676,17 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><strong>Death</strong></p>
 <ul>
 <li>Selalu <em>cek Elion's Tear</em> dan <em>Elion's Blessing</em> sebelum grinding buat jaga-jaga kalau pas character mati dan <em>Fairy Tear</em> gak ada bisa pakai ini</li>
-</ul>
 <li>Jangan pernah dan mencoba untuk restore crystal pada saat character mati, boleh restore jika sudah mendapatkan persetujuan dari owner</li>
 <li>Compen crystal pecah pedomannya untuk saat ini adalah <em>50% TL dan 50% RNG</em></li>
 <li>Gunakan <em>Fairy Tear</em> jika character mati, ini wajib banget dan jangan lupa kalau ada itu ya pakai</li>
 <li>Jika <em>Elion's Tear, Elion's Blessing, maupun Fairy Tear</em> gak ada pada saat character mati, ya pilihan terakhir ya ke safe zone</li>
+</ul>
+<p><strong>Link</strong></p>
+<ul>
+<li><a href="https://garmoth.com" target="_blank" rel="noopener noreferrer">Garmoth</a></li>
+<li><a href="https://www.bdoclasshub.com" target="_blank" rel="noopener noreferrer">BDO Class Hub</a></li>
+<li><a href="https://korbdo.co.kr" target="_blank" rel="noopener noreferrer">Tachyon</a></li>
+</ul>
 </section>
 
 </main>
