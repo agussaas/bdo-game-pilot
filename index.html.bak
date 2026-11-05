@@ -111,6 +111,10 @@ dialog a { display: inline-block; padding: 0.25rem 0; }
   margin: 0.5rem 0 1rem;
 }
 input[type="range"] { padding: 0; border: 0; background: transparent; }
+input[type="checkbox"] { display: inline-block; width: 1.1rem; height: 1.1rem; min-height: 0; margin: 0 0.35rem 0 0; padding: 0; vertical-align: middle; }
+input:disabled { opacity: 0.55; cursor: not-allowed; }
+.up { color: light-dark(#0b6b2b, #6fe39a); }
+.down { color: light-dark(#b00020, #ff8a8a); }
 figure { min-width: 0; margin: 0; }
 img { display: block; max-width: 100%; height: auto; border: 1px solid var(--bd); border-radius: 0.5rem; }
 figcaption { margin-top: 0.5rem; font-size: 0.875rem; }
@@ -144,6 +148,8 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <button type="button" role="tab" id="tab-tax" aria-controls="panel-tax" aria-selected="false" tabindex="-1">BDO Tax Calculator</button>
 <button type="button" role="tab" id="tab-totaltl" aria-controls="panel-totaltl" aria-selected="false" tabindex="-1">Total TL</button>
 <button type="button" role="tab" id="tab-compen" aria-controls="panel-compen" aria-selected="false" tabindex="-1">Compen</button>
+<button type="button" role="tab" id="tab-silver" aria-controls="panel-silver" aria-selected="false" tabindex="-1">Silver</button>
+<button type="button" role="tab" id="tab-tips" aria-controls="panel-tips" aria-selected="false" tabindex="-1">Tips & Tricks</button>
 </nav>
 </header>
 <main>
@@ -152,24 +158,24 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <h2>Google Stopwatch</h2>
 <div id="form-stopwatch">
 <fieldset>
-<legend>Enter H:MM:SS</legend>
-<p><label for="sw-h">Jam (H)</label> <input type="text" inputmode="decimal" id="sw-h" name="h" value="1" required></p>
-<p><label for="sw-m">Menit (MM)</label> <input type="text" inputmode="decimal" id="sw-m" name="m" value="41" required></p>
-<p><label for="sw-s">Detik (SS)</label> <input type="text" inputmode="decimal" id="sw-s" name="s" value="49" required></p>
+<legend>Input</legend>
+<p><label for="sw-h">Jam (H)</label> <input type="text" inputmode="decimal" id="sw-h" name="h" value="8" required></p>
+<p><label for="sw-m">Menit (MM)</label> <input type="text" inputmode="decimal" id="sw-m" name="m" value="45" required></p>
+<p><label for="sw-s">Detik (SS)</label> <input type="text" inputmode="decimal" id="sw-s" name="s" value="21" required></p>
 <p><button type="button" id="reset-stopwatch">Reset</button> <button type="button" id="clear-stopwatch">Clear</button></p>
 </fieldset>
-<p><label for="sw-out">Paste di browser console</label></p>
+<p><label for="sw-out"><strong>Result</strong></label></p>
 <p><textarea id="sw-out" name="out" rows="8" cols="80" readonly></textarea></p>
-<p>Note:</p>
+<p><strong>Note:</strong></p>
 <ul>
 <li>Buka tab baru, search <code>Stopwatch</code> di Google</li>
 <li>Play dulu 1–3 detik, yang penting stopwatch udah jalan</li>
 <li>Buka browser console, tekan <strong>F12</strong></li>
 <li>Paste, ketik <code>allow pasting</code> terus enter jika tidak bisa paste</li>
+<li>Jika <strong>F12</strong> membuka tab <em>Elements</em>, klik pada tab <em>Console</em> untuk membuka browser console</li>
 </ul>
 <figure>
 <img src="browser-console.png" alt="Screenshot browser console" loading="lazy">
-<figcaption>Jika <strong>F12</strong> membuka tab <em>Elements</em>, klik pada tab <em>Console</em> untuk membuka browser console.</figcaption>
 </figure>
 </div>
 </section>
@@ -179,28 +185,28 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <div id="form-hourly">
 <fieldset>
 <legend>Input</legend>
-<p><label for="h-total">Total TL:</label> <input type="text" inputmode="decimal" id="h-total" name="total" value="55,000"></p>
-<p><label for="h-rate">TL per jam:</label> <input type="text" inputmode="decimal" id="h-rate" name="rate" value="19,000"></p>
+<p><label for="h-total">Total TL:</label> <input type="text" inputmode="decimal" id="h-total" name="total" value="97,000"></p>
+<p><label for="h-rate">TL per jam (patokan):</label> <input type="text" inputmode="decimal" id="h-rate" name="rate" value="11,000"></p>
 <p><button type="button" id="reset-hourly">Reset</button> <button type="button" id="clear-hourly">Clear</button></p>
 </fieldset>
 <p><label for="h-out">Progress:</label> <textarea id="h-out" name="progress" rows="1" cols="50" readonly></textarea></p>
-<p>Contoh:</p>
+<p><strong>Contoh:</strong></p>
 <ul>
-<li>Total perolehan TL dalam satu shift: <code>55,000</code></li>
-<li><em>TL per jam sesuai note: <code>19,000</code></em></li>
-<li>Progress: <samp>2 Hours 53 Minutes 41 Seconds</samp></li>
+<li>Total perolehan TL dalam satu shift: <code>97,000</code></li>
+<li><em>TL per jam sesuai patokan yang ada di note: <code>11,000</code></em></li>
+<li>Progress: <samp>8 Hours 49 Minutes 5 Seconds</samp></li>
 </ul>
 <details>
 <summary>Perhitungan</summary>
 <p><label for="h-s1">Total TL dibagi TL per jam <strong>(waktu dalam jam)</strong></label></p>
 <p><textarea id="h-s1" name="h-s1" rows="1" cols="50" readonly></textarea></p>
-<p><label for="h-s2">Waktu dalam jam dikali 3600, dibulatkan ke bawah <strong>(total detik)</strong></label></p>
+<p><label for="h-s2">Waktu dalam jam dikali <code>3600</code>, dibulatkan ke bawah <strong>(total detik)</strong></label></p>
 <p><textarea id="h-s2" name="h-s2" rows="1" cols="50" readonly></textarea></p>
-<p><label for="h-s3">Total detik dibagi 3600, dibulatkan ke bawah <strong>(jam)</strong></label></p>
+<p><label for="h-s3">Total detik dibagi <code>3600</code>, dibulatkan ke bawah <strong style="color: #dc3545;">(jam)</strong></label></p>
 <p><textarea id="h-s3" name="h-s3" rows="1" cols="50" readonly></textarea></p>
-<p><label for="h-s4">Sisa total detik dibagi 3600, lalu dibagi 60 dan dibulatkan ke bawah <strong>(menit)</strong></label></p>
+<p><label for="h-s4">Sisa total detik dibagi <code>3600</code>, lalu dibagi <code>60</code> dan dibulatkan ke bawah <strong style="color: #dc3545;">(menit)</strong></label></p>
 <p><textarea id="h-s4" name="h-s4" rows="1" cols="50" readonly></textarea></p>
-<p><label for="h-s5">Sisa total detik dibagi 60 <strong>(detik)</strong></label></p>
+<p><label for="h-s5">Sisa total detik dibagi <code>60</code> <strong style="color: #dc3545;">(detik)</strong></label></p>
 <p><textarea id="h-s5" name="h-s5" rows="1" cols="50" readonly></textarea></p>
 </details>
 </div>
@@ -211,87 +217,87 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <div id="form-agris">
 <fieldset>
 <legend>Input</legend>
-<p><label for="a-total">Total TL:</label> <input type="text" inputmode="decimal" id="a-total" name="total" value="55,000"></p>
+<p><label for="a-total">Total TL:</label> <input type="text" inputmode="decimal" id="a-total" name="total" value="110,000"></p>
 <fieldset>
 <legend>Patokan Agris</legend>
-<p><label for="a-rate">TL/hr dengan Agris:</label> <input type="text" inputmode="decimal" id="a-rate" name="rate" value="19,000"></p>
-<p><label for="a-cost">Agris yang digunakan per jam:</label> <input type="text" inputmode="decimal" id="a-cost" name="cost" value="32,000"></p>
+<p><label for="a-rate">TL/hr dengan Agris (sesuai note):</label> <input type="text" inputmode="decimal" id="a-rate" name="rate" value="19,000"></p>
+<p><label for="a-cost">Agris yang digunakan per jam (sesuai note):</label> <input type="text" inputmode="decimal" id="a-cost" name="cost" value="32,000"></p>
 </fieldset>
-<p><label for="a-normal">TL/hr tanpa Agris:</label> <input type="text" inputmode="decimal" id="a-normal" name="normal" value="11,000"></p>
-<p><label for="a-current">Agris yang digunakan:</label> <input type="text" inputmode="decimal" id="a-current" name="current" value="32,000"></p>
+<p><label for="a-normal">TL/hr tanpa Agris (sesuai note):</label> <input type="text" inputmode="decimal" id="a-normal" name="normal" value="11,000"></p>
+<p><label for="a-current">Agris yang digunakan selama shift:</label> <input type="text" inputmode="decimal" id="a-current" name="current" value="55,000"></p>
 <p><button type="button" id="reset-agris">Reset</button> <button type="button" id="clear-agris">Clear</button></p>
 </fieldset>
 <p><label for="a-out">Total Time:</label> <textarea id="a-out" name="total-time" rows="1" cols="40" readonly></textarea></p>
 <p><label for="a-with">Time with Agris:</label> <textarea id="a-with" name="time-with-agris" rows="1" cols="40" readonly></textarea></p>
 <p><label for="a-without">Time without Agris:</label> <textarea id="a-without" name="time-without-agris" rows="1" cols="40" readonly></textarea></p>
-<p>Note:</p>
+<p><strong>Note:</strong></p>
 <ul>
 <li>Harus ada patokan <em>Agris yang digunakan</em> dan <em>total TL</em> per jam</li>
 </ul>
 <div id="note-images">
 <figure>
 <img src="tidak-bisa-di-hitung.png" alt="Screenshot TL yang tidak bisa dihitung" loading="lazy">
-<figcaption><strong>Tidak bisa dihitung.</strong> Pada kotak merah di note, hanya TL per jam dengan Agris, sedangkan Agris yang digunakan per jam tidak ada. Tanpa patokan itu, perhitungannya tidak akan bisa. Solusinya, grinding sendiri dengan Agris berdasarkan TL per jam yang ada di note.</figcaption>
+<figcaption><strong>Tidak bisa dihitung.</strong> Pada kotak merah yang ada di note, hanya TL per jam dengan Agris saja yang diketahui, sedangkan Agris yang digunakan per jam tidak ada. Tanpa patokan itu, perhitungannya tidak akan menampilkan hasil. Solusinya, <em>grinding sendiri dengan Agris berdasarkan TL per jam yang ada di note</em>.</figcaption>
 </figure>
 <figure>
 <img src="bisa-di-hitung.png" alt="Screenshot TL yang bisa dihitung" loading="lazy">
-<figcaption><strong>Bisa dihitung.</strong> Pada kotak biru di note, ada patokan Agris yang digunakan per jam beserta TL per jamnya. Dengan kedua patokan ini, perhitungan total time, time with Agris, dan time without Agris akan menampilkan hasil.</figcaption>
+<figcaption><strong>Bisa dihitung.</strong> Pada kotak biru yang ada di note, ada patokan Agris yang digunakan per jam beserta TL per jamnya. Dengan kedua patokan ini, <em>perhitungan total time, time with Agris, dan time without Agris</em> dapat dijalankan dan tidak akan menampilkan error.</figcaption>
 </figure>
 </div>
 <p>Contoh:</p>
 <ul>
-<li>Total TL selama shift: <code>55,000</code></li>
+<li>Total TL selama shift: <code>110,000</code></li>
 <li><em>Note dari TL per jam pake Agris: <code>19,000</code></em></li>
 <li><em>Note dari TL per jam berapa Agris: <code>32,000</code></em></li>
 <li><em>Note dari TL per jam tanpa Agris: <code>11,000</code></em></li>
-<li>Agris yang digunakan selama shift: <code>32,000</code></li>
-<li>Total Time: <samp>4 Hours 16 Minutes 21 Seconds</samp></li>
-<li>Time with Agris: <samp>1 Hours 0 Minutes 0 Seconds</samp></li>
-<li>Time without Agris: <samp>3 Hours 16 Minutes 21 Seconds</samp></li>
+<li>Agris yang digunakan selama shift: <code>55,000</code></li>
+<li>Total Time: <samp>8 Hours 45 Minutes 0 Seconds</samp></li>
+<li>Time with Agris: <samp>1 Hours 43 Minutes 7 Seconds</samp></li>
+<li>Time without Agris: <samp>7 Hours 1 Minutes 52 Seconds</samp></li>
 </ul>
 <details>
 <summary>Perhitungan</summary>
-<p><label for="a-s1">Agris yang digunakan selama shift dibagi dengan Agris yang digunakan per jam <strong>(maks jam Agris)</strong></label></p>
+<p><label for="a-s1">Agris yang digunakan selama shift dibagi dengan patokan Agris yang digunakan per jam <strong>(maks jam Agris)</strong></label></p>
 <p><textarea id="a-s1" name="a-s1" rows="1" cols="50" readonly></textarea></p>
-<p><label for="a-s2">Maks jam Agris dikali TL/hr dengan Agris <strong>(maks TL Agris)</strong></label></p>
+<p><label for="a-s2">Maks jam Agris dikali dengan patokan TL/hr dengan Agris <strong>(maks TL Agris)</strong></label></p>
 <p><textarea id="a-s2" name="a-s2" rows="1" cols="50" readonly></textarea></p>
 <p><label for="a-s3">Total TL dibandingkan dengan Maks TL Agris <strong>(≤ berarti Agris cukup, > berarti Agris tidak cukup)</strong></label></p>
 <p><textarea id="a-s3" name="a-s3" rows="1" cols="50" readonly></textarea></p>
-<p><label for="a-s4" id="a-l4">(Total TL dikurangi Maks TL Agris) dibagi TL/hr tanpa Agris <strong>(waktu without Agris, dalam jam)</strong></label></p>
+<p><label for="a-s4" id="a-l4">(Total TL dikurangi Maks TL Agris) dibagi dengan patokan TL/hr tanpa Agris <strong>(waktu without Agris, dalam jam)</strong></label></p>
 <p><textarea id="a-s4" name="a-s4" rows="1" cols="50" readonly></textarea></p>
 <p><label for="a-s5">Waktu with Agris ditambah waktu without Agris <strong>(total waktu, dalam jam)</strong></label></p>
 <p><textarea id="a-s5" name="a-s5" rows="1" cols="50" readonly></textarea></p>
 <fieldset>
 <legend>Total Time</legend>
-<p><label for="a-t1">Waktu dalam jam dikali 3600, dibulatkan ke bawah <strong>(total detik)</strong></label></p>
+<p><label for="a-t1">Waktu dalam jam dikali <code>3600</code>, dibulatkan ke bawah <strong>(total detik)</strong></label></p>
 <p><textarea id="a-t1" name="a-t1" rows="1" cols="50" readonly></textarea></p>
-<p><label for="a-t2">Total detik dibagi 3600, dibulatkan ke bawah <strong>(jam)</strong></label></p>
+<p><label for="a-t2">Total detik dibagi <code>3600</code>, dibulatkan ke bawah <strong style="color: #dc3545;">(jam)</strong></label></p>
 <p><textarea id="a-t2" name="a-t2" rows="1" cols="50" readonly></textarea></p>
-<p><label for="a-t3">Sisa total detik dibagi 3600, lalu dibagi 60 dan dibulatkan ke bawah <strong>(menit)</strong></label></p>
+<p><label for="a-t3">Sisa total detik dibagi <code>3600</code>, lalu dibagi <code>60</code> dan dibulatkan ke bawah <strong style="color: #dc3545;">(menit)</strong></label></p>
 <p><textarea id="a-t3" name="a-t3" rows="1" cols="50" readonly></textarea></p>
-<p><label for="a-t4">Sisa total detik dibagi 60 <strong>(detik)</strong></label></p>
+<p><label for="a-t4">Sisa total detik dibagi <code>60</code> <strong style="color: #dc3545;">(detik)</strong></label></p>
 <p><textarea id="a-t4" name="a-t4" rows="1" cols="50" readonly></textarea></p>
 </fieldset>
 <fieldset>
 <legend>Time with Agris</legend>
-<p><label for="a-w1">Waktu dalam jam dikali 3600, dibulatkan ke bawah <strong>(total detik)</strong></label></p>
+<p><label for="a-w1">Waktu dalam jam dikali <code>3600</code>, dibulatkan ke bawah <strong>(total detik)</strong></label></p>
 <p><textarea id="a-w1" name="a-w1" rows="1" cols="50" readonly></textarea></p>
-<p><label for="a-w2">Total detik dibagi 3600, dibulatkan ke bawah <strong>(jam)</strong></label></p>
+<p><label for="a-w2">Total detik dibagi <code>3600</code>, dibulatkan ke bawah <strong style="color: #dc3545;">(jam)</strong></label></p>
 <p><textarea id="a-w2" name="a-w2" rows="1" cols="50" readonly></textarea></p>
-<p><label for="a-w3">Sisa total detik dibagi 3600, lalu dibagi 60 dan dibulatkan ke bawah <strong>(menit)</strong></label></p>
+<p><label for="a-w3">Sisa total detik dibagi <code>3600</code>, lalu dibagi <code>60</code> dan dibulatkan ke bawah <strong style="color: #dc3545;">(menit)</strong></label></p>
 <p><textarea id="a-w3" name="a-w3" rows="1" cols="50" readonly></textarea></p>
-<p><label for="a-w4">Sisa total detik dibagi 60 <strong>(detik)</strong></label></p>
+<p><label for="a-w4">Sisa total detik dibagi <code>60</code> <strong style="color: #dc3545;">(detik)</strong></label></p>
 <p><textarea id="a-w4" name="a-w4" rows="1" cols="50" readonly></textarea></p>
 </fieldset>
 <fieldset>
 <legend>Time without Agris</legend>
-<p><label for="a-o1">Waktu dalam jam dikali 3600, dibulatkan ke bawah <strong>(total detik)</strong></label></p>
+<p><label for="a-o1">Waktu dalam jam dikali <code>3600</code>, dibulatkan ke bawah <strong>(total detik)</strong></label></p>
 <p><textarea id="a-o1" name="a-o1" rows="1" cols="50" readonly></textarea></p>
-<p><label for="a-o2">Total detik dibagi 3600, dibulatkan ke bawah <strong>(jam)</strong></label></p>
+<p><label for="a-o2">Total detik dibagi <code>3600</code>, dibulatkan ke bawah <strong style="color: #dc3545;">(jam)</strong></label></p>
 <p><textarea id="a-o2" name="a-o2" rows="1" cols="50" readonly></textarea></p>
-<p><label for="a-o3">Sisa total detik dibagi 3600, lalu dibagi 60 dan dibulatkan ke bawah <strong>(menit)</strong></label></p>
+<p><label for="a-o3">Sisa total detik dibagi <code>3600</code>, lalu dibagi <code>60></code> dan dibulatkan ke bawah <strong style="color: #dc3545;">(menit)</strong></label></p>
 <p><textarea id="a-o3" name="a-o3" rows="1" cols="50" readonly></textarea></p>
-<p><label for="a-o4">Sisa total detik dibagi 60 <strong>(detik)</strong></label></p>
+<p><label for="a-o4">Sisa total detik dibagi <code>60</code> <strong style="color: #dc3545;">(detik)</strong></label></p>
 <p><textarea id="a-o4" name="a-o4" rows="1" cols="50" readonly></textarea></p>
 </fieldset>
 </details>
@@ -303,16 +309,16 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <div id="form-total">
 <fieldset>
 <legend>Input</legend>
-<p><label for="t-prev">Total progress sebelumnya:</label> <input type="text" id="t-prev" name="prev" value="360 H 51 M"></p>
-<p><label for="t-now">Progress:</label> <input type="text" id="t-now" name="now" value="8 H 30 M"></p>
+<p><label for="t-prev">Total progress sebelumnya:</label> <input type="text" id="t-prev" name="prev" value="60 H 41 M"></p>
+<p><label for="t-now">Progress sekarang:</label> <input type="text" id="t-now" name="now" value="8 H 45 M"></p>
 <p><button type="button" id="reset-total">Reset</button> <button type="button" id="clear-total">Clear</button></p>
 </fieldset>
 <p><label for="t-out">Total Hours:</label> <textarea id="t-out" name="total-hours" rows="1" cols="40" readonly></textarea></p>
-<p>Contoh:</p>
+<p><strong>Contoh:</strong></p>
 <ul>
-<li>Total progress sebelumnya adalah <code>360 H 51 M</code></li>
-<li>Progress sekarang: <code>8 H 30 M</code></li>
-<li>Total Hours: <samp>369 H 21 M</samp></li>
+<li>Total progress sebelumnya adalah <code>60 H 41 M</code></li>
+<li>Progress sekarang: <code>8 H 45 M</code></li>
+<li>Total Hours: <samp>69 H 26 M</samp></li>
 </ul>
 <details>
 <summary>Perhitungan</summary>
@@ -322,9 +328,9 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><textarea id="t-s2" name="t-s2" rows="1" cols="50" readonly></textarea></p>
 <p><label for="t-s3">Menit sebelumnya ditambah menit sekarang <strong>(total menit)</strong></label></p>
 <p><textarea id="t-s3" name="t-s3" rows="1" cols="50" readonly></textarea></p>
-<p><label for="t-s4">Total menit dibagi 60, dibulatkan ke bawah <strong>(jam)</strong></label></p>
+<p><label for="t-s4">Total menit dibagi <code>60</code>, dibulatkan ke bawah <strong style="color: #dc3545;">(jam)</strong></label></p>
 <p><textarea id="t-s4" name="t-s4" rows="1" cols="50" readonly></textarea></p>
-<p><label for="t-s5">Sisa total menit dibagi 60 <strong>(menit)</strong></label></p>
+<p><label for="t-s5">Sisa total menit dibagi <code>60</code> <strong style="color: #dc3545;">(menit)</strong></label></p>
 <p><textarea id="t-s5" name="t-s5" rows="1" cols="50" readonly></textarea></p>
 </details>
 </div>
@@ -335,7 +341,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <div id="form-buff">
 <fieldset>
 <legend>Input</legend>
-<p><label for="b-shift">Shift length:</label> <input type="text" id="b-shift" name="shift" value="6h"></p>
+<p><label for="b-shift">Shift length:</label> <input type="text" id="b-shift" name="shift" value="8h"></p>
 <p><label for="b-duration">Buff duration:</label> <input type="text" id="b-duration" name="duration" value="15m"></p>
 <p><label for="b-cooldown">Cooldown:</label> <input type="text" id="b-cooldown" name="cooldown" value="10s"></p>
 <p><label for="b-price">Price per buff (opsional):</label> <input type="text" id="b-price" name="price" value="27.5m"></p>
@@ -345,19 +351,19 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><label for="b-o2">Buff:</label> <textarea id="b-o2" name="buff-out" rows="1" cols="40" readonly></textarea></p>
 <p><label for="b-o3">Total Buff:</label> <textarea id="b-o3" name="total-buff" rows="1" cols="40" readonly></textarea></p>
 <p><label for="b-o4">Cost:</label> <textarea id="b-o4" name="cost" rows="1" cols="40" readonly></textarea></p>
-<p>Note:</p>
+<p><strong>Note:</strong></p>
 <ul>
-<li>Jika ditulis tanpa satuan, Shift length dihitung <em>jam</em>, Buff duration <em>menit</em>, dan Cooldown <em>detik</em>, jadi <code>6 15 10</code> sama dengan <code>6h 15m 10s</code></li>
-<li>Satuan yang bisa dipakai: <code>h</code>, <code>m</code>, <code>s</code>. Tiap form input hanya dapat diisi dalam satu nilai, misal tulis <code>90m</code> bukan <code>1h 30m</code></li>
+<li>Jika ditulis tanpa satuan, Shift length dihitung <em>jam</em>, Buff duration <em>menit</em>, dan Cooldown <em>detik</em>, jadi <code>8 15 10</code> sama dengan <code>8h 15m 10s</code></li>
+<li>Satuan yang bisa dipakai: <code>h</code>, <code>m</code>, <code>s</code>. Tiap form input hanya dapat diisi satu nilai saja tidak bisa lebih, misal tulis <code>90m</code> bukan <code>1h 30m</code></li>
 <li>Price per buff bisa pakai angka biasa, pemisah ribuan, atau akhiran <code>k</code>, <code>m</code>, <code>b</code>. Jika dikosongkan, Cost tidak akan dihitung</li>
 </ul>
-<p>Contoh:</p>
+<p><strong>Contoh:</strong></p>
 <ul>
-<li>Shift length: <code>6h</code>, Buff duration: <code>15m</code>, Cooldown: <code>10s</code>, Price per buff: <code>27.5m</code></li>
-<li>Shift: <samp>6h</samp></li>
+<li>Shift length: <code>8h</code>, Buff duration: <code>15m</code>, Cooldown: <code>10s</code>, Price per buff: <code>27.5m</code></li>
+<li>Shift: <samp>8h</samp></li>
 <li>Buff: <samp>15m duration + 10s cooldown (one buff covers 15m 10s)</samp></li>
-<li>Total Buff: <samp>24 buffs</samp></li>
-<li>Cost: <samp>24 x 27,500,000 = 660,000,000 silver</samp></li>
+<li>Total Buff: <samp>32 buffs</samp></li>
+<li>Cost: <samp>32 x 27,500,000 = 880,000,000 silver</samp></li>
 </ul>
 <details>
 <summary>Perhitungan</summary>
@@ -373,11 +379,11 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><textarea id="b-s5" name="b-s5" rows="1" cols="50" readonly></textarea></p>
 <p><label for="b-s6">Hasil bagi dibulatkan ke atas</label></p>
 <p><textarea id="b-s6" name="b-s6" rows="1" cols="50" readonly></textarea></p>
-<p><label for="b-s7">Jumlah buff minimal 1 <strong>(ambil yang terbesar antara 1 dan hasil pembulatan)</strong></label></p>
+<p><label for="b-s7">Jumlah buff minimal 1 <strong style="color: #dc3545;">(ambil yang terbesar antara 1 dan hasil pembulatan)</strong></label></p>
 <p><textarea id="b-s7" name="b-s7" rows="1" cols="50" readonly></textarea></p>
 <p><label for="b-s8">Harga per buff diubah ke silver <strong>(nilai dikali pengali, dibulatkan ke bawah)</strong></label></p>
 <p><textarea id="b-s8" name="b-s8" rows="1" cols="50" readonly></textarea></p>
-<p><label for="b-s9">Total biaya: jumlah buff dikali harga per buff <strong>(silver)</strong></label></p>
+<p><label for="b-s9">Total biaya: jumlah buff dikali harga per buff <strong style="color: #dc3545;">(silver)</strong></label></p>
 <p><textarea id="b-s9" name="b-s9" rows="1" cols="50" readonly></textarea></p>
 </details>
 </div>
@@ -407,12 +413,14 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><label for="d-p4">Value Pack (+30%):</label> <textarea id="d-p4" name="d-p4" rows="1" cols="40" readonly></textarea></p>
 <p><label for="d-p5">You receive:</label> <textarea id="d-p5" name="d-p5" rows="1" cols="40" readonly></textarea></p>
 </fieldset>
-<p>Note:</p>
+<p><strong>Note:</strong></p>
 <ul>
 <li>Price bisa pakai angka biasa (<code>5000000</code>), pemisah ribuan (<code>1,000,000</code>), atau akhiran <code>k</code> (ribu), <code>m</code> (juta), <code>b</code> (miliar), <code>t</code> (triliun), contoh <code>500k</code>, <code>100m</code>, <code>1.5b</code></li>
-<li>Options boleh dikosongkan atau diisi beberapa, dipisah spasi: <code>vp</code> (Value Pack aktif), <code>ring</code> (Rich Merchant's Ring atau Old Moon Trade Pass, keduanya tidak bisa ditumpuk), dan Family Fame berupa tier <code>fame1</code>, <code>fame2</code>, <code>fame3</code> atau poin Family Fame <strong>P</strong> (contoh <code>4500</code>, otomatis jadi tier)</li>
+<li>Options boleh dikosongkan atau diisi beberapa, dipisah spasi: <code>vp</code> (Value Pack aktif), <code>ring</code> (Rich Merchant's Ring atau Old Moon Trade Pass, keduanya tidak bisa ditumpuk), dan Family Fame berupa tier <code>fame1</code>, <code>fame2</code>, <code>fame3</code> atau poin Family Fame <em>di shortcut keyboard <strong>P</strong></em> (contoh <code>4500</code>, otomatis akan diubah menjadi tier)</li>
+<li>Cara mengisi Options: tulis hanya yang aktif, yang tidak aktif tidak perlu ditulis. Contoh jika Value Pack aktif, Ring tidak aktif, dan poin Family Fame 4500, tulis <code>vp 4500</code></li>
+<li>Contoh lain: Value Pack tidak aktif, Ring aktif, dan Family Fame tier 2, tulis <code>ring fame2</code>. Jika semuanya aktif, tulis <code>vp ring 4500</code>. Jika tidak ada yang aktif, kosongkan Options</li>
 <li>Jika Options kosong, result akan menampilkan dua versi: biasa dan with Value Pack</li>
-<li>Jika ada lebih dari satu input Family Fame, maka otomatis yang terakhir sendiri masuk ke result</li>
+<li>Jika ada lebih dari satu input Family Fame, maka otomatis yang terakhir sendiri masuk ke perhitungan</li>
 <li>Pajak total <em>35%</em> (30% Central Market dan 5% territory), jadi seller menerima <em>65%</em></li>
 <li>Semua bonus dihitung dari profit setelah pajak <em>(65%)</em>, lalu dijumlahkan: <em>Value Pack +30%</em>, <em>Ring/Pass +5%</em>, <em>Family Fame 1000–3999 +0.5%</em>, <em>4000–6999 +1.0%</em>, <em>7000 ke atas +1.5%</em></li>
 </ul>
@@ -434,13 +442,13 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <summary>Perhitungan</summary>
 <p><label for="d-s1">Harga diubah ke silver <strong>(nilai dikali pengali, dibulatkan ke bawah)</strong></label></p>
 <p><textarea id="d-s1" name="d-s1" rows="1" cols="50" readonly></textarea></p>
-<p><label for="d-s2">Profit setelah pajak: harga dikali 0.65</label></p>
+<p><label for="d-s2">Profit setelah pajak: harga dikali <code>0.65</code></label></p>
 <p><textarea id="d-s2" name="d-s2" rows="1" cols="50" readonly></textarea></p>
 <p><label for="d-s3">Pajak: harga dikurangi profit</label></p>
 <p><textarea id="d-s3" name="d-s3" rows="1" cols="50" readonly></textarea></p>
-<p><label for="d-s4">Bonus Value Pack: profit dikali 0.3</label></p>
+<p><label for="d-s4">Bonus Value Pack: profit dikali <code>0.3</code></label></p>
 <p><textarea id="d-s4" name="d-s4" rows="1" cols="50" readonly></textarea></p>
-<p><label for="d-s5">Bonus Ring/Pass: profit dikali 0.05</label></p>
+<p><label for="d-s5">Bonus Ring/Pass: profit dikali <code>0.05</code></label></p>
 <p><textarea id="d-s5" name="d-s5" rows="1" cols="50" readonly></textarea></p>
 <p><label for="d-s6">Family Fame points dibandingkan dengan batas tier</label></p>
 <p><textarea id="d-s6" name="d-s6" rows="1" cols="50" readonly></textarea></p>
@@ -450,25 +458,25 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><textarea id="d-s8" name="d-s8" rows="1" cols="50" readonly></textarea></p>
 <p><label for="d-s9">Rate efektif: total dibagi harga</label></p>
 <p><textarea id="d-s9" name="d-s9" rows="1" cols="50" readonly></textarea></p>
-<p><label for="d-s10">Rate dalam persen: rate dikali 100</label></p>
+<p><label for="d-s10">Rate dalam persen: rate dikali <code>100</code></label></p>
 <p><textarea id="d-s10" name="d-s10" rows="1" cols="50" readonly></textarea></p>
 <fieldset id="d-stp2" hidden>
 <legend>with Value Pack</legend>
-<p><label for="d-t1">Profit setelah pajak: harga dikali 0.65</label></p>
+<p><label for="d-t1">Profit setelah pajak: harga dikali <code>0.65</code></label></p>
 <p><textarea id="d-t1" name="d-t1" rows="1" cols="50" readonly></textarea></p>
 <p><label for="d-t2">Pajak: harga dikurangi profit</label></p>
 <p><textarea id="d-t2" name="d-t2" rows="1" cols="50" readonly></textarea></p>
-<p><label for="d-t3">Bonus Value Pack: profit dikali 0.3</label></p>
+<p><label for="d-t3">Bonus Value Pack: profit dikali <code>0.3</code></label></p>
 <p><textarea id="d-t3" name="d-t3" rows="1" cols="50" readonly></textarea></p>
 <p><label for="d-t4">Total diterima: profit ditambah semua bonus</label></p>
 <p><textarea id="d-t4" name="d-t4" rows="1" cols="50" readonly></textarea></p>
 <p><label for="d-t5">Rate efektif: total dibagi harga</label></p>
 <p><textarea id="d-t5" name="d-t5" rows="1" cols="50" readonly></textarea></p>
-<p><label for="d-t6">Rate dalam persen: rate dikali 100</label></p>
+<p><label for="d-t6">Rate dalam persen: rate dikali <code>100</code></label></p>
 <p><textarea id="d-t6" name="d-t6" rows="1" cols="50" readonly></textarea></p>
 </fieldset>
 </details>
-</div>
+</div>  
 </section>
 
 <section role="tabpanel" id="panel-totaltl" aria-labelledby="tab-totaltl" hidden>
@@ -476,23 +484,23 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <div id="form-totaltl">
 <fieldset>
 <legend>Input</legend>
-<p><label for="tl-start">TL awal:</label> <input type="text" inputmode="decimal" id="tl-start" name="start" value="250,000"></p>
-<p><label for="tl-end">TL akhir:</label> <input type="text" inputmode="decimal" id="tl-end" name="end" value="315,000"></p>
+<p><label for="tl-start">TL awal:</label> <input type="text" inputmode="decimal" id="tl-start" name="start" value="325,000"></p>
+<p><label for="tl-end">TL akhir:</label> <input type="text" inputmode="decimal" id="tl-end" name="end" value="410,000"></p>
 <p><button type="button" id="reset-totaltl">Reset</button> <button type="button" id="clear-totaltl">Clear</button></p>
 </fieldset>
 <p><label for="tl-out">Total perolehan TL:</label> <textarea id="tl-out" name="total-tl" rows="1" cols="40" readonly></textarea></p>
-<p>Note:</p>
+<p><strong>Note:</strong></p>
 <ul>
 <li>Total TL ini fungsinya untuk mengetahui total perolehan TL jika di storage sudah ada TL-nya</li>
 <li><em>TL awal</em> adalah TL yang sudah ada di storage</li>
-<li><em>TL akhir</em> adalah TL setelah grinding selama shift</li>
+<li><em>TL akhir</em> adalah TL setelah grinding selama shift yang sudah ditaruh di storage</li>
 <li>Total perolehan TL didapat dari TL akhir dikurangi TL awal</li>
 </ul>
 <p>Contoh:</p>
 <ul>
-<li>TL awal: <code>250,000</code></li>
-<li>TL akhir: <code>315,000</code></li>
-<li>Total perolehan TL: <samp>65,000</samp></li>
+<li>TL awal: <code>325,000</code></li>
+<li>TL akhir: <code>410,000</code></li>
+<li>Total perolehan TL: <samp>85,000</samp></li>
 </ul>
 <details>
 <summary>Perhitungan</summary>
@@ -508,7 +516,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <fieldset>
 <legend>Input</legend>
 <p><label for="cp-compen">Compen berapa silver?</label> <input type="text" id="cp-compen" name="compen" value="3b"></p>
-<p><label for="cp-price">Harga TL per biji (opsional):</label> <input type="text" id="cp-price" name="price" value="181,042"></p>
+<p><label for="cp-price">Harga TL (opsional):</label> <input type="text" id="cp-price" name="price" value="181,042"></p>
 <p><label for="cp-pct">Persen TL:</label> <input type="range" id="cp-pct" name="pct" min="0" max="100" step="1" value="50"></p>
 <p><button type="button" id="reset-compen">Reset</button> <button type="button" id="clear-compen">Clear</button></p>
 </fieldset>
@@ -524,19 +532,19 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><label for="cp-o5">Persen:</label> <textarea id="cp-o5" name="cp-o5" rows="1" cols="40" readonly></textarea></p>
 <p><label for="cp-o6">Silver:</label> <textarea id="cp-o6" name="cp-o6" rows="1" cols="40" readonly></textarea></p>
 </fieldset>
-<p>Note:</p>
+<p><strong>Note:</strong></p>
 <ul>
 <li>Compen bisa diisi angka biasa, pemisah ribuan, atau akhiran <code>k</code>, <code>m</code>, <code>b</code>, contoh <code>500k</code>, <code>100m</code>, <code>3b</code></li>
-<li>Harga TL per biji adalah harga satu TL dalam silver, bisa diisi dengan format yang sama. Jika dikosongkan, Jumlah TL yang harus disell tidak akan dihitung</li>
+<li>Harga TL adalah harga satu TL dalam silver, bisa diisi dengan format yang sama. Jika dikosongkan, Jumlah TL yang harus disell tidak akan dihitung</li>
 <li>Slider Persen TL mengatur pembagian compen antara <em>TL</em> dan <em>RNG</em>: paling kiri <em>0%</em> TL (semuanya RNG) dan paling kanan <em>100%</em> TL (semuanya TL), misal <em>40%</em> TL berarti <em>60%</em> RNG</li>
-<li>Jumlah TL yang harus disell dibulatkan ke atas supaya silver dari TL mencapai bagian compen TL</li>
-<li>Sisa compen di luar bagian TL adalah bagian <em>RNG</em></li>
+<li>Jumlah TL yang harus disell <em>dibulatkan ke atas</em> supaya silver dari TL mencapai bagian compen TL</li>
+<li>Sisa compen di luar bagian TL adalah bagian dari <em>RNG</em></li>
 </ul>
-<p>Contoh:</p>
+<p><strong>Contoh:</strong></p>
 <ul>
-<li>Misal yang pecah Corrupted Glutony Crystal, harga di central market <code>3b</code> dan patokan compen <em>50%</em> RNG dan <em>50%</em> TL</li>
-<li>Grind di Magaia, harga TL per item <code>181,042</code></li>
-<li>Compen: <code>3b</code>, Harga TL per biji: <code>181,042</code>, Persen TL: <code>50%</code></li>
+<li>Misal yang pecah <em>Corrupted Glutony Crystal</em>, harga di central market sekarang adalah <code>3b</code> dan patokan compen yang digunakan adalah <em>50%</em> RNG dan <em>50%</em> TL</li>
+<li>Grind di Magaia, harga TL-nya <code>181,042</code></li>
+<li>Compen: <code>3b</code>, Harga TL: <code>181,042</code>, Persen TL: <code>50%</code></li>
 <li>Compen: <samp>3,000,000,000 silver</samp></li>
 <li>TL, Persen: <samp>50%</samp></li>
 <li>TL, Silver: <samp>1,500,000,000 silver</samp></li>
@@ -548,18 +556,112 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <summary>Perhitungan</summary>
 <p><label for="cp-s1">Compen diubah ke silver <strong>(nilai dikali pengali, dibulatkan ke bawah)</strong></label></p>
 <p><textarea id="cp-s1" name="cp-s1" rows="1" cols="50" readonly></textarea></p>
-<p><label for="cp-s2">Harga TL per biji diubah ke silver <strong>(nilai dikali pengali, dibulatkan ke bawah)</strong></label></p>
+<p><label for="cp-s2">Harga TL diubah ke silver <strong>(nilai dikali pengali, dibulatkan ke bawah)</strong></label></p>
 <p><textarea id="cp-s2" name="cp-s2" rows="1" cols="50" readonly></textarea></p>
-<p><label for="cp-s3">Compen TL: compen dikali persen TL, dibagi 100 <strong>(dibulatkan ke bawah)</strong></label></p>
+<p><label for="cp-s3">Compen TL: compen dikali persen TL, dibagi <code>100</code> <strong>(dibulatkan ke bawah)</strong></label></p>
 <p><textarea id="cp-s3" name="cp-s3" rows="1" cols="50" readonly></textarea></p>
 <p><label for="cp-s4">Compen RNG: compen dikurangi compen TL</label></p>
 <p><textarea id="cp-s4" name="cp-s4" rows="1" cols="50" readonly></textarea></p>
-<p><label for="cp-s5">Jumlah TL: compen TL dibagi harga TL per biji <strong>(dibulatkan ke atas)</strong></label></p>
+<p><label for="cp-s5">Jumlah TL: compen TL dibagi harga TL <strong style="color: #dc3545;">(dibulatkan ke atas)</strong></label></p>
 <p><textarea id="cp-s5" name="cp-s5" rows="1" cols="50" readonly></textarea></p>
-<p><label for="cp-s6">Total silver dari TL: jumlah TL dikali harga TL per biji</label></p>
+<p><label for="cp-s6">Total silver dari TL: jumlah TL dikali harga TL</label></p>
 <p><textarea id="cp-s6" name="cp-s6" rows="1" cols="50" readonly></textarea></p>
 </details>
 </div>
+</section>
+
+<section role="tabpanel" id="panel-silver" aria-labelledby="tab-silver" hidden>
+<h2>Silver</h2>
+<div id="form-silver">
+<fieldset>
+<legend>Input</legend>
+<fieldset>
+<legend>Screenshot awal</legend>
+<p><label for="sv-c0">Silver di Central Market:</label> <input type="text" id="sv-c0" name="c0" value="120b"></p>
+<p><label><input type="checkbox" id="sv-i0-on" name="sv-i0-on" aria-controls="sv-i0"> Silver di Inventory (opsional):</label> <input type="text" id="sv-i0" name="i0" value="5b" disabled aria-label="Silver di Inventory (opsional, screenshot awal)"></p>
+</fieldset>
+<fieldset>
+<legend>TL & RNG</legend>
+<p><label><input type="checkbox" id="sv-o1-on" name="sv-o1-on" aria-controls="sv-o1"> Sell in storage:</label> <input type="text" id="sv-o1" name="o1" value="7.6b" disabled aria-label="Sell in storage"></p>
+<p><label><input type="checkbox" id="sv-o2-on" name="sv-o2-on" aria-controls="sv-o2"> Sell in Central Market:</label> <input type="text" id="sv-o2" name="o2" value="3.7b" disabled aria-label="Sell in Central Market"></p>
+<p><label><input type="checkbox" id="sv-o3-on" name="sv-o3-on" aria-controls="sv-o3"> Listed in CM (Tax):</label> <input type="text" id="sv-o3" name="o3" value="1.3b" disabled aria-label="Listed in CM (Tax)"></p>
+<p><label><input type="checkbox" id="sv-o4-on" name="sv-o4-on" aria-controls="sv-o4"> Keep owner:</label> <input type="text" id="sv-o4" name="o4" value="2.1b" disabled aria-label="Keep owner"></p>
+</fieldset>
+<fieldset>
+<legend>Screenshot akhir</legend>
+<p><label for="sv-c1">Silver di Central Market:</label> <input type="text" id="sv-c1" name="c1" value="118b"></p>
+<p><label><input type="checkbox" id="sv-i1-on" name="sv-i1-on" aria-controls="sv-i1"> Silver di Inventory (opsional):</label> <input type="text" id="sv-i1" name="i1" value="2.5b" disabled aria-label="Silver di Inventory (opsional, screenshot akhir)"></p>
+</fieldset>
+<fieldset>
+<legend>Total Progress</legend>
+<p><label for="sv-p0">Total progress sebelumnya (opsional):</label> <input type="text" id="sv-p0" name="p0" value="59.4b"></p>
+<p><label for="sv-p1">Total progress keseluruhan:</label> <input type="text" id="sv-p1" name="p1" value="150b"></p>
+</fieldset>
+<p><button type="button" id="reset-silver">Reset</button> <button type="button" id="clear-silver">Clear</button></p>
+</fieldset>
+<fieldset id="sv-cmp">
+<legend>Perbandingan silver (CM)</legend>
+<p><label for="sv-r1">Silver awal:</label> <textarea id="sv-r1" name="sv-r1" rows="1" cols="40" readonly></textarea></p>
+<p><label for="sv-r2">Silver akhir:</label> <textarea id="sv-r2" name="sv-r2" rows="1" cols="40" readonly></textarea></p>
+<p><label for="sv-r3">Selisih:</label> <textarea id="sv-r3" name="sv-r3" rows="1" cols="40" readonly></textarea></p>
+<p><label for="sv-r4">Keterangan:</label> <textarea id="sv-r4" name="sv-r4" rows="1" cols="40" readonly></textarea></p>
+</fieldset>
+<p><label for="sv-r5">Total perolehan silver:</label> <textarea id="sv-r5" name="sv-r5" rows="1" cols="40" readonly></textarea></p>
+<p><label for="sv-r6">Total Progress:</label> <textarea id="sv-r6" name="sv-r6" rows="1" cols="40" readonly></textarea></p>
+<p><strong>Note:</strong></p>
+<ul>
+<li>Silver di Central Market <em>(screenshot awal dan akhir)</em> wajib diisi. Silver di Inventory (opsional) dan semua opsi boleh dicentang atau tidak: jika dicentang, kolomnya aktif, jika tidak, kolomnya nonaktif dan dihitung <code>0</code></li>
+<li>Silver bisa diisi angka biasa, pemisah ribuan, atau akhiran <code>k</code>, <code>m</code>, <code>b</code>, contoh <code>500k</code>, <code>100m</code>, <code>1.5b</code></li>
+<li>Silver awal dan akhir dijumlahkan dari Central Market dan Inventory, jadi perpindahan silver antara keduanya tidak memengaruhi hasil</li>
+<li>Perbandingan di screenshot menampilkan silver awal, silver akhir, dan selisihnya: <em>hijau</em> jika bertambah dan <em>merah</em> jika berkurang. Berkurang itu wajar karena ada biaya saat atau sebelum grinding, seperti repair gear dan beli buff. Bertambah perlu dicek karena bisa jadi ada aktivitas di luar grinding <em>(wajib tanyakan owner)</em>, yang ikut menambah total perolehan silver</li>
+<li>Total perolehan silver adalah <em>selisih</em> ditambah total <em>TL & RNG</em></li>
+<li>Total Progress adalah total progress sebelumnya ditambah total perolehan silver, dibandingkan dengan total progress keseluruhan. Formatnya <code>57.4 B / 150 B</code>: kiri progress yang didapat, kanan total keseluruhan. <code>B</code> berarti miliar, <code>M</code> juta, dan <code>K</code> ribu</li>
+<li>Total progress sebelumnya boleh dikosongkan, dihitung <code>0</code></li>
+</ul>
+<p><strong>Contoh:</strong></p>
+<ul>
+<li>Central Market (awal): <code>120b</code>, Central Market (akhir): <code>118b</code></li>
+<li>Total progress sebelumnya: <code>59.4b</code>, Total progress keseluruhan: <code>150b</code></li>
+<li>Selisih: <samp>-2,000,000,000 silver (-2 B)</samp> (merah karena berkurang)</li>
+<li>Total perolehan silver: <samp>-2,000,000,000 silver (-2 B)</samp></li>
+<li>Total Progress: <samp>57.4 B / 140 B</samp></li>
+<li>Jika <em>Sell in storage</em> dicentang dan diisi <code>7.6b</code>, Total perolehan silver menjadi <samp>5,600,000,000 silver (5.6 B)</samp> dan Total Progress <samp>65 B / 150 B</samp></li>
+<li>Jika Central Market (akhir) <code>118b</code>, Selisih <samp>-2,000,000,000 silver (-2 B)</samp> (merah karena berkurang)</li>
+</ul>
+<details>
+<summary>Perhitungan</summary>
+<p><label for="sv-s1">Silver awal: silver Central Market ditambah silver Inventory <strong>(jika dicentang)</strong></label></p>
+<p><textarea id="sv-s1" name="sv-s1" rows="1" cols="50" readonly></textarea></p>
+<p><label for="sv-s2">Silver akhir: silver Central Market ditambah silver Inventory <strong>(jika dicentang)</strong></label></p>
+<p><textarea id="sv-s2" name="sv-s2" rows="1" cols="50" readonly></textarea></p>
+<p><label for="sv-s3">Selisih: silver akhir dikurangi silver awal</label></p>
+<p><textarea id="sv-s3" name="sv-s3" rows="1" cols="50" readonly></textarea></p>
+<p><label for="sv-s4">Total TL & RNG: semua TL & RNG yang dicentang dijumlahkan</label></p>
+<p><textarea id="sv-s4" name="sv-s4" rows="1" cols="50" readonly></textarea></p>
+<p><label for="sv-s5">Total perolehan silver: selisih ditambah total TL & RNG <strong style="color: #dc3545;">(k, m, b)</strong></label></p>
+<p><textarea id="sv-s5" name="sv-s5" rows="1" cols="50" readonly></textarea></p>
+<p><label for="sv-s6">Total progress: total progress sebelumnya ditambah total perolehan silver <strong style="color: #dc3545;">(k, m, b)</strong></label></p>
+<p><textarea id="sv-s6" name="sv-s6" rows="1" cols="50" readonly></textarea></p>
+</details>
+</div>
+</section>
+
+<section role="tabpanel" id="panel-tips" aria-labelledby="tab-tips" hidden>
+<h2>Tips & Tricks</h2>
+<p><strong>Grinding</strong></p>
+<ul>
+<li>Jika Maid sedikit, TL bisa ditaruh di kuda. Jadi pada saat inventory sudah penuh pergi ke kuda dan pencet <strong>F6</strong> di keyboard lalu pindahkan semua TL-nya disana</li>
+<li>Jika Maid-nya banyak jangan pergi ke kota, taruh aja di spot grinding dan usahakan jauh dari mob</li>
+<li>Jangan letakkan TL di kuda jika Maid-nya banyak, taruh aja di storage</li>
+<li>Jika total TL di storage sudah mencapai ratusan ribu <em>k</em> arahkan mouse ke TL-nya jika ingin mengetahui total TL-nya</li>
+</ul>
+<p><strong>Buff</strong></p>
+<ul>
+<li>Jika ada Guild Manor <em>pencet G</em> coba pergi kesana, barangkali ada buff yang bisa digunakan untuk grinding</li>
+<li>Baik hourly maupun silver, usahakan tetap membeli buff drop rate 50% di tenda</li>
+<li>Usahakan selalu mengecek persen drop rate ketika mau grinding karena ini berpengaruh sekali ke progress</li>
+<li>Hati hati jika pakai buff <strong>Blessing of Old Moon Scroll</strong> karena ini seperti memakai Agris</li>
+</ul>
 </section>
 
 </main>
@@ -571,6 +673,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li><a href="https://t.me/+Xmmz3gE42BYzNmM1" target="_blank" rel="noopener noreferrer">Telegram Channel</a></li>
 <li><a href="http://t.me/Agus_HK059" target="_blank" rel="noopener noreferrer">AGUS</a></li>
 </ul>
+<p ><em>Use at on your own risk!</em></p>
 <p><button type="button" id="help-close">Tutup</button></p>
 </dialog>
 <script>
@@ -1205,7 +1308,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
   };
 
   /* 8. Compen */
-  var parseSilver = function (text, label) {
+  var parseSilver = function (text, label, allowZero) {
     var cleaned = text.trim().toLowerCase().replace(/[,_]/g, "");
     if (!cleaned) throw new Error("missing " + label);
 
@@ -1221,10 +1324,14 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     var amount = value * mult;
 
     if (!isFinite(amount)) throw new Error("'" + text + "' is not a valid " + label);
-    if (amount <= 0) throw new Error(label + " must be greater than zero");
+    if (allowZero) {
+      if (amount < 0) throw new Error(label + " cannot be negative");
+    } else if (amount <= 0) {
+      throw new Error(label + " must be greater than zero");
+    }
     if (amount > 1e15) throw new Error(label + " is too large");
     var whole = BigInt(Math.trunc(amount));
-    if (whole === 0n) throw new Error(label + " must be greater than zero");
+    if (!allowZero && whole === 0n) throw new Error(label + " must be greater than zero");
     return { value: value, mult: mult, amount: whole };
   };
 
@@ -1269,6 +1376,114 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     put("cp-s6", price ? count + " × " + price.amount + " = " + (count * price.amount) : null);
   };
 
+  /* 9. Silver */
+  var compactSilver = function (big) {
+    var neg = big < 0n;
+    var abs = neg ? -big : big;
+    var units = [["B", 1000000000n], ["M", 1000000n], ["K", 1000n]];
+    var pick = -1;
+    for (var i = 0; i < units.length; i++) {
+      if (abs >= units[i][1]) { pick = i; break; }
+    }
+    if (pick === -1) return (neg ? "-" : "") + abs;
+    var scale = function (k) { return (abs * 100n + units[k][1] / 2n) / units[k][1]; };
+    var scaled = scale(pick);
+    if (scaled >= 100000n && pick > 0) {
+      pick -= 1;
+      scaled = scale(pick);
+    }
+    var text = (scaled / 100n).toString();
+    var frac = scaled % 100n;
+    if (frac !== 0n) text += "." + frac.toString().padStart(2, "0").replace(/0+$/, "");
+    return (neg ? "-" : "") + text + " " + units[pick][0];
+  };
+
+  var silverText = function (v) {
+    var c = compactSilver(v);
+    var n = v.toLocaleString("en-US");
+    return c === n ? n + " silver" : n + " silver (" + c + ")";
+  };
+
+  var calcSilver = function () {
+    var stepIds = ["sv-s1", "sv-s2", "sv-s3", "sv-s4", "sv-s5", "sv-s6"];
+    var cmpIds = ["sv-r1", "sv-r2", "sv-r3", "sv-r4"];
+    var cmpBox = document.getElementById("sv-cmp");
+    var isOn = function (id) { return document.getElementById(id + "-on").checked; };
+    var text = function (id) { return document.getElementById(id).value; };
+    var sum = function (list) { return list.reduce(function (a, b) { return a + b; }, 0n); };
+    var line = function (list) { return (list.length > 1 ? list.join(" + ") + " = " : "") + sum(list); };
+    var mark = function (up, down) {
+      ["sv-r3", "sv-r4"].forEach(function (id) {
+        var el = document.getElementById(id);
+        el.classList.toggle("up", up);
+        el.classList.toggle("down", down);
+      });
+    };
+
+    var startTerms = [];
+    var endTerms = [];
+    var optTerms = [];
+
+    try {
+      startTerms.push(parseSilver(text("sv-c0"), "central market silver (awal)", true).amount);
+      if (isOn("sv-i0")) startTerms.push(parseSilver(text("sv-i0"), "inventory silver (awal)", true).amount);
+
+      [["sv-o1", "sell in storage"], ["sv-o2", "sell in central market"], ["sv-o3", "listed in cm"], ["sv-o4", "keep owner"]].forEach(function (o) {
+        if (isOn(o[0])) optTerms.push(parseSilver(text(o[0]), o[1], true).amount);
+      });
+
+      endTerms.push(parseSilver(text("sv-c1"), "central market silver (akhir)", true).amount);
+      if (isOn("sv-i1")) endTerms.push(parseSilver(text("sv-i1"), "inventory silver (akhir)", true).amount);
+    } catch (e) {
+      cmpIds.forEach(function (id) { put(id, null); });
+      cmpBox.hidden = true;
+      mark(false, false);
+      put("sv-r6", null);
+      stepIds.forEach(function (id) { put(id, null); });
+      put("sv-r5", e.message);
+      return;
+    }
+
+    var prev = 0n;
+    var target = 0n;
+    var progressError = null;
+    try {
+      var prevText = text("sv-p0");
+      prev = prevText.trim() ? parseSilver(prevText, "total progress sebelumnya", true).amount : 0n;
+      target = parseSilver(text("sv-p1"), "total progress keseluruhan", false).amount;
+    } catch (e) {
+      progressError = e.message;
+    }
+
+    var startTotal = sum(startTerms);
+    var endTotal = sum(endTerms);
+    var diff = endTotal - startTotal;
+    var optTotal = sum(optTerms);
+    var gain = diff + optTotal;
+    var up = diff > 0n;
+    var down = diff < 0n;
+
+    cmpBox.hidden = false;
+    put("sv-r1", silverText(startTotal));
+    put("sv-r2", silverText(endTotal));
+    put("sv-r3", up ? "+" + silverText(diff).replace(" (", " (+") : silverText(diff));
+    put("sv-r4", up
+      ? "Silver bertambah. Cek apakah ada aktivitas di luar grinding (wajib tanyakan owner), yang ikut menambah total perolehan silver"
+      : down
+        ? "Silver berkurang. Wajar karena ada biaya saat atau sebelum grinding, seperti repair gear dan beli buff"
+        : "Silver tidak berubah. Tolong hitung lagi mungkin ada kesalahan input");
+    mark(up, down);
+    put("sv-r5", silverText(gain));
+    put("sv-r6", progressError !== null ? progressError : compactSilver(prev + gain) + " / " + compactSilver(target));
+
+    put("sv-s1", line(startTerms));
+    put("sv-s2", line(endTerms));
+    put("sv-s3", endTotal + " − " + startTotal + " = " + diff);
+    put("sv-s4", optTerms.length ? line(optTerms) : null);
+    put("sv-s5", diff + " + " + optTotal + " = " + gain);
+    put("sv-s6", progressError === null ? prev + " + " + gain + " = " + (prev + gain) : null);
+  };
+
   /* Simpan input di localStorage (hanya nilai yang berbeda dari default) */
   var STORE_KEY = "bdo-game-pilot:inputs";
   var readStore = function () {
@@ -1286,14 +1501,26 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     } catch (e) {}
   };
 
+  var syncEnabled = function () {
+    Array.prototype.forEach.call(document.querySelectorAll('main input[type="checkbox"][aria-controls]'), function (cb) {
+      var target = document.getElementById(cb.getAttribute("aria-controls"));
+      if (target) target.disabled = !cb.checked;
+    });
+  };
+
   var restoreInputs = function () {
     var data = readStore();
     Array.prototype.forEach.call(document.querySelectorAll("main input"), function (el) {
       if (Object.prototype.hasOwnProperty.call(data, el.id) && typeof data[el.id] === "string") {
-        el.value = data[el.id];
-        if (isNumInput(el)) formatNumber(el);
+        if (el.type === "checkbox") {
+          if (data[el.id] === "1" || data[el.id] === "0") el.checked = data[el.id] === "1";
+        } else {
+          el.value = data[el.id];
+          if (isNumInput(el)) formatNumber(el);
+        }
       }
     });
+    syncEnabled();
   };
   restoreInputs();
 
@@ -1301,14 +1528,21 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     if (isNumInput(ev.target)) formatNumber(ev.target);
   }, true);
 
-  document.querySelector("main").addEventListener("input", function (ev) {
+  var saveField = function (ev) {
     var el = ev.target;
     if (!el || el.tagName !== "INPUT" || !el.id) return;
+    var isCheck = el.type === "checkbox";
+    if (ev.type === "change" && !isCheck) return;
     var data = readStore();
-    if (el.value === el.defaultValue) delete data[el.id];
-    else data[el.id] = el.value;
+    var current = isCheck ? (el.checked ? "1" : "0") : el.value;
+    var base = isCheck ? (el.defaultChecked ? "1" : "0") : el.defaultValue;
+    if (current === base) delete data[el.id];
+    else data[el.id] = current;
     writeStore(data);
-  });
+    if (isCheck) syncEnabled();
+  };
+  document.querySelector("main").addEventListener("input", saveField);
+  document.querySelector("main").addEventListener("change", saveField);
 
   /* Live update */
   [
@@ -1319,18 +1553,24 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     ["form-buff", calcBuff],
     ["form-tax", calcTax],
     ["form-totaltl", calcTotalTL],
-    ["form-compen", calcCompen]
+    ["form-compen", calcCompen],
+    ["form-silver", calcSilver]
   ].forEach(function (x) {
     var form = document.getElementById(x[0]);
     form.addEventListener("input", function () { x[1](); fitAll(); });
+    form.addEventListener("change", function (ev) {
+      if (ev.target.type === "checkbox") { x[1](); fitAll(); }
+    });
 
     document.getElementById("reset-" + x[0].replace("form-", "")).addEventListener("click", function () {
       var data = readStore();
       Array.prototype.forEach.call(form.querySelectorAll("input"), function (el) {
-        el.value = el.defaultValue;
+        if (el.type === "checkbox") el.checked = el.defaultChecked;
+        else el.value = el.defaultValue;
         delete data[el.id];
       });
       writeStore(data);
+      syncEnabled();
       x[1]();
       fitAll();
     });
@@ -1339,11 +1579,18 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       var data = readStore();
       Array.prototype.forEach.call(form.querySelectorAll("input"), function (el) {
         if (el.type === "range") return;
+        if (el.type === "checkbox") {
+          el.checked = false;
+          if (el.checked === el.defaultChecked) delete data[el.id];
+          else data[el.id] = "0";
+          return;
+        }
         el.value = "";
         if (el.value === el.defaultValue) delete data[el.id];
         else data[el.id] = el.value;
       });
       writeStore(data);
+      syncEnabled();
       x[1]();
       fitAll();
     });
