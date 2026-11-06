@@ -149,8 +149,8 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <button type="button" role="tab" id="tab-totaltl" aria-controls="panel-totaltl" aria-selected="false" tabindex="-1">Total TL</button>
 <button type="button" role="tab" id="tab-compen" aria-controls="panel-compen" aria-selected="false" tabindex="-1">Compen</button>
 <button type="button" role="tab" id="tab-silver" aria-controls="panel-silver" aria-selected="false" tabindex="-1">Silver</button>
-<button type="button" role="tab" id="tab-tips" aria-controls="panel-tips" aria-selected="false" tabindex="-1">Tips & Tricks</button>
 <button type="button" role="tab" id="tab-grinding" aria-controls="panel-grinding" aria-selected="false" tabindex="-1">Grinding Spot</button>
+<button type="button" role="tab" id="tab-tips" aria-controls="panel-tips" aria-selected="false" tabindex="-1">Tips & Tricks</button>
 </nav>
 </header>
 <main>
@@ -657,15 +657,49 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 </div>
 </section>
 
+<!-- Grinding Spot -->
+<section role="tabpanel" id="panel-grinding" aria-labelledby="tab-grinding" hidden>
+<h2>Grinding Spot</h2>
+<p><strong>Rusalka Coral</strong></p>
+<ul>
+<li>1 Jam <code>500</code> Coral</li>
+</ul>
+<p><strong>Aphrodon</strong></p>
+<ul>
+<li>1 Jam LS2 <code>11,000</code> TL</li>
+<li>1 Jam LS2 Agris <code>19,000</code> TL</li>
+</ul>
+<p><strong>Hermesia</strong></p>
+<ul>
+<li>1 Jam LS2 <code>11,000</code> TL</li>
+<li>1 Jam LS2 Agris <code>20,000</code> TL</li>
+</ul>
+<p><strong>Magaia Temple</strong></p>
+<ul>
+<li>1 Jam LS2 <code>11,000</code> TL</li>
+</ul>
+<p><strong>Aresion</strong></p>
+<ul>
+<li>1 Jam LS2 <code>11,000</code> TL</li>
+<li>1 Jam LS2 <code>34,000</code> Agris <code>20,000</code> TL</li>
+</ul>
+<p><strong>Event Horizon</strong></p>
+<ul>
+<li>1 Jam LS2 <code>11,000</code> TL</li>
+<li>1 Jam LS2 Agris <code>19,000</code> TL</li>
+</ul>
+</section>
+
 <!-- Tips & Tricks -->
 <section role="tabpanel" id="panel-tips" aria-labelledby="tab-tips" hidden>
 <h2>Tips & Tricks</h2>
 <p><strong>Grinding</strong></p>
 <ul>
-<li>Jika Maid sedikit, TL bisa ditaruh di kuda. Jadi pada saat inventory sudah penuh pergi ke kuda dan pencet <strong>F6</strong> di keyboard lalu pindahkan semua TL-nya disana</li>
+<li>Jika Maid sedikit, TL bisa ditaruh di kuda. Jadi pada saat inventory sudah penuh pergi ke kuda dan pencet <strong>F5</strong> di keyboard lalu pindahkan semua TL-nya disana</li>
 <li>Jika Maid-nya banyak jangan pergi ke kota, taruh aja di spot grinding dan usahakan jauh dari mob agar pas owner mau login atau shift berikutnya <em>gak kaget</em></li>
-<li>Jangan letakkan TL di kuda jika Maid-nya banyak, taruh aja di storage <em>(wasting time banget)</em></li>
+<li>Jangan letakkan TL di kuda jika Maid-nya banyak, taruh aja di storage <em>(wasting time banget kalo di kuda)</em></li>
 <li>Jika total TL di storage sudah mencapai ratusan ribu <em>k</em> arahkan mouse ke TL-nya jika ingin mengetahui total TL-nya secara akurat</li>
+<li>Jika silver di central market pada saat awal shift dan akhir shift nambah maka berarti ada aktivitas diluar grinding, usahakan cek selalu agar silver dari aktivitas owner tidak masuk ke progress</li>
 </ul>
 <p><strong>Buff</strong></p>
 <ul>
@@ -688,41 +722,6 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li><a href="https://www.bdoclasshub.com" target="_blank" rel="noopener noreferrer">BDO Class Hub</a></li>
 <li><a href="https://korbdo.co.kr" target="_blank" rel="noopener noreferrer">Tachyon</a></li>
 </ul>
-</section>
-
-<!-- Grinding Spot -->
-<section role="tabpanel" id="panel-grinding" aria-labelledby="tab-grinding" hidden>
-<h2>Grinding Spot</h2>
-<p><strong>Rusalka Coral</strong></p>
-<ul>
-<li>1 Jam <code>500</code> Coral</li>
-</ul>
-<p><strong>Event Horizon</strong></p>
-<ul>
-<li>1 Jam LS2 <code>11,000</code> TL</li>
-<li>1 Jam LS2 <code>x</code> Agris <code>19,000</code> TL</li>
-</ul>
-<p><strong>Magaia Temple</strong></p>
-<ul>
-<li>1 Jam LS2 <code>11,000</code> TL</li>
-</ul>
-<p><strong>Hermesia</strong></p>
-<ul>
-<li>1 Jam LS2 <code>11,000</code> TL</li>
-<li>1 Jam LS2 <code>x</code> Agris <code>20,000</code> TL</li>
-</ul>
-<p><strong>Aphrodon</strong></p>
-<ul>
-<li>1 Jam LS2 <code>11,000</code> TL</li>
-<li>1 Jam LS2 <code>x</code> Agris <code>19,000</code> TL</li>
-</ul>
-<p><strong>Aresion</strong></p>
-<ul>
-<li>1 Jam LS2 <code>11,000</code> TL</li>
-<li>1 Jam LS2 <code>34,000</code> Agris <code>20,000</code> TL</li>
-</ul>
-<p><em>Jika patokan Agris masih berupa variabel <code>x</code>, grinding sendiri dulu dengan Agris berdasarkan patokan TL per jam-nya (jangan lupa update note).</em></p>
-<p><code>x = Agris awal - Agris akhir</code></p>
 </section>
 
 </main>
