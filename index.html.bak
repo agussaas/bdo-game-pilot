@@ -151,6 +151,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <button type="button" role="tab" id="tab-silver" aria-controls="panel-silver" aria-selected="false" tabindex="-1">Silver</button>
 <button type="button" role="tab" id="tab-grinding" aria-controls="panel-grinding" aria-selected="false" tabindex="-1">Grinding Spot</button>
 <button type="button" role="tab" id="tab-tips" aria-controls="panel-tips" aria-selected="false" tabindex="-1">Tips & Tricks</button>
+<button type="button" role="tab" id="tab-ascendant" aria-controls="panel-ascendant" aria-selected="false" tabindex="-1">Ascendant</button>
 </nav>
 </header>
 <main>
@@ -721,6 +722,17 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li><a href="https://garmoth.com" target="_blank" rel="noopener noreferrer">Garmoth</a></li>
 <li><a href="https://www.bdoclasshub.com" target="_blank" rel="noopener noreferrer">BDO Class Hub</a></li>
 <li><a href="https://korbdo.co.kr" target="_blank" rel="noopener noreferrer">Tachyon</a></li>
+</ul>
+</section>
+
+<!-- Ascendant -->
+<section role="tabpanel" id="panel-ascendant" aria-labelledby="tab-ascendant" hidden>
+<h2>Ascendant</h2>
+<p><strong>Jadwal</strong></p>
+<ul>
+<li><a href="https://docs.google.com/spreadsheets/d/1m4p1gzCgbTrQUMn81e2YGEZ3s23WesE5s8fZaH1ViKY/" target="_blank" rel="noopener noreferrer">jadwal</a></li>
+<li><a href="https://docs.google.com/spreadsheets/d/1bupn8hYu76W0qqRJwsXkNQ4p7o3EzJyzoCNpEygu7Us" target="_blank" rel="noopener noreferrer">Jadwal MOD & Pilot</a></li>
+<li><a href="https://docs.google.com/spreadsheets/d/12S_BWkK6dUQLzZ3NmvwyRUKsk046Sv4FZDC3Thv41Mo" target="_blank" rel="noopener noreferrer">jadwal ascendant</a></li>
 </ul>
 </section>
 
