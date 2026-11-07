@@ -25,7 +25,7 @@
   --sel-fg: light-dark(#ffffff, #121212);
 }
 body { background: var(--bg); color: var(--fg); }
-button, input, textarea { background: var(--ctl); color: var(--fg); border: 1px solid var(--bd); }
+button, input, select, textarea { background: var(--ctl); color: var(--fg); border: 1px solid var(--bd); }
 fieldset { border: 1px solid var(--bd); }
 [aria-selected="true"] { background: var(--sel-bg); color: var(--sel-fg); }
 
@@ -73,7 +73,7 @@ p { margin: 0 0 0.9rem; }
 p:has(> label:first-child) { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.35rem; }
 label { overflow-wrap: anywhere; }
 
-input, textarea {
+input, select, textarea {
   display: block;
   width: 100%;
   min-width: 0;
@@ -112,7 +112,7 @@ dialog a { display: inline-block; padding: 0.25rem 0; }
 }
 input[type="range"] { padding: 0; border: 0; background: transparent; }
 input[type="checkbox"] { display: inline-block; width: 1.1rem; height: 1.1rem; min-height: 0; margin: 0 0.35rem 0 0; padding: 0; vertical-align: middle; }
-input:disabled { opacity: 0.55; cursor: not-allowed; }
+input:disabled, select:disabled { opacity: 0.55; cursor: not-allowed; }
 .up { color: light-dark(#0b6b2b, #6fe39a); }
 .down { color: light-dark(#b00020, #ff8a8a); }
 figure { min-width: 0; margin: 0; }
@@ -123,7 +123,7 @@ details p:has(> label:only-child) { display: block; margin-bottom: 0.25rem; }
 details p:has(> label:only-child) > label { padding-top: 0; }
 
 @media (hover: none) and (pointer: coarse) {
-  input { font-size: 1rem; }
+  input, select { font-size: 1rem; }
 }
 @media (min-width: 40rem) {
   p:has(> label:first-child) { grid-template-columns: minmax(0, 15rem) minmax(0, 1fr); align-items: start; gap: 0.35rem 1rem; }
@@ -249,7 +249,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <figcaption><strong>Bisa dihitung.</strong> Pada kotak biru yang ada di note, ada patokan Agris yang digunakan per jam beserta TL per jamnya. Dengan kedua patokan ini, <em>perhitungan total time, time with Agris, dan time without Agris</em> dapat dijalankan dan tidak akan menampilkan error.</figcaption>
 </figure>
 </div>
-<p>Contoh:</p>
+<p><strong>Contoh:</strong></p>
 <ul>
 <li>Total TL selama shift: <code>110,000</code></li>
 <li><em>Note dari TL per jam pake Agris: <code>19,000</code></em></li>
@@ -300,7 +300,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><textarea id="a-o1" name="a-o1" rows="1" cols="50" readonly></textarea></p>
 <p><label for="a-o2">Total detik dibagi <code>3600</code>, <em>dibulatkan ke bawah</em> <strong style="color: #dc3545;">(jam)</strong></label></p>
 <p><textarea id="a-o2" name="a-o2" rows="1" cols="50" readonly></textarea></p>
-<p><label for="a-o3">Sisa total detik dibagi <code>3600</code>, lalu dibagi <code>60></code> dan <em>dibulatkan ke bawah</em> <strong style="color: #dc3545;">(menit)</strong></label></p>
+<p><label for="a-o3">Sisa total detik dibagi <code>3600</code>, lalu dibagi <code>60</code> dan <em>dibulatkan ke bawah</em> <strong style="color: #dc3545;">(menit)</strong></label></p>
 <p><textarea id="a-o3" name="a-o3" rows="1" cols="50" readonly></textarea></p>
 <p><label for="a-o4">Sisa total detik dibagi <code>60</code> <strong style="color: #dc3545;">(detik)</strong></label></p>
 <p><textarea id="a-o4" name="a-o4" rows="1" cols="50" readonly></textarea></p>
@@ -432,7 +432,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li>Pajak total <em>35%</em> (30% Central Market dan 5% territory), jadi seller menerima <em>65%</em></li>
 <li>Semua bonus dihitung dari profit setelah pajak <em>(65%)</em>, lalu dijumlahkan: <em>Value Pack +30%</em>, <em>Ring/Pass +5%</em>, <em>Family Fame 1000–3999 +0.5%</em>, <em>4000–6999 +1.0%</em>, <em>7000 ke atas +1.5%</em></li>
 </ul>
-<p>Contoh:</p>
+<p><strong>Contoh:</strong></p>
 <ul>
 <li>Price: <code>100m</code>, Options dikosongkan akan menampilkan hasil dengan Value Pack</li>
 <li>Price: <code>1.5b</code>, Options: <code>vp</code> menampilkan Value Pack saja</li>
@@ -495,26 +495,52 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <legend>Input</legend>
 <p><label for="tl-start">TL awal:</label> <input type="text" inputmode="decimal" id="tl-start" name="start" value="325,000"></p>
 <p><label for="tl-end">TL akhir:</label> <input type="text" inputmode="decimal" id="tl-end" name="end" value="410,000"></p>
+<fieldset>
+<legend>Harga TL (opsional)</legend>
+<p><label><input type="checkbox" id="tl-spot-on" name="tl-spot-on" aria-controls="tl-spot" checked> Spot:</label>
+<select id="tl-spot" name="spot" aria-label="Spot (harga TL)">
+<option value="155127">Aphrodon: 155,127</option>
+<option value="160539">Hermesia: 160,539</option>
+<option value="181042" selected>Magaia: 181,042</option>
+<option value="182049">Aresion: 182,049</option>
+<option value="196501">Event Horizon: 196,501</option>
+<option value="custom">Edit (custom)</option>
+</select></p>
+<p id="tl-custom-row" hidden><label for="tl-custom">Harga TL (custom):</label> <input type="text" inputmode="decimal" id="tl-custom" name="custom" value="181,042"></p>
+</fieldset>
 <p><button type="button" id="reset-totaltl">Reset</button> <button type="button" id="clear-totaltl">Clear</button></p>
 </fieldset>
 <p><label for="tl-out">Total perolehan TL:</label> <textarea id="tl-out" name="total-tl" rows="1" cols="40" readonly></textarea></p>
+<p><label for="tl-price">Harga TL:</label> <textarea id="tl-price" name="tl-price" rows="1" cols="40" readonly></textarea></p>
+<p><label for="tl-all">Harga TL seluruhnya:</label> <textarea id="tl-all" name="tl-all" rows="1" cols="40" readonly></textarea></p>
 <p><strong>Note:</strong></p>
 <ul>
-<li>Total TL ini fungsinya untuk mengetahui total perolehan TL jika di storage sudah ada TL-nya</li>
+<li>Total TL ini fungsinya untuk mengetahui total perolehan TL jika di storage sudah ada TL-nya, dan juga bisa untuk menghitung berapa silver dari TL tersebut</li>
 <li><em>TL awal</em> adalah TL yang sudah ada di storage</li>
 <li><em>TL akhir</em> adalah TL setelah grinding selama shift yang sudah ditaruh di storage</li>
 <li>Total perolehan TL didapat dari TL akhir dikurangi TL awal</li>
+<li>Harga TL bersifat opsional: jika dicentang, kolomnya aktif dan harga ikut dihitung, jika tidak, kolomnya nonaktif dan hanya total perolehan TL saja yang akan ditampilkan</li>
+<li>Harga dipilih dari daftar spot. Jika tidak ada di daftar, pilih <em>Edit (custom)</em> lalu isi harga dari TL tersebut</li>
+<li>Harga TL seluruhnya didapat dari <em>total perolehan TL dikali harga TL</em></li>
 </ul>
-<p>Contoh:</p>
+<p><strong>Contoh:</strong></p>
 <ul>
 <li>TL awal: <code>325,000</code></li>
 <li>TL akhir: <code>410,000</code></li>
+<li>Spot (dicentang): <code>Magaia: 181,042</code></li>
 <li>Total perolehan TL: <samp>85,000</samp></li>
+<li>Harga TL: <samp>181,042 silver</samp></li>
+<li>Harga TL seluruhnya: <samp>15,388,570,000 silver (15.39 B)</samp></li>
+<li>Jika Spot tidak dicentang, hanya Total perolehan TL: <samp>85,000</samp></li>
 </ul>
 <details>
 <summary>Perhitungan</summary>
-<p><label for="tl-s1">TL akhir dikurangi TL awal <strong>(total perolehan TL)</strong></label></p>
+<p><label for="tl-s1">TL akhir dikurangi TL awal <strong style="color: #dc3545;">(total perolehan TL)</strong></label></p>
 <p><textarea id="tl-s1" name="tl-s1" rows="1" cols="50" readonly></textarea></p>
+<p><label for="tl-s2">Harga TL <strong>(dari pilihan spot atau input sendiri, jika dicentang)</strong></label></p>
+<p><textarea id="tl-s2" name="tl-s2" rows="1" cols="50" readonly></textarea></p>
+<p><label for="tl-s3">Total perolehan TL dikali harga TL <strong style="color: #dc3545;">(harga TL seluruhnya)</strong></label></p>
+<p><textarea id="tl-s3" name="tl-s3" rows="1" cols="50" readonly></textarea></p>
 </details>
 </div>
 </section>
@@ -694,6 +720,43 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <!-- Agris Used -->
 <section role="tabpanel" id="panel-used" aria-labelledby="tab-used" hidden>
 <h2>Agris Used</h2>
+<div id="form-used">
+<fieldset>
+<legend>Input</legend>
+<p><label for="au-start">Agris awal:</label> <input type="text" inputmode="decimal" id="au-start" name="start" value="85,000"></p>
+<p><label for="au-end">Agris akhir:</label> <input type="text" inputmode="decimal" id="au-end" name="end" value="17,500"></p>
+<p><label><input type="checkbox" id="au-reset" name="reset" aria-controls="au-before"> Agris sebelum reset:</label> <input type="text" inputmode="decimal" id="au-before" name="before" value="60,000" disabled aria-label="Agris sebelum reset"></p>
+<p><button type="button" id="reset-used">Reset</button> <button type="button" id="clear-used">Clear</button></p>
+</fieldset>
+<p><label for="au-out">Agris yang digunakan:</label> <textarea id="au-out" name="agris-used" rows="1" cols="40" readonly></textarea></p>
+<p><strong>Note:</strong></p>
+<ul>
+<li>Agris Used ini fungsinya untuk mengetahui berapa Agris yang digunakan selama shift</li>
+<li><em>Agris awal</em> adalah Agris yang ada di awal shift</li>
+<li><em>Agris akhir</em> adalah Agris yang tersisa setelah selesai grinding</li>
+<li>Agris yang digunakan didapat dari total agris dikurangi agris akhir</li>
+<li>Agris reset akan menambah <em>20,000</em> Agris per hari (pukul 06:00 UTC), tetapi Agris tidak bisa melebihi batas maksimal <em>100,000</em></li>
+<li>Pengisian Agris sebelum reset; jika reset terjadi di awal shift, isi sama dengan agris awal. Jika reset terjadi di tengah shift setelah sebagian Agris terpakai, isi dengan sisa Agris saat itu. Kolom ini hanya aktif jika Agris reset dicentang</li>
+<li>Agris sebelum reset tidak boleh lebih besar dari agris awal dan tidak boleh lebih dari <em>100,000</em></li>
+<li>Jika agris akhir lebih besar dari total agris yang tersedia, hasilnya akan menampilkan error</li>
+</ul>
+<p><strong>Contoh:</strong></p>
+<ul>
+<li>Agris awal: <code>85,000</code></li>
+<li>Agris akhir: <code>17,500</code></li>
+<li>Tanpa reset, Agris yang digunakan: <samp>67,500</samp></li>
+<li>Reset dicentang; Agris sebelum reset <code>60,000</code> (reset di tengah shift): yang masuk penuh 20,000, Agris yang digunakan: <samp>87,500</samp></li>
+</ul>
+<details>
+<summary>Perhitungan</summary>
+<p><label for="au-s1">Agris dari reset: yang lebih kecil antara <code>20,000</code> dan <code>100,000</code> dikurangi agris sebelum reset <strong>(jika dicentang)</strong></label></p>
+<p><textarea id="au-s1" name="au-s1" rows="1" cols="50" readonly></textarea></p>
+<p><label for="au-s2">Agris awal ditambah agris dari reset <strong>(total agris)</strong></label></p>
+<p><textarea id="au-s2" name="au-s2" rows="1" cols="50" readonly></textarea></p>
+<p><label for="au-s3">Total agris dikurangi agris akhir <strong style="color: #dc3545;">(agris yang digunakan)</strong></label></p>
+<p><textarea id="au-s3" name="au-s3" rows="1" cols="50" readonly></textarea></p>
+</details>
+</div>
 </section>
 
 <!-- Ascendant -->
@@ -1259,7 +1322,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     return {
       price: price, tax: price - profit, profit: profit,
       vp: vpBonus, ring: ringBonus, fameBonus: fameBonus, fame: fame, famePoints: famePoints,
-      vpOn: vp, ringOn: ring, total: total, rate: total / price
+      total: total, rate: total / price
     };
   };
 
@@ -1361,21 +1424,59 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
   /* 7. Total TL */
   var calcTotalTL = function () {
     var out = document.getElementById("tl-out");
+    var useSpot = document.getElementById("tl-spot-on").checked;
+    var spot = document.getElementById("tl-spot").value;
+    var isCustom = spot === "custom";
+    document.getElementById("tl-custom").disabled = !useSpot;
+    document.getElementById("tl-custom-row").hidden = !(useSpot && isCustom);
+
+    var hidePrice = function () {
+      put("tl-price", null);
+      put("tl-all", null);
+      put("tl-s2", null);
+      put("tl-s3", null);
+    };
+
     var a = readNum("tl-start");
     var b = readNum("tl-end");
 
     if (a === "" || b === "" || Number(a) < 0 || Number(b) < 0) {
       out.value = "Invalid input.";
-      fill("tl-s", [], 1);
+      hidePrice();
+      put("tl-s1", null);
       return;
     }
 
     var start = Number(a);
     var end = Number(b);
     var gain = end - start;
-
     out.value = gain.toLocaleString("en-US");
-    fill("tl-s", [end + " − " + start + " = " + gain], 1);
+    put("tl-s1", end + " − " + start + " = " + gain);
+
+    if (!useSpot) {
+      hidePrice();
+      return;
+    }
+
+    var priceText = isCustom ? readNum("tl-custom") : spot;
+    var price = Number(priceText);
+
+    if (priceText === "" || !(price > 0) || !isFinite(price) || !isFinite(gain)) {
+      put("tl-price", isCustom ? "Isi harga TL" : null);
+      put("tl-all", null);
+      put("tl-s2", null);
+      put("tl-s3", null);
+      return;
+    }
+
+    var all = BigInt(Math.round(gain)) * BigInt(Math.round(price));
+    var compact = compactSilver(all);
+    var full = all.toLocaleString("en-US");
+
+    put("tl-price", price.toLocaleString("en-US") + " silver");
+    put("tl-all", compact === full ? full + " silver" : full + " silver (" + compact + ")");
+    put("tl-s2", String(price));
+    put("tl-s3", gain + " × " + price + " = " + all);
   };
 
   /* 8. Compen */
@@ -1555,6 +1656,59 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     put("sv-s6", progressError === null ? prev + " + " + gain + " = " + (prev + gain) : null);
   };
 
+  /* 10. Agris Used */
+  var AGRIS_RESET = 20000;
+  var AGRIS_MAX = 100000;
+
+  var calcAgrisUsed = function () {
+    var a = readNum("au-start");
+    var b = readNum("au-end");
+    var reset = document.getElementById("au-reset").checked;
+    var c = reset ? readNum("au-before") : "0";
+    var steps = ["au-s1", "au-s2", "au-s3"];
+
+    var fail = function (message) {
+      put("au-out", message);
+      steps.forEach(function (id) { put(id, null); });
+    };
+
+    if (a === "" || b === "" || c === "" ||
+        Number(a) < 0 || Number(b) < 0 || Number(c) < 0 ||
+        !isFinite(Number(a)) || !isFinite(Number(b)) || !isFinite(Number(c))) {
+      fail("Invalid input.");
+      return;
+    }
+
+    var start = Number(a);
+    var end = Number(b);
+    var before = Number(c);
+
+    if (reset && before > start) {
+      fail("Agris sebelum reset tidak boleh lebih besar dari agris awal");
+      return;
+    }
+    if (reset && before > AGRIS_MAX) {
+      fail("Agris sebelum reset tidak boleh lebih dari " + AGRIS_MAX.toLocaleString("en-US"));
+      return;
+    }
+
+    var gain = reset ? Math.min(AGRIS_RESET, AGRIS_MAX - before) : 0;
+    var total = start + gain;
+    var used = total - end;
+
+    put("au-s1", reset ? "min(" + AGRIS_RESET + ", " + AGRIS_MAX + " − " + before + ") = " + gain : null);
+    put("au-s2", reset ? start + " + " + gain + " = " + total : String(total));
+
+    if (used < 0) {
+      put("au-out", "Agris akhir lebih besar dari total agris");
+      put("au-s3", null);
+      return;
+    }
+
+    put("au-out", used.toLocaleString("en-US"));
+    put("au-s3", total + " − " + end + " = " + used);
+  };
+
   /* Simpan input di localStorage (hanya nilai yang berbeda dari default) */
   var STORE_KEY = "bdo-game-pilot:inputs";
   var readStore = function () {
@@ -1579,16 +1733,23 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     });
   };
 
+  var selectDefault = function (el) {
+    var o = Array.prototype.filter.call(el.options, function (x) { return x.defaultSelected; })[0];
+    return o ? o.value : el.options[0].value;
+  };
+
   var restoreInputs = function () {
     var data = readStore();
-    Array.prototype.forEach.call(document.querySelectorAll("main input"), function (el) {
-      if (Object.prototype.hasOwnProperty.call(data, el.id) && typeof data[el.id] === "string") {
-        if (el.type === "checkbox") {
-          if (data[el.id] === "1" || data[el.id] === "0") el.checked = data[el.id] === "1";
-        } else {
-          el.value = data[el.id];
-          if (isNumInput(el)) formatNumber(el);
-        }
+    Array.prototype.forEach.call(document.querySelectorAll("main input, main select"), function (el) {
+      if (!Object.prototype.hasOwnProperty.call(data, el.id) || typeof data[el.id] !== "string") return;
+      if (el.tagName === "SELECT") {
+        var exists = Array.prototype.some.call(el.options, function (o) { return o.value === data[el.id]; });
+        if (exists) el.value = data[el.id];
+      } else if (el.type === "checkbox") {
+        if (data[el.id] === "1" || data[el.id] === "0") el.checked = data[el.id] === "1";
+      } else {
+        el.value = data[el.id];
+        if (isNumInput(el)) formatNumber(el);
       }
     });
     syncEnabled();
@@ -1601,12 +1762,13 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 
   var saveField = function (ev) {
     var el = ev.target;
-    if (!el || el.tagName !== "INPUT" || !el.id) return;
+    if (!el || !el.id || (el.tagName !== "INPUT" && el.tagName !== "SELECT")) return;
     var isCheck = el.type === "checkbox";
-    if (ev.type === "change" && !isCheck) return;
+    var isSelect = el.tagName === "SELECT";
+    if (ev.type === "change" && !isCheck && !isSelect) return;
     var data = readStore();
     var current = isCheck ? (el.checked ? "1" : "0") : el.value;
-    var base = isCheck ? (el.defaultChecked ? "1" : "0") : el.defaultValue;
+    var base = isCheck ? (el.defaultChecked ? "1" : "0") : isSelect ? selectDefault(el) : el.defaultValue;
     if (current === base) delete data[el.id];
     else data[el.id] = current;
     writeStore(data);
@@ -1625,18 +1787,20 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     ["form-tax", calcTax],
     ["form-totaltl", calcTotalTL],
     ["form-compen", calcCompen],
-    ["form-silver", calcSilver]
+    ["form-silver", calcSilver],
+    ["form-used", calcAgrisUsed]
   ].forEach(function (x) {
     var form = document.getElementById(x[0]);
     form.addEventListener("input", function () { x[1](); fitAll(); });
     form.addEventListener("change", function (ev) {
-      if (ev.target.type === "checkbox") { x[1](); fitAll(); }
+      if (ev.target.type === "checkbox" || ev.target.tagName === "SELECT") { x[1](); fitAll(); }
     });
 
     document.getElementById("reset-" + x[0].replace("form-", "")).addEventListener("click", function () {
       var data = readStore();
-      Array.prototype.forEach.call(form.querySelectorAll("input"), function (el) {
-        if (el.type === "checkbox") el.checked = el.defaultChecked;
+      Array.prototype.forEach.call(form.querySelectorAll("input, select"), function (el) {
+        if (el.tagName === "SELECT") el.value = selectDefault(el);
+        else if (el.type === "checkbox") el.checked = el.defaultChecked;
         else el.value = el.defaultValue;
         delete data[el.id];
       });
@@ -1648,7 +1812,15 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 
     document.getElementById("clear-" + x[0].replace("form-", "")).addEventListener("click", function () {
       var data = readStore();
-      Array.prototype.forEach.call(form.querySelectorAll("input"), function (el) {
+      Array.prototype.forEach.call(form.querySelectorAll("input, select"), function (el) {
+        if (el.tagName === "SELECT") {
+          var hasCustom = Array.prototype.some.call(el.options, function (o) { return o.value === "custom"; });
+          if (!hasCustom) return;
+          el.value = "custom";
+          if (el.value === selectDefault(el)) delete data[el.id];
+          else data[el.id] = "custom";
+          return;
+        }
         if (el.type === "range") return;
         if (el.type === "checkbox") {
           el.checked = false;
