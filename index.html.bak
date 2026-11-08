@@ -497,8 +497,10 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><label for="tl-end">TL akhir:</label> <input type="text" inputmode="decimal" id="tl-end" name="end" value="410,000"></p>
 <fieldset>
 <legend>Harga TL (opsional)</legend>
-<p><label><input type="checkbox" id="tl-spot-on" name="tl-spot-on" aria-controls="tl-spot" checked> Spot:</label>
+<p><label><input type="checkbox" id="tl-spot-on" name="tl-spot-on" aria-controls="tl-spot"> Spot:</label>
 <select id="tl-spot" name="spot" aria-label="Spot (harga TL)">
+<option value="1000">Rusalka Coral: 1,000</option>
+<option value="126980">Zephyros: 126,980</option>
 <option value="155127">Aphrodon: 155,127</option>
 <option value="160539">Hermesia: 160,539</option>
 <option value="181042" selected>Magaia: 181,042</option>
@@ -662,9 +664,8 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li>Total progress sebelumnya: <code>59.4b</code>, Total progress seluruhnya: <code>150b</code></li>
 <li>Selisih: <samp>-2,000,000,000 silver (-2 B)</samp> (merah karena berkurang)</li>
 <li>Total perolehan silver: <samp>-2,000,000,000 silver (-2 B)</samp></li>
-<li>Total Progress: <samp>57.4 B / 140 B</samp></li>
+<li>Total Progress: <samp>57.4 B / 150 B</samp></li>
 <li>Jika <em>Sell in storage</em> dicentang dan diisi <code>7.6b</code>, Total perolehan silver menjadi <samp>5,600,000,000 silver (5.6 B)</samp> dan Total Progress <samp>65 B / 150 B</samp></li>
-<li>Jika Central Market (end shift) <code>118b</code>, Selisih <samp>-2,000,000,000 silver (-2 B)</samp> (merah karena berkurang)</li>
 </ul>
 <details>
 <summary>Perhitungan</summary>
@@ -691,6 +692,11 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <ul>
 <li>1 Jam <code>500</code> Coral</li>
 </ul>
+<p><strong>Zephyros</strong></p>
+<ul>
+<li>1 Jam LS2 <code>13,000</code> TL</li>
+<li>1 Jam LS2 Agris <code>23,000</code> TL</li>
+</ul>
 <p><strong>Aphrodon</strong></p>
 <ul>
 <li>1 Jam LS2 <code>11,000</code> TL</li>
@@ -704,6 +710,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><strong>Magaia Temple</strong></p>
 <ul>
 <li>1 Jam LS2 <code>11,000</code> TL</li>
+<li>1 Jam LS2 Agris <code>20,000</code> TL</li>
 </ul>
 <p><strong>Aresion</strong></p>
 <ul>
@@ -788,6 +795,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><strong>Link</strong></p>
 <ul>
 <li><a href="https://garmoth.com" target="_blank" rel="noopener noreferrer">Garmoth</a></li>
+<li><a href="https://bdocodex.com/" target="_blank" rel="noopener noreferrer">BDO Codex</a></li>
 <li><a href="https://www.bdoclasshub.com" target="_blank" rel="noopener noreferrer">BDO Class Hub</a></li>
 <li><a href="https://korbdo.co.kr" target="_blank" rel="noopener noreferrer">Tachyon</a></li>
 </ul>
