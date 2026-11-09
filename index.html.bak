@@ -150,7 +150,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <button type="button" role="tab" id="tab-compen" aria-controls="panel-compen" aria-selected="false" tabindex="-1">Compen</button>
 <button type="button" role="tab" id="tab-silver" aria-controls="panel-silver" aria-selected="false" tabindex="-1">Silver</button>
 <button type="button" role="tab" id="tab-grinding" aria-controls="panel-grinding" aria-selected="false" tabindex="-1">Grinding Spot</button>
-<button type="button" role="tab" id="tab-used" aria-controls="panel-used" aria-selected="false" tabindex="-1">Agris Used</button>
+<button type="button" role="tab" id="tab-used" aria-controls="panel-used" aria-selected="false" tabindex="-1">Agris yang Digunakan</button>
 <button type="button" role="tab" id="tab-ascendant" aria-controls="panel-ascendant" aria-selected="false" tabindex="-1">Ascendant</button>
 </nav>
 </header>
@@ -615,7 +615,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <fieldset>
 <legend>Input</legend>
 <fieldset>
-<legend>Awal shift</legend>
+<legend>Awal shift (bukan SS awal)</legend>
 <p><label for="sv-c0">Silver di Central Market:</label> <input type="text" id="sv-c0" name="c0" value="120b"></p>
 <p><label><input type="checkbox" id="sv-i0-on" name="sv-i0-on" aria-controls="sv-i0"> Silver di Inventory (opsional):</label> <input type="text" id="sv-i0" name="i0" value="5b" disabled aria-label="Silver di Inventory (opsional, screenshot awal)"></p>
 </fieldset>
@@ -627,7 +627,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><label><input type="checkbox" id="sv-o4-on" name="sv-o4-on" aria-controls="sv-o4"> Keep owner:</label> <input type="text" id="sv-o4" name="o4" value="2.1b" disabled aria-label="Keep owner"></p>
 </fieldset>
 <fieldset>
-<legend>End shift</legend>
+<legend>End shift (bukan SS akhir)</legend>
 <p><label for="sv-c1">Silver di Central Market:</label> <input type="text" id="sv-c1" name="c1" value="118b"></p>
 <p><label><input type="checkbox" id="sv-i1-on" name="sv-i1-on" aria-controls="sv-i1"> Silver di Inventory (opsional):</label> <input type="text" id="sv-i1" name="i1" value="2.5b" disabled aria-label="Silver di Inventory (opsional, screenshot akhir)"></p>
 </fieldset>
@@ -652,7 +652,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li>Silver di Central Market <em>(awal dan akhir shift)</em> wajib diisi. Silver di Inventory (opsional) bisa diisi jika ada silvernya, dan semua opsi TL & RNG boleh dicentang atau tidak: jika dicentang, kolomnya aktif, jika tidak, kolomnya nonaktif dan otomatis akan dihitung <code>0</code></li>
 <li>Silver bisa diisi angka biasa, pemisah ribuan, atau akhiran <code>k</code>, <code>m</code>, <code>b</code>, contoh <code>500k</code>, <code>100m</code>, <code>1.5b</code></li>
 <li>Silver pada awal dan end shift dijumlahkan dari Central Market dan Inventory, jadi <em>perpindahan silver antara keduanya tidak akan memengaruhi hasil</em></li>
-<li>Perbandingan silver di CM menampilkan silver pada saat awal shift, end shift, dan selisihnya: <em>hijau</em> jika bertambah dan <em>merah</em> jika berkurang. Berkurang itu wajar karena ada biaya saat atau sebelum grinding, seperti repair gear dan beli buff. Jika silver bertambah perlu dicek karena bisa jadi ada aktivitas di luar grinding <em>(wajib tanyakan owner)</em>, yang ikut menambah total perolehan silver</li>
+<li>Perbandingan silver di CM menampilkan silver pada saat awal shift, end shift, dan selisihnya: <em>hijau</em> jika bertambah dan <em>merah</em> jika berkurang. Berkurang itu wajar karena ada biaya saat atau sebelum grinding, seperti repair gear dan beli buff. Jika silver bertambah perlu dicek karena bisa jadi ada aktivitas di luar grinding <em>(wajib tanyakan mod, jangan buat keputusan sendiri)</em>, yang ikut menambah total perolehan silver</li>
 <li>Total perolehan silver adalah <em>selisih</em> ditambah total <em>TL & RNG</em></li>
 <li><em>Awal shift dan end shift beda banget dengan screenshot awal dan akhir, jangan menginput awal shift dengan screenshot awal dan end shift dengan screenshot akhir biar perhitungannya akurat</em></li>
 <li>Total Progress adalah total progress sebelumnya ditambah total perolehan silver saat ini, dibandingkan dengan total progress seluruhnya. Formatnya <code>57.4 B / 150 B</code>: kiri progress yang didapat, kanan total progress seluruhnya. <code>B</code> berarti miliar, <code>M</code> juta, dan <code>K</code> ribu</li>
@@ -724,9 +724,9 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 </ul>
 </section>
 
-<!-- Agris Used -->
+<!-- Agris yang Digunakan -->
 <section role="tabpanel" id="panel-used" aria-labelledby="tab-used" hidden>
-<h2>Agris Used</h2>
+<h2>Agris yang Digunakan</h2>
 <div id="form-used">
 <fieldset>
 <legend>Input</legend>
@@ -738,7 +738,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><label for="au-out">Agris yang digunakan:</label> <textarea id="au-out" name="agris-used" rows="1" cols="40" readonly></textarea></p>
 <p><strong>Note:</strong></p>
 <ul>
-<li>Agris Used ini fungsinya untuk mengetahui berapa Agris yang digunakan selama shift</li>
+<li>Agris yang Digunakan; fungsinya untuk mengetahui berapa Agris yang digunakan selama shift</li>
 <li><em>Agris awal</em> adalah Agris yang ada di awal shift</li>
 <li><em>Agris akhir</em> adalah Agris yang tersisa setelah selesai grinding</li>
 <li>Agris yang digunakan didapat dari total agris dikurangi agris akhir</li>
@@ -1648,10 +1648,10 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     put("sv-r2", silverText(endTotal));
     put("sv-r3", up ? "+" + silverText(diff).replace(" (", " (+") : silverText(diff));
     put("sv-r4", up
-      ? "Silver bertambah. Cek apakah ada aktivitas di luar grinding (wajib tanyakan owner), yang ikut menambah total perolehan silver"
+      ? "Silver bertambah. Cek apakah ada aktivitas di luar grinding (wajib tanyakan mod, jangan buat keputusan sendiri), yang ikut menambah total perolehan silver"
       : down
         ? "Silver berkurang. Wajar karena ada biaya saat atau sebelum grinding, seperti repair gear dan beli buff"
-        : "Silver tidak berubah. Tolong hitung lagi mungkin ada kesalahan input");
+        : "Silver tidak berubah. Tolong hitung lagi, biaya buff (jika beli buff) maupun biaya repair gear saat grinding seharusnya masuk di perhitungan");
     mark(up, down);
     put("sv-r5", silverText(gain));
     put("sv-r6", progressError !== null ? progressError : compactSilver(prev + gain) + " / " + compactSilver(target));
@@ -1664,7 +1664,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     put("sv-s6", progressError === null ? prev + " + " + gain + " = " + (prev + gain) : null);
   };
 
-  /* 10. Agris Used */
+  /* 10. Agris yang Digunakan */
   var AGRIS_RESET = 20000;
   var AGRIS_MAX = 100000;
 
