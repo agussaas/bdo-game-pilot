@@ -144,7 +144,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <button type="button" role="tab" id="tab-hourly" aria-controls="panel-hourly" aria-selected="false" tabindex="-1">Progress Hourly (Tanpa Agris)</button>
 <button type="button" role="tab" id="tab-agris" aria-controls="panel-agris" aria-selected="false" tabindex="-1">Progress Hourly (Dengan Agris)</button>
 <button type="button" role="tab" id="tab-total" aria-controls="panel-total" aria-selected="false" tabindex="-1">Total Progress Hourly</button>
-<button type="button" role="tab" id="tab-buff" aria-controls="panel-buff" aria-selected="false" tabindex="-1">Buff Counter</button>
+<button type="button" role="tab" id="tab-buff" aria-controls="panel-buff" aria-selected="false" tabindex="-1">Buff yang Digunakan</button>
 <button type="button" role="tab" id="tab-tax" aria-controls="panel-tax" aria-selected="false" tabindex="-1">BDO Tax Calculator</button>
 <button type="button" role="tab" id="tab-totaltl" aria-controls="panel-totaltl" aria-selected="false" tabindex="-1">Total TL</button>
 <button type="button" role="tab" id="tab-compen" aria-controls="panel-compen" aria-selected="false" tabindex="-1">Compen</button>
@@ -342,9 +342,9 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 </div>
 </section>
 
-<!-- Buff Counter -->
+<!-- Buff yang Digunakan -->
 <section role="tabpanel" id="panel-buff" aria-labelledby="tab-buff" hidden>
-<h2>Buff Counter</h2>
+<h2>Buff yang Digunakan</h2>
 <div id="form-buff">
 <fieldset>
 <legend>Input</legend>
@@ -615,7 +615,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <fieldset>
 <legend>Input</legend>
 <fieldset>
-<legend>Awal shift (bukan SS awal)</legend>
+<legend>Awal shift</legend>
 <p><label for="sv-c0">Silver di Central Market:</label> <input type="text" id="sv-c0" name="c0" value="120b"></p>
 <p><label><input type="checkbox" id="sv-i0-on" name="sv-i0-on" aria-controls="sv-i0"> Silver di Inventory (opsional):</label> <input type="text" id="sv-i0" name="i0" value="5b" disabled aria-label="Silver di Inventory (opsional, screenshot awal)"></p>
 </fieldset>
@@ -627,7 +627,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><label><input type="checkbox" id="sv-o4-on" name="sv-o4-on" aria-controls="sv-o4"> Keep owner:</label> <input type="text" id="sv-o4" name="o4" value="2.1b" disabled aria-label="Keep owner"></p>
 </fieldset>
 <fieldset>
-<legend>End shift (bukan SS akhir)</legend>
+<legend>End shift</legend>
 <p><label for="sv-c1">Silver di Central Market:</label> <input type="text" id="sv-c1" name="c1" value="118b"></p>
 <p><label><input type="checkbox" id="sv-i1-on" name="sv-i1-on" aria-controls="sv-i1"> Silver di Inventory (opsional):</label> <input type="text" id="sv-i1" name="i1" value="2.5b" disabled aria-label="Silver di Inventory (opsional, screenshot akhir)"></p>
 </fieldset>
@@ -654,7 +654,9 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li>Silver pada awal dan end shift dijumlahkan dari Central Market dan Inventory, jadi <em>perpindahan silver antara keduanya tidak akan memengaruhi hasil</em></li>
 <li>Perbandingan silver di CM menampilkan silver pada saat awal shift, end shift, dan selisihnya: <em>hijau</em> jika bertambah dan <em>merah</em> jika berkurang. Berkurang itu wajar karena ada biaya saat atau sebelum grinding, seperti repair gear dan beli buff. Jika silver bertambah perlu dicek karena bisa jadi ada aktivitas di luar grinding <em>(wajib tanyakan mod, jangan buat keputusan sendiri)</em>, yang ikut menambah total perolehan silver</li>
 <li>Total perolehan silver adalah <em>selisih</em> ditambah total <em>TL & RNG</em></li>
-<li><em>Awal shift dan end shift beda banget dengan screenshot awal dan akhir, jangan menginput awal shift dengan screenshot awal dan end shift dengan screenshot akhir biar perhitungannya akurat</em></li>
+<li><em>Opsi Sell in Central Market tidak boleh dicentang jika sudah menjual hasil grinding ke CM, nanti hasilnya double; tolong dibaca baik-baik</em></li>
+<li><em>Opsi Sell in Central Market boleh dicentang jika belum sell apapun di CM; tolong dibaca baik-baik</em></li>
+<li><em>Wajib lapor ke mod jika selisih silver pada saat awal dan end shift di CM bertambah banyak; tolong dibaca baik-baik</em></li>
 <li>Total Progress adalah total progress sebelumnya ditambah total perolehan silver saat ini, dibandingkan dengan total progress seluruhnya. Formatnya <code>57.4 B / 150 B</code>: kiri progress yang didapat, kanan total progress seluruhnya. <code>B</code> berarti miliar, <code>M</code> juta, dan <code>K</code> ribu</li>
 <li>Total progress sebelumnya boleh dikosongkan, otomatis akan dihitung <code>0</code></li>
 </ul>
@@ -804,6 +806,10 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li><a href="https://docs.google.com/spreadsheets/d/1m4p1gzCgbTrQUMn81e2YGEZ3s23WesE5s8fZaH1ViKY/" target="_blank" rel="noopener noreferrer">jadwal</a></li>
 <li><a href="https://docs.google.com/spreadsheets/d/1bupn8hYu76W0qqRJwsXkNQ4p7o3EzJyzoCNpEygu7Us" target="_blank" rel="noopener noreferrer">Jadwal MOD & Pilot</a></li>
 <li><a href="https://docs.google.com/spreadsheets/d/12S_BWkK6dUQLzZ3NmvwyRUKsk046Sv4FZDC3Thv41Mo" target="_blank" rel="noopener noreferrer">jadwal ascendant</a></li>
+</ul>
+<p><strong>Warning</strong></p>
+<ul>
+<li>Tools ini hanya referensi saja, wajib baca note dan double-check sebelum report progress; <em>Use at on your own risk!</em></li>
 </ul>
 </section>
 
