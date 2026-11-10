@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+
+<!-- Meta tags -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
@@ -8,11 +10,15 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=JetBrains+Mono:wght@400&amp;display=swap">
 <title>BDO Game Pilot</title>
+
+<!-- Favicon -->
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="manifest" href="site.webmanifest">
+
 <style>
+/* Reset */
 :root { color-scheme: light dark; }
 :root[data-theme="light"] { color-scheme: light; }
 :root[data-theme="dark"] { color-scheme: dark; }
@@ -101,6 +107,7 @@ dialog {
   border-radius: 0.5rem;
 }
 dialog::backdrop { background: rgba(0, 0, 0, 0.5); }
+#verify-dialog { width: min(40rem, calc(100% - 2rem)); }
 dialog ul {list-style: none; padding-left: 0; }
 dialog a { display: inline-block; padding: 0.25rem 0; }
 
@@ -112,7 +119,7 @@ dialog a { display: inline-block; padding: 0.25rem 0; }
 }
 input[type="range"] { padding: 0; border: 0; background: transparent; }
 input[type="checkbox"] { display: inline-block; width: 1.1rem; height: 1.1rem; min-height: 0; margin: 0 0.35rem 0 0; padding: 0; vertical-align: middle; }
-input:disabled, select:disabled { opacity: 0.55; cursor: not-allowed; }
+input:disabled, select:disabled, textarea:disabled { opacity: 0.55; cursor: not-allowed; }
 .up { color: light-dark(#0b6b2b, #6fe39a); }
 .down { color: light-dark(#b00020, #ff8a8a); }
 figure { min-width: 0; margin: 0; }
@@ -130,21 +137,30 @@ details p:has(> label:only-child) > label { padding-top: 0; }
   p:has(> label:first-child) > label { padding-top: 0.5rem; }
 }
 </style>
+
+<!-- Save localStorage -->
 <script>
 try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved === "dark") document.documentElement.setAttribute("data-theme", saved); } catch (e) {}
 </script>
+
 </head>
+
 <body>
+  <!-- Header title -->
 <header>
 <h1><a href="./">BDO Game Pilot</a></h1>
+
+<!-- Header button -->
 <button type="button" id="theme-toggle"><span id="theme-icon" aria-hidden="true">☾</span> <span id="theme-label">Mode Gelap</span></button>
 <button type="button" id="help-open" aria-haspopup="dialog"><span aria-hidden="true">?</span> <span>Help</span></button>
+
+<!-- List semua tab -->
 <nav role="tablist" aria-label="Tab">
 <button type="button" role="tab" id="tab-stopwatch" aria-controls="panel-stopwatch" aria-selected="true">Google Stopwatch</button>
 <button type="button" role="tab" id="tab-hourly" aria-controls="panel-hourly" aria-selected="false" tabindex="-1">Progress Hourly (Tanpa Agris)</button>
 <button type="button" role="tab" id="tab-agris" aria-controls="panel-agris" aria-selected="false" tabindex="-1">Progress Hourly (Dengan Agris)</button>
 <button type="button" role="tab" id="tab-total" aria-controls="panel-total" aria-selected="false" tabindex="-1">Total Progress Hourly</button>
-<button type="button" role="tab" id="tab-buff" aria-controls="panel-buff" aria-selected="false" tabindex="-1">Buff yang Digunakan</button>
+<button type="button" role="tab" id="tab-buff" aria-controls="panel-buff" aria-selected="false" tabindex="-1">Total Buff</button>
 <button type="button" role="tab" id="tab-tax" aria-controls="panel-tax" aria-selected="false" tabindex="-1">BDO Tax Calculator</button>
 <button type="button" role="tab" id="tab-totaltl" aria-controls="panel-totaltl" aria-selected="false" tabindex="-1">Total TL</button>
 <button type="button" role="tab" id="tab-compen" aria-controls="panel-compen" aria-selected="false" tabindex="-1">Compen</button>
@@ -169,6 +185,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 </fieldset>
 <p><label for="sw-out"><strong>Paste di browser console</strong></label></p>
 <p><textarea id="sw-out" name="out" rows="8" cols="80" readonly></textarea></p>
+<p><button type="button" id="verify-open" aria-haspopup="dialog">Verifikasi (ChatGPT, Claude, Gemini)</button></p>
 <p><strong>Note:</strong></p>
 <ul>
 <li>Buka tab baru, search <code>Stopwatch</code> di Google</li>
@@ -194,6 +211,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><button type="button" id="reset-hourly">Reset</button> <button type="button" id="clear-hourly">Clear</button></p>
 </fieldset>
 <p><label for="h-out">Progress:</label> <textarea id="h-out" name="progress" rows="1" cols="50" readonly></textarea></p>
+<p><button type="button" id="verify-hourly-open" aria-haspopup="dialog">Verifikasi (ChatGPT, Claude, Gemini)</button></p>
 <p><strong>Contoh:</strong></p>
 <ul>
 <li>Total perolehan TL dalam satu shift: <code>97,000</code></li>
@@ -235,6 +253,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><label for="a-out">Total Time:</label> <textarea id="a-out" name="total-time" rows="1" cols="40" readonly></textarea></p>
 <p><label for="a-with">Time with Agris:</label> <textarea id="a-with" name="time-with-agris" rows="1" cols="40" readonly></textarea></p>
 <p><label for="a-without">Time without Agris:</label> <textarea id="a-without" name="time-without-agris" rows="1" cols="40" readonly></textarea></p>
+<p><button type="button" id="verify-agris-open" aria-haspopup="dialog">Verifikasi (ChatGPT, Claude, Gemini)</button></p>
 <p><strong>Note:</strong></p>
 <ul>
 <li>Harus ada patokan <em>Agris yang digunakan</em> dan <em>total TL</em> per jam</li>
@@ -320,6 +339,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><button type="button" id="reset-total">Reset</button> <button type="button" id="clear-total">Clear</button></p>
 </fieldset>
 <p><label for="t-out">Total Hours:</label> <textarea id="t-out" name="total-hours" rows="1" cols="40" readonly></textarea></p>
+<p><button type="button" id="verify-total-open" aria-haspopup="dialog">Verifikasi (ChatGPT, Claude, Gemini)</button></p>
 <p><strong>Contoh:</strong></p>
 <ul>
 <li>Total progress sebelumnya adalah <code>60 H 41 M</code></li>
@@ -342,9 +362,9 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 </div>
 </section>
 
-<!-- Buff yang Digunakan -->
+<!-- Total Buff -->
 <section role="tabpanel" id="panel-buff" aria-labelledby="tab-buff" hidden>
-<h2>Buff yang Digunakan</h2>
+<h2>Total Buff</h2>
 <div id="form-buff">
 <fieldset>
 <legend>Input</legend>
@@ -357,7 +377,8 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><label for="b-o1">Shift:</label> <textarea id="b-o1" name="shift-out" rows="1" cols="40" readonly></textarea></p>
 <p><label for="b-o2">Buff:</label> <textarea id="b-o2" name="buff-out" rows="1" cols="40" readonly></textarea></p>
 <p><label for="b-o3">Total Buff:</label> <textarea id="b-o3" name="total-buff" rows="1" cols="40" readonly></textarea></p>
-<p><label for="b-o4">Harga:</label> <textarea id="b-o4" name="cost" rows="1" cols="40" readonly></textarea></p>
+<p><label for="b-o4">Price:</label> <textarea id="b-o4" name="cost" rows="1" cols="40" readonly></textarea></p>
+<p><button type="button" id="verify-buff-open" aria-haspopup="dialog">Verifikasi (ChatGPT, Claude, Gemini)</button></p>
 <p><strong>Note:</strong></p>
 <ul>
 <li>Jika ditulis tanpa satuan, Shift length dihitung <em>jam</em>, Buff duration <em>menit</em>, dan Cooldown <em>detik</em>, jadi <code>8 15 10</code> sama dengan <code>8h 15m 10s</code></li>
@@ -421,6 +442,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><label for="d-p4">Value Pack (+30%):</label> <textarea id="d-p4" name="d-p4" rows="1" cols="40" readonly></textarea></p>
 <p><label for="d-p5">You receive:</label> <textarea id="d-p5" name="d-p5" rows="1" cols="40" readonly></textarea></p>
 </fieldset>
+<p><button type="button" id="verify-tax-open" aria-haspopup="dialog">Verifikasi (ChatGPT, Claude, Gemini)</button></p>
 <p><strong>Note:</strong></p>
 <ul>
 <li>Price bisa pakai angka biasa (<code>5000000</code>), pemisah ribuan (<code>1,000,000</code>), atau akhiran <code>k</code> (ribu), <code>m</code> (juta), <code>b</code> (miliar), <code>t</code> (triliun), contoh <code>500k</code>, <code>100m</code>, <code>1.5b</code></li>
@@ -515,6 +537,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><label for="tl-out">Total perolehan TL:</label> <textarea id="tl-out" name="total-tl" rows="1" cols="40" readonly></textarea></p>
 <p><label for="tl-price">Harga TL:</label> <textarea id="tl-price" name="tl-price" rows="1" cols="40" readonly></textarea></p>
 <p><label for="tl-all">Harga TL seluruhnya:</label> <textarea id="tl-all" name="tl-all" rows="1" cols="40" readonly></textarea></p>
+<p><button type="button" id="verify-totaltl-open" aria-haspopup="dialog">Verifikasi (ChatGPT, Claude, Gemini)</button></p>
 <p><strong>Note:</strong></p>
 <ul>
 <li>Total TL ini fungsinya untuk mengetahui total perolehan TL jika di storage sudah ada TL-nya, dan juga bisa untuk menghitung berapa silver dari TL tersebut</li>
@@ -570,6 +593,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><label for="cp-o5">Persen:</label> <textarea id="cp-o5" name="cp-o5" rows="1" cols="40" readonly></textarea></p>
 <p><label for="cp-o6">Silver:</label> <textarea id="cp-o6" name="cp-o6" rows="1" cols="40" readonly></textarea></p>
 </fieldset>
+<p><button type="button" id="verify-compen-open" aria-haspopup="dialog">Verifikasi (ChatGPT, Claude, Gemini)</button></p>
 <p><strong>Note:</strong></p>
 <ul>
 <li>Compen bisa diisi angka biasa, pemisah ribuan, atau akhiran <code>k</code>, <code>m</code>, <code>b</code>, contoh <code>500k</code>, <code>100m</code>, <code>3b</code></li>
@@ -617,14 +641,25 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <fieldset>
 <legend>Awal shift (sebelum SS awal)</legend>
 <p><label for="sv-c0">Silver di Central Market:</label> <input type="text" id="sv-c0" name="c0" value="120b"></p>
-<p><label><input type="checkbox" id="sv-i0-on" name="sv-i0-on" aria-controls="sv-i0"> Silver di Inventory (opsional):</label> <input type="text" id="sv-i0" name="i0" value="5b" disabled aria-label="Silver di Inventory (opsional, screenshot awal)"></p>
+<p><label><input type="checkbox" id="sv-i0-on" name="sv-i0-on" aria-controls="sv-i0"> Silver di Inventory (opsional):</label> <input type="text" id="sv-i0" name="i0" value="5b" disabled aria-label="Silver di Inventory (opsional, sebelum screenshot awal)"></p>
 </fieldset>
 <fieldset>
 <legend>TL & RNG</legend>
-<p><label><input type="checkbox" id="sv-o1-on" name="sv-o1-on" aria-controls="sv-o1"> Sell in storage:</label> <input type="text" id="sv-o1" name="o1" value="7.6b" disabled aria-label="Sell in storage"></p>
-<p><label><input type="checkbox" id="sv-o2-on" name="sv-o2-on" aria-controls="sv-o2"> Sell in Central Market:</label> <input type="text" id="sv-o2" name="o2" value="3.7b" disabled aria-label="Sell in Central Market"></p>
-<p><label><input type="checkbox" id="sv-o3-on" name="sv-o3-on" aria-controls="sv-o3"> Listed in CM (Tax):</label> <input type="text" id="sv-o3" name="o3" value="1.3b" disabled aria-label="Listed in CM (Tax)"></p>
-<p><label><input type="checkbox" id="sv-o4-on" name="sv-o4-on" aria-controls="sv-o4"> Keep owner:</label> <input type="text" id="sv-o4" name="o4" value="2.1b" disabled aria-label="Keep owner"></p>
+<p><label><input type="checkbox" id="sv-o1-on" name="sv-o1-on" aria-controls="sv-o1 sv-o1-m-on sv-o1-m"> Sell in storage:</label> <input type="text" id="sv-o1" name="o1" value="7.6b" disabled aria-label="Sell in storage"></p>
+<p><label><input type="checkbox" id="sv-o1-m-on" name="sv-o1-m-on" aria-controls="sv-o1 sv-o1-m" aria-label="Hitung manual Sell in storage" disabled> Hitung manual (per baris):</label> <textarea id="sv-o1-m" name="o1-m" rows="3" cols="40" disabled aria-label="Hitung manual Sell in storage, satu angka per baris">1.3b
+252,000,000</textarea></p>
+<p><label><input type="checkbox" id="sv-o2-on" name="sv-o2-on" aria-controls="sv-o2 sv-o2-m-on sv-o2-m"> Sell in Central Market (sudah tax):</label> <input type="text" id="sv-o2" name="o2" value="3.7b" disabled aria-label="Sell in Central Market (sudah tax)"></p>
+<p><label><input type="checkbox" id="sv-o2-m-on" name="sv-o2-m-on" aria-controls="sv-o2 sv-o2-m" aria-label="Hitung manual Sell in Central Market (sudah tax)" disabled> Hitung manual (per baris):</label> <textarea id="sv-o2-m" name="o2-m" rows="3" cols="40" disabled aria-label="Hitung manual Sell in Central Market (sudah tax), satu angka per baris">1.1b
+1,235,000,000
+512,000,000</textarea></p>
+<p><label><input type="checkbox" id="sv-o3-on" name="sv-o3-on" aria-controls="sv-o3 sv-o3-m-on sv-o3-m"> Listed in CM (sudah tax):</label> <input type="text" id="sv-o3" name="o3" value="1.3b" disabled aria-label="Listed in CM (sudah tax)"></p>
+<p><label><input type="checkbox" id="sv-o3-m-on" name="sv-o3-m-on" aria-controls="sv-o3 sv-o3-m" aria-label="Hitung manual Listed in CM (sudah tax)" disabled> Hitung manual (per baris):</label> <textarea id="sv-o3-m" name="o3-m" rows="3" cols="40" disabled aria-label="Hitung manual Listed in CM (sudah tax), satu angka per baris">1.5b
+1,725,000,000</textarea></p>
+<p><label><input type="checkbox" id="sv-o4-on" name="sv-o4-on" aria-controls="sv-o4 sv-o4-m-on sv-o4-m"> Keep owner:</label> <input type="text" id="sv-o4" name="o4" value="2.1b" disabled aria-label="Keep owner"></p>
+<p><label><input type="checkbox" id="sv-o4-m-on" name="sv-o4-m-on" aria-controls="sv-o4 sv-o4-m" aria-label="Hitung manual Keep owner" disabled> Hitung manual (per baris):</label> <textarea id="sv-o4-m" name="o4-m" rows="3" cols="40" disabled aria-label="Hitung manual Keep owner, satu angka per baris">1.8b
+1,775,000,000
+525,000,000
+125,000,000</textarea></p>
 </fieldset>
 <fieldset>
 <legend>End shift (sebelum SS akhir)</legend>
@@ -647,18 +682,20 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 </fieldset>
 <p><label for="sv-r5">Total perolehan silver:</label> <textarea id="sv-r5" name="sv-r5" rows="1" cols="40" readonly></textarea></p>
 <p><label for="sv-r6">Total Progress:</label> <textarea id="sv-r6" name="sv-r6" rows="1" cols="40" readonly></textarea></p>
+<p><button type="button" id="verify-silver-open" aria-haspopup="dialog">Verifikasi (ChatGPT, Claude, Gemini)</button></p>
 <p><strong>Note:</strong></p>
 <ul>
 <li>Silver di Central Market <em>(awal dan akhir shift)</em> wajib diisi. Silver di Inventory (opsional) bisa diisi jika ada silvernya, dan semua opsi TL & RNG boleh dicentang atau tidak: jika dicentang, kolomnya aktif, jika tidak, kolomnya nonaktif dan otomatis akan dihitung <code>0</code></li>
 <li>Silver bisa diisi angka biasa, pemisah ribuan, atau akhiran <code>k</code>, <code>m</code>, <code>b</code>, contoh <code>500k</code>, <code>100m</code>, <code>1.5b</code></li>
+<li>Setiap opsi di TL & RNG bisa <em>dihitung disini</em>: jika dicentang, <em>harus input satu angka per baris</em> atau bisa juga memakai spasi (spasi juga dianggap pemisah), lalu semuanya akan otomatis dijumlahkan dan hasilnya akan tampil di kolom opsi tersebut</li>
 <li>Silver pada awal dan end shift dijumlahkan dari Central Market dan Inventory, jadi <em>perpindahan silver antara keduanya tidak akan memengaruhi hasil</em></li>
-<li>Perbandingan silver di CM menampilkan silver pada saat awal shift, end shift, dan selisihnya: <em>hijau</em> jika bertambah dan <em>merah</em> jika berkurang. Berkurang itu wajar karena ada biaya saat atau sebelum grinding, seperti repair gear dan beli buff. Jika silver bertambah perlu dicek karena bisa jadi ada aktivitas di luar grinding <em>(wajib tanyakan mod, jangan buat keputusan sendiri)</em>, yang ikut menambah total perolehan silver</li>
+<li style="color: #dc3545;">Perbandingan silver di CM menampilkan silver pada saat awal shift, end shift, dan selisihnya: <em>hijau</em> jika bertambah dan <em>merah</em> jika berkurang. Berkurang itu wajar karena ada biaya saat atau sebelum grinding, seperti repair gear dan beli buff. Jika silver bertambah perlu dicek karena bisa jadi ada aktivitas di luar grinding <em>(wajib tanyakan mod, jangan buat keputusan sendiri)</em>, yang ikut menambah total perolehan silver</li>
 <li>Total perolehan silver adalah <em>selisih</em> ditambah total <em>TL & RNG</em></li>
-<li><em>Tolong untuk opsi Sell in Central Market, input harga itu seharusnya setelah dijual bukan sebelum dijual karena sudah dikurangi tax; tolong dibaca baik-baik</em></li>
-<li><em>Awal shift itu pada waktu mau screenshot awal, dan end shift itu pada waktu mau screenshot akhir; tolong dibaca baik-baik</em></li>
-<li><em>Tolong jangan memakai screenshot awal pada awal shift dan screenshot akhir pada end shift untuk silver di central market dan inventory; tolong dibaca baik-baik</em></li>
-<li><em>Sebelum menghitung, wajib menyimpan berapa total silver di central market dan inventory pada awal shift (sebelum screenshot awal); tolong dibaca baik-baik</em></li>
-<li><em>Pada waktu mau screenshot akhir, wajib menyimpan berapa total silver di central market dan inventory dulu sebelum melakukan sell di central market; tolong dibaca baik-baik</em></li>
+<li style="color: #dc3545;"><em>Tolong untuk opsi Sell in Central Market (sudah tax), input harga itu seharusnya setelah dijual bukan sebelum dijual karena sudah dikurangi tax</em></li>
+<li style="color: #dc3545;"><em>Awal shift itu pada waktu mau screenshot awal, dan end shift itu pada waktu mau screenshot akhir</em></li>
+<li style="color: #dc3545;"><em>Tolong jangan memakai screenshot awal pada awal shift dan screenshot akhir pada end shift untuk silver di central market dan inventory</em></li>
+<li style="color: #dc3545;"><em>Sebelum menghitung, wajib menyimpan berapa total silver di central market dan inventory pada awal shift (sebelum screenshot awal)</em></li>
+<li style="color: #dc3545;"><em>Pada waktu mau screenshot akhir, wajib menyimpan berapa total silver di central market dan inventory dulu, sebelum melakukan sell di central market maupun storage</em></li>
 <li>Total Progress adalah total progress sebelumnya ditambah total perolehan silver saat ini, dibandingkan dengan total progress seluruhnya. Formatnya <code>57.4 B / 150 B</code>: kiri progress yang didapat, kanan total progress seluruhnya. <code>B</code> berarti miliar, <code>M</code> juta, dan <code>K</code> ribu</li>
 <li>Total progress sebelumnya boleh dikosongkan, otomatis akan dihitung <code>0</code></li>
 </ul>
@@ -740,6 +777,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><button type="button" id="reset-used">Reset</button> <button type="button" id="clear-used">Clear</button></p>
 </fieldset>
 <p><label for="au-out">Agris yang digunakan:</label> <textarea id="au-out" name="agris-used" rows="1" cols="40" readonly></textarea></p>
+<p><button type="button" id="verify-used-open" aria-haspopup="dialog">Verifikasi (ChatGPT, Claude, Gemini)</button></p>
 <p><strong>Note:</strong></p>
 <ul>
 <li>Agris yang Digunakan; fungsinya untuk mengetahui berapa Agris yang digunakan selama shift</li>
@@ -775,11 +813,11 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <h2>Ascendant</h2>
 <p><strong>Grinding</strong></p>
 <ul>
-<li>Jika Maid sedikit, TL bisa ditaruh di kuda. Jadi pada saat inventory sudah penuh pergi ke kuda dan pencet <strong>F5</strong> di keyboard lalu pindahkan semua TL-nya disana</li>
-<li>Jika Maid-nya banyak jangan pergi ke kota, taruh aja di spot grinding dan usahakan jauh dari mob agar pas owner mau login atau shift berikutnya <em>gak kaget</em></li>
+<li>Jika Maid sedikit, TL bisa ditaruh di kuda. Jadi pada saat inventory sudah penuh pergi ke kuda dan pencet <strong>F6</strong> di keyboard lalu pindahkan semua TL-nya disana</li>
+<li>Jika Maid-nya banyak jangan pergi ke kota, taruh aja di spot grinding dan usahakan jauh dari mob agar pas owner mau login atau shift berikutnya <em>tidak mati tiba-tiba</em></li>
 <li>Jangan letakkan TL di kuda jika Maid-nya banyak, taruh aja di storage <em>(wasting time banget kalo di kuda)</em></li>
 <li>Jika total TL di storage sudah mencapai ratusan ribu <em>k</em> arahkan mouse ke TL-nya jika ingin mengetahui total TL-nya secara akurat</li>
-<li>Jika silver di central market pada saat awal shift dan akhir shift nambah maka berarti ada aktivitas diluar grinding, usahakan cek selalu agar silver dari aktivitas owner tidak masuk ke progress</li>
+<li>Jika silver di central market pada saat awal shift dan akhir shift nambah tanpa ada aktivitas sell; berarti ada aktivitas diluar grinding, usahakan cek selalu agar silver dari aktivitas owner tidak masuk ke progress</li>
 </ul>
 <p><strong>Buff</strong></p>
 <ul>
@@ -787,6 +825,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li>Baik hourly maupun silver, usahakan tetap membeli buff drop rate 50% di tenda</li>
 <li>Usahakan selalu mengecek persen drop rate ketika mau grinding karena ini berpengaruh sekali ke progress</li>
 <li>Hati hati jika pakai buff <em>Blessing of Old Moon Scroll</em> karena ini seperti memakai Agris <em>(100% Drop Amount)</em></li>
+<li>Jika terlanjur pakai buff <em>Blessing of Old Moon Scroll</em> perhitungannya seperti memakai Agris 1 jam (lihat patokan agris di note berapa TL per jam-nya.</li>
 </ul>
 <p><strong>Death</strong></p>
 <ul>
@@ -819,15 +858,20 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li><a href="https://t.me/+Xmmz3gE42BYzNmM1" target="_blank" rel="noopener noreferrer">Telegram Channel</a></li>
 <li><a href="http://t.me/Agus_HK059" target="_blank" rel="noopener noreferrer">AGUS</a></li>
 </ul>
-<p ><em>Selalu double-check sebelum report progress</em></p>
-<p ><em>Use at on your own risk!</em></p>
+<p><em>Use at on your own risk!</em></p>
 <p><button type="button" id="help-close">Tutup</button></p>
+</dialog>
+<dialog id="verify-dialog" aria-labelledby="verify-title">
+<h2 id="verify-title">Verifikasi (ChatGPT, Claude, Gemini)</h2>
+<p>Copy prompt di bawah, lalu paste ke ChatGPT, Claude, atau Gemini untuk verifikasi</p>
+<p><textarea id="verify-out" name="verify-out" rows="12" cols="60" readonly></textarea></p>
+<p><button type="button" id="verify-close">Tutup</button></p>
 </dialog>
 <script>
 (function () {
   "use strict";
 
-  /* Tinggi textarea mengikuti isi */
+  /* Tidak peduli berapa element HTML-nya, tinggi textarea wajib mengikuti semua element HTML */
   var fit = function (el) {
     if (!el.clientWidth) return;
     el.style.height = "auto";
@@ -837,14 +881,14 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     Array.prototype.forEach.call(document.querySelectorAll("textarea"), fit);
   };
 
-  /* Isi textarea perhitungan per langkah */
+  /* Textarea untuk perhitungan per langkah */
   var fill = function (prefix, lines, count) {
     for (var k = 0; k < count; k++) {
       document.getElementById(prefix + (k + 1)).value = lines[k] || "";
     }
   };
 
-  /* Input angka: pemisah ribuan otomatis (koma), koma yang diketik diabaikan saat menghitung */
+  /* Input angka: pemisah ribuan (koma), koma yang diketik diabaikan saat menghitung */
   var readNum = function (id) {
     var t = document.getElementById(id).value.replace(/,/g, "").trim();
     return /^-?(\d+\.?\d*|\.\d+)(e[+-]?\d+)?$/i.test(t) ? t : "";
@@ -945,7 +989,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     });
   });
 
-  /* Pulihkan tab terakhir yang dibuka */
+  /* Pulihkan tab terakhir */
   var savedTab = null;
   try { savedTab = localStorage.getItem(TAB_KEY); } catch (e) {}
   var lastTab = tabs.filter(function (t) { return t.id === savedTab; })[0];
@@ -961,7 +1005,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     document.getElementById("sw-out").value = code;
   };
 
-  /* Klik/fokus pada kode stopwatch: seluruh isi langsung tersorot dan siap di copy */
+  /* Klik/hover stopwatch: langsung siap di copy */
   var swOut = document.getElementById("sw-out");
   var selectSwOut = function () {
     swOut.select();
@@ -969,6 +1013,586 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
   };
   swOut.addEventListener("click", selectSwOut);
   swOut.addEventListener("focus", selectSwOut);
+
+  /* Verifikasi Google Stopwatch (Claude, ChatGPT, Gemini) */
+  var verifyDlg = document.getElementById("verify-dialog");
+  var verifyOut = document.getElementById("verify-out");
+  var buildVerifyPrompt = function () {
+    return [
+      "Tolong verifikasi kode JavaScript di bawah ini. Kode ini untuk di-paste di browser console pada halaman Google Stopwatch (hasil search \"Stopwatch\" di Google).",
+      "",
+      "Yang ingin saya ketahui:",
+      "1. Apa sebenarnya yang dilakukan kode ini, langkah demi langkah?",
+      "2. Apakah benar kode ini hanya mengubah teks tampilan stopwatch (elemen [jsname=\"LQ3Xe\"]) dan judul tab, tidak lebih dari itu?",
+      "3. Apakah ada hal berbahaya: mengirim data ke luar (fetch, XMLHttpRequest, WebSocket, dll), membaca cookie atau localStorage, memakai eval, atau memuat script lain?",
+      "4. Apakah aman untuk di-paste di browser console?",
+      "",
+      "Jawab jujur dan jelas. Jika ada yang mencurigakan, jelaskan. Jika tidak yakin, bilang tidak yakin.",
+      "",
+      "Kode:",
+      "```",
+      document.getElementById("sw-out").value,
+      "```"
+    ].join("\n");
+  };
+  var closeVerify = function () {
+    if (typeof verifyDlg.close === "function") verifyDlg.close();
+    else verifyDlg.removeAttribute("open");
+  };
+  document.getElementById("verify-open").addEventListener("click", function () {
+    if (verifyDlg.open) return;
+    verifyOut.value = buildVerifyPrompt();
+    if (typeof verifyDlg.showModal === "function") verifyDlg.showModal();
+    else verifyDlg.setAttribute("open", "");
+    fit(verifyOut);
+  });
+  document.getElementById("verify-close").addEventListener("click", closeVerify);
+  verifyDlg.addEventListener("click", function (ev) {
+    if (ev.target !== verifyDlg) return;
+    var r = verifyDlg.getBoundingClientRect();
+    var inside = ev.clientX >= r.left && ev.clientX <= r.right && ev.clientY >= r.top && ev.clientY <= r.bottom;
+    if (!inside) closeVerify();
+  });
+  var selectVerify = function () {
+    verifyOut.select();
+    verifyOut.setSelectionRange(0, verifyOut.value.length);
+  };
+  verifyOut.addEventListener("click", selectVerify);
+  verifyOut.addEventListener("focus", selectVerify);
+
+  /* Verifikasi Progress Hourly no Agris (Claude, ChatGPT, Gemini) */
+  var buildHourlyVerifyPrompt = function () {
+    var v = function (id) { return document.getElementById(id).value; };
+    var steps = ["h-s1", "h-s2", "h-s3", "h-s4", "h-s5"].map(v).filter(function (s) { return s; });
+    var lines = [
+      "Tolong verifikasi perhitungan progress hourly (tanpa Agris) di bawah ini. Saya ingin memastikan hasilnya benar.",
+      "",
+      "Data input:",
+      "- Total TL selama shift: " + v("h-total"),
+      "- TL per jam (patokan di note): " + v("h-rate"),
+      "",
+      "Rumus yang dipakai:",
+      "1. Waktu (jam) = Total TL ÷ TL per jam",
+      "2. Total detik = floor(waktu × 3600)",
+      "3. Jam = floor(total detik ÷ 3600)",
+      "4. Menit = floor((total detik mod 3600) ÷ 60)",
+      "5. Detik = total detik mod 60",
+      "",
+      "Hasil dari tool:",
+      v("h-out")
+    ];
+    if (steps.length) {
+      lines.push("", "Langkah perhitungan dari tool:");
+      steps.forEach(function (s, i) { lines.push((i + 1) + ". " + s); });
+    }
+    lines.push(
+      "",
+      "Yang ingin saya ketahui:",
+      "1. Apakah rumusnya sudah benar untuk menghitung lama grinding dari total TL dan TL per jam?",
+      "2. Hitung ulang sendiri dari data input di atas, apakah hasilnya sama dengan hasil tool?",
+      "3. Apakah pembulatan ke bawah (floor) sudah tepat?",
+      "",
+      "Jawab jujur dan jelas. Jika ada selisih, jelaskan di langkah mana. Jika tidak yakin, bilang tidak yakin."
+    );
+    return lines.join("\n");
+  };
+  document.getElementById("verify-hourly-open").addEventListener("click", function () {
+    if (verifyDlg.open) return;
+    verifyOut.value = buildHourlyVerifyPrompt();
+    if (typeof verifyDlg.showModal === "function") verifyDlg.showModal();
+    else verifyDlg.setAttribute("open", "");
+    fit(verifyOut);
+  });
+
+  /* Verifikasi Progress Hourly dengan Agris (Claude, ChatGPT, Gemini) */
+  var buildAgrisVerifyPrompt = function () {
+    var v = function (id) { return document.getElementById(id).value; };
+    var group = function (title, prefix, count) {
+      var items = [];
+      for (var k = 1; k <= count; k++) {
+        var s = v(prefix + k);
+        if (s) items.push(s);
+      }
+      return items.length
+        ? ["", title].concat(items.map(function (s, i) { return (i + 1) + ". " + s; }))
+        : [];
+    };
+    var lines = [
+      "Tolong verifikasi perhitungan progress hourly (dengan Agris) di bawah ini. Saya ingin memastikan hasilnya benar.",
+      "",
+      "Data input:",
+      "- Total TL selama shift: " + v("a-total"),
+      "- TL/hr dengan Agris (patokan note): " + v("a-rate"),
+      "- Agris yang digunakan per jam (patokan note): " + v("a-cost"),
+      "- TL/hr tanpa Agris (patokan note): " + v("a-normal"),
+      "- Agris yang digunakan selama shift: " + v("a-current"),
+      "",
+      "Rumus yang dipakai:",
+      "1. Maks jam Agris = Agris yang digunakan selama shift ÷ Agris per jam",
+      "2. Maks TL Agris = Maks jam Agris × TL/hr dengan Agris",
+      "3. Jika Total TL ≤ Maks TL Agris (Agris cukup): waktu with Agris = Total TL ÷ TL/hr dengan Agris, waktu without Agris = 0",
+      "4. Jika Total TL > Maks TL Agris (Agris tidak cukup): waktu with Agris = Maks jam Agris, waktu without Agris = (Total TL − Maks TL Agris) ÷ TL/hr tanpa Agris",
+      "5. Total waktu = waktu with Agris + waktu without Agris (dijumlahkan dalam jam, sebelum dibulatkan)",
+      "6. Setiap waktu (dalam jam) diubah ke jam/menit/detik: total detik = floor(jam × 3600), jam = floor(total detik ÷ 3600), menit = floor((total detik mod 3600) ÷ 60), detik = total detik mod 60",
+      "Catatan: karena pembulatan dilakukan terpisah untuk tiap hasil, Total Time boleh berbeda sekitar 1 detik dari penjumlahan Time with Agris dan Time without Agris.",
+      "",
+      "Hasil dari tool:",
+      "- Total Time: " + v("a-out"),
+      "- Time with Agris: " + v("a-with"),
+      "- Time without Agris: " + v("a-without")
+    ];
+    lines = lines
+      .concat(group("Langkah perhitungan dari tool:", "a-s", 5))
+      .concat(group("Konversi Total Time:", "a-t", 4))
+      .concat(group("Konversi Time with Agris:", "a-w", 4))
+      .concat(group("Konversi Time without Agris:", "a-o", 4));
+    lines.push(
+      "",
+      "Yang ingin saya ketahui:",
+      "1. Apakah rumusnya sudah benar, termasuk pembagian kasus Agris cukup dan Agris tidak cukup?",
+      "2. Hitung ulang sendiri dari data input di atas, apakah hasilnya sama dengan hasil tool?",
+      "3. Apakah pembulatan ke bawah (floor) sudah tepat?",
+      "",
+      "Jawab jujur dan jelas. Jika ada selisih, jelaskan di langkah mana. Jika tidak yakin, bilang tidak yakin."
+    );
+    return lines.join("\n");
+  };
+  document.getElementById("verify-agris-open").addEventListener("click", function () {
+    if (verifyDlg.open) return;
+    verifyOut.value = buildAgrisVerifyPrompt();
+    if (typeof verifyDlg.showModal === "function") verifyDlg.showModal();
+    else verifyDlg.setAttribute("open", "");
+    fit(verifyOut);
+  });
+
+  /* Verifikasi Total Progress Hourly (Claude, ChatGPT, Gemini) */
+  var buildTotalVerifyPrompt = function () {
+    var v = function (id) { return document.getElementById(id).value; };
+    var steps = ["t-s1", "t-s2", "t-s3", "t-s4", "t-s5"].map(v).filter(function (s) { return s; });
+    var lines = [
+      "Tolong verifikasi perhitungan total progress hourly di bawah ini. Saya ingin memastikan hasilnya benar.",
+      "",
+      "Data input (format H = jam, M = menit):",
+      "- Total progress sebelumnya: " + v("t-prev"),
+      "- Progress saat ini: " + v("t-now"),
+      "",
+      "Rumus yang dipakai:",
+      "1. Total progress sebelumnya diubah ke menit = jam × 60 + menit",
+      "2. Progress saat ini diubah ke menit = jam × 60 + menit",
+      "3. Total menit = menit sebelumnya + menit saat ini",
+      "4. Jam = floor(total menit ÷ 60)",
+      "5. Menit = total menit mod 60",
+      "",
+      "Hasil dari tool:",
+      "- Total Hours: " + v("t-out")
+    ];
+    if (steps.length) {
+      lines.push("", "Langkah perhitungan dari tool:");
+      steps.forEach(function (s, i) { lines.push((i + 1) + ". " + s); });
+    }
+    lines.push(
+      "",
+      "Yang ingin saya ketahui:",
+      "1. Apakah rumusnya sudah benar untuk menjumlahkan dua progress dalam format jam dan menit?",
+      "2. Hitung ulang sendiri dari data input di atas, apakah hasilnya sama dengan hasil tool?",
+      "3. Apakah pembagian jam dan sisa menitnya sudah tepat, terutama saat menit melebihi 60?",
+      "",
+      "Jawab jujur dan jelas. Jika ada selisih, jelaskan di langkah mana. Jika tidak yakin, bilang tidak yakin."
+    );
+    return lines.join("\n");
+  };
+  document.getElementById("verify-total-open").addEventListener("click", function () {
+    if (verifyDlg.open) return;
+    verifyOut.value = buildTotalVerifyPrompt();
+    if (typeof verifyDlg.showModal === "function") verifyDlg.showModal();
+    else verifyDlg.setAttribute("open", "");
+    fit(verifyOut);
+  });
+
+  /* Verifikasi Total Buff (Claude, ChatGPT, Gemini) */
+  var buildBuffVerifyPrompt = function () {
+    var v = function (id) { return document.getElementById(id).value; };
+    var steps = ["b-s1", "b-s2", "b-s3", "b-s4", "b-s5", "b-s6", "b-s7", "b-s8", "b-s9"].map(v).filter(function (s) { return s; });
+    var price = v("b-price").trim();
+    var lines = [
+      "Tolong verifikasi perhitungan jumlah buff yang digunakan di bawah ini. Saya ingin memastikan hasilnya benar.",
+      "",
+      "Data input:",
+      "- Durasi shift: " + v("b-shift"),
+      "- Durasi buff: " + v("b-duration"),
+      "- Buff cooldown: " + v("b-cooldown"),
+      "- Harga per buff (opsional): " + (price ? price : "(kosong, biaya tidak dihitung)"),
+      "",
+      "Aturan satuan:",
+      "- Satuan waktu: h = jam, m = menit, s = detik. Tanpa satuan, durasi shift dihitung jam, durasi buff menit, dan cooldown detik.",
+      "- Satuan harga: k = ribu, m = juta, b = miliar. Perhatikan bahwa m pada waktu berarti menit, tetapi m pada harga berarti juta.",
+      "",
+      "Rumus yang dipakai:",
+      "1. Durasi shift, durasi buff, dan cooldown masing-masing diubah ke detik",
+      "2. Satu siklus buff = durasi buff + cooldown (dalam detik)",
+      "3. Jumlah buff = max(1, ceil(durasi shift ÷ siklus))",
+      "4. Harga per buff diubah ke silver = floor(nilai × pengali)",
+      "5. Total biaya = jumlah buff × harga per buff",
+      "",
+      "Hasil dari tool:",
+      "- Shift: " + v("b-o1"),
+      "- Buff: " + v("b-o2"),
+      "- Total Buff: " + v("b-o3"),
+      "- Harga: " + (v("b-o4") || "(tidak dihitung)")
+    ];
+    if (steps.length) {
+      lines.push("", "Langkah perhitungan dari tool:");
+      steps.forEach(function (s, i) { lines.push((i + 1) + ". " + s); });
+    }
+    lines.push(
+      "",
+      "Yang ingin saya ketahui:",
+      "1. Apakah rumusnya sudah benar, termasuk pembulatan ke atas (ceil) dan minimal 1 buff?",
+      "2. Hitung ulang sendiri dari data input di atas, apakah hasilnya sama dengan hasil tool?",
+      "3. Apakah konversi satuan waktu dan harga sudah tepat?",
+      "",
+      "Jawab jujur dan jelas. Jika ada selisih, jelaskan di langkah mana. Jika tidak yakin, bilang tidak yakin."
+    );
+    return lines.join("\n");
+  };
+  document.getElementById("verify-buff-open").addEventListener("click", function () {
+    if (verifyDlg.open) return;
+    verifyOut.value = buildBuffVerifyPrompt();
+    if (typeof verifyDlg.showModal === "function") verifyDlg.showModal();
+    else verifyDlg.setAttribute("open", "");
+    fit(verifyOut);
+  });
+
+  /* Verifikasi Progress Hourly dengan Agris (Claude, ChatGPT, Gemini) */
+  var buildTaxVerifyPrompt = function () {
+    var v = function (id) { return document.getElementById(id).value; };
+    var rows = function (pairs) {
+      return pairs
+        .map(function (p) { return v(p[1]) ? "- " + p[0] + " " + v(p[1]) : ""; })
+        .filter(function (s) { return s; });
+    };
+    var group = function (title, prefix, count) {
+      var items = [];
+      for (var k = 1; k <= count; k++) {
+        var s = v(prefix + k);
+        if (s) items.push(s);
+      }
+      return items.length
+        ? ["", title].concat(items.map(function (s, i) { return (i + 1) + ". " + s; }))
+        : [];
+    };
+    var options = v("d-options").trim();
+    var fameLabel = document.getElementById("d-l6").textContent;
+    var lines = [
+      "Tolong verifikasi perhitungan BDO Tax Calculator (Black Desert Online) di bawah ini. Saya ingin memastikan hasilnya benar.",
+      "",
+      "Data input:",
+      "- Price: " + v("d-price"),
+      "- Options: " + (options ? options : "(kosong)"),
+      "",
+      "Aturan yang dipakai tool:",
+      "- Satuan harga: k = ribu, m = juta, b = miliar, t = triliun.",
+      "- Options (dipisah spasi): vp = Value Pack aktif, ring = Rich Merchant's Ring atau Old Moon Trade Pass (tidak bisa ditumpuk), fame1/fame2/fame3 = tier Family Fame, atau poin Family Fame berupa angka yang otomatis diubah ke tier.",
+      "- Jika Options kosong, tool menampilkan dua versi: biasa dan with Value Pack.",
+      "- Pajak total 35% (30% Central Market dan 5% territory), jadi seller menerima 65% (profit).",
+      "- Semua bonus dihitung dari profit setelah pajak (65%), lalu dijumlahkan: Value Pack +30%, Ring/Pass +5%, Family Fame 1000-3999 poin +0.5%, 4000-6999 poin +1.0%, 7000 ke atas +1.5%.",
+      "- Total diterima = profit + semua bonus. Rate efektif = total diterima ÷ harga.",
+      "Catatan: tiap angka yang ditampilkan dibulatkan ke silver terdekat, sedangkan total dihitung dari angka sebelum dibulatkan, jadi penjumlahan angka yang tampil boleh berbeda sekitar 1 silver dari total.",
+      "",
+      "Hasil dari tool:"
+    ];
+    lines = lines.concat(rows([
+      ["Sale price:", "d-o1"],
+      ["Tax (35%):", "d-o2"],
+      ["Base profit (65%):", "d-o3"],
+      ["Value Pack (+30%):", "d-o4"],
+      ["Ring/Pass (+5%):", "d-o5"],
+      [fameLabel, "d-o6"],
+      ["You receive:", "d-o7"]
+    ]));
+    var second = rows([
+      ["Sale price:", "d-p1"],
+      ["Tax (35%):", "d-p2"],
+      ["Base profit (65%):", "d-p3"],
+      ["Value Pack (+30%):", "d-p4"],
+      ["You receive:", "d-p5"]
+    ]);
+    if (second.length) lines = lines.concat(["", "Versi with Value Pack:"], second);
+    lines = lines
+      .concat(group("Langkah perhitungan dari tool:", "d-s", 10))
+      .concat(group("Langkah perhitungan versi with Value Pack:", "d-t", 6));
+    lines.push(
+      "",
+      "Yang ingin saya ketahui:",
+      "1. Apakah rumus pajak dan bonusnya sudah sesuai dengan aturan yang saya tulis di atas?",
+      "2. Hitung ulang sendiri dari data input di atas, apakah hasilnya sama dengan hasil tool?",
+      "3. Apakah tier Family Fame yang dipilih sudah tepat untuk poin yang diinput?",
+      "4. Sepengetahuan kamu tentang Black Desert Online, apakah persentase pajak dan bonus di atas sesuai dengan game? Jika tidak yakin, bilang tidak yakin.",
+      "",
+      "Jawab jujur dan jelas. Jika ada selisih, jelaskan di langkah mana. Jika tidak yakin, bilang tidak yakin."
+    );
+    return lines.join("\n");
+  };
+  document.getElementById("verify-tax-open").addEventListener("click", function () {
+    if (verifyDlg.open) return;
+    verifyOut.value = buildTaxVerifyPrompt();
+    if (typeof verifyDlg.showModal === "function") verifyDlg.showModal();
+    else verifyDlg.setAttribute("open", "");
+    fit(verifyOut);
+  });
+
+  /* Verifikasi Total TL (Claude, ChatGPT, Gemini) */
+  var buildTotalTLVerifyPrompt = function () {
+    var v = function (id) { return document.getElementById(id).value; };
+    var useSpot = document.getElementById("tl-spot-on").checked;
+    var spotEl = document.getElementById("tl-spot");
+    var isCustom = spotEl.value === "custom";
+    var steps = ["tl-s1", "tl-s2", "tl-s3"].map(v).filter(function (s) { return s; });
+    var lines = [
+      "Tolong verifikasi perhitungan Total TL (Black Desert Online) di bawah ini. Saya ingin memastikan hasilnya benar.",
+      "",
+      "Data input:",
+      "- TL awal (yang sudah ada di storage): " + v("tl-start"),
+      "- TL akhir (setelah grinding selama shift): " + v("tl-end"),
+      "- Harga TL (opsional): " + (useSpot
+        ? (isCustom
+            ? "custom, " + v("tl-custom") + " silver per TL"
+            : spotEl.options[spotEl.selectedIndex].text + " silver per TL")
+        : "tidak dipakai (checkbox Spot tidak dicentang)"),
+      "",
+      "Rumus yang dipakai:",
+      "1. Total perolehan TL = TL akhir − TL awal",
+      "2. Harga TL seluruhnya = total perolehan TL × harga TL (hanya jika harga TL dipakai)",
+      "3. Angka besar ditampilkan juga dalam bentuk ringkas: K = ribu, M = juta, B = miliar",
+      "",
+      "Hasil dari tool:",
+      "- Total perolehan TL: " + v("tl-out")
+    ];
+    if (v("tl-price")) lines.push("- Harga TL: " + v("tl-price"));
+    if (v("tl-all")) lines.push("- Harga TL seluruhnya: " + v("tl-all"));
+    if (steps.length) {
+      lines.push("", "Langkah perhitungan dari tool:");
+      steps.forEach(function (s, i) { lines.push((i + 1) + ". " + s); });
+    }
+    lines.push(
+      "",
+      "Yang ingin saya ketahui:",
+      "1. Apakah rumusnya sudah benar untuk menghitung total perolehan TL dan nilai silvernya?",
+      "2. Hitung ulang sendiri dari data input di atas, apakah hasilnya sama dengan hasil tool?",
+      "3. Apakah format angka ringkas (K, M, B) sudah sesuai dengan angka lengkapnya?",
+      "",
+      "Jawab jujur dan jelas. Jika ada selisih, jelaskan di langkah mana. Jika tidak yakin, bilang tidak yakin."
+    );
+    return lines.join("\n");
+  };
+  document.getElementById("verify-totaltl-open").addEventListener("click", function () {
+    if (verifyDlg.open) return;
+    verifyOut.value = buildTotalTLVerifyPrompt();
+    if (typeof verifyDlg.showModal === "function") verifyDlg.showModal();
+    else verifyDlg.setAttribute("open", "");
+    fit(verifyOut);
+  });
+
+  /* Verifikasi Silver (Claude, ChatGPT, Gemini) */
+  var buildSilverVerifyPrompt = function () {
+    var v = function (id) { return document.getElementById(id).value; };
+    var on = function (id) { return document.getElementById(id + "-on").checked; };
+    var optional = function (id, label) {
+      return "- " + label + ": " + (on(id) ? v(id) : "tidak dicentang (dihitung 0)");
+    };
+    var optionLine = function (o) {
+      var id = o[0];
+      if (!on(id)) return "- " + o[1] + ": tidak dicentang (dihitung 0)";
+      if (document.getElementById(id + "-m-on").checked) {
+        var items = v(id + "-m").split(/\s+/).filter(function (s) { return s; });
+        return "- " + o[1] + ": hitung manual, daftar angka: " +
+          (items.length ? items.join(", ") : "(kosong)") +
+          " (hasil penjumlahan di kolom: " + v(id) + ")";
+      }
+      return "- " + o[1] + ": " + v(id);
+    };
+    var results = [
+      ["Awal shift", "sv-r1"],
+      ["End shift", "sv-r2"],
+      ["Selisih", "sv-r3"],
+      ["Total perolehan silver", "sv-r5"],
+      ["Total Progress", "sv-r6"]
+    ].filter(function (r) { return v(r[1]); })
+     .map(function (r) { return "- " + r[0] + ": " + v(r[1]); });
+    var steps = ["sv-s1", "sv-s2", "sv-s3", "sv-s4", "sv-s5", "sv-s6"].map(v).filter(function (s) { return s; });
+    var prev = v("sv-p0").trim();
+
+    var lines = [
+      "Tolong verifikasi perhitungan silver selama shift (Black Desert Online) di bawah ini. Saya ingin memastikan hasilnya benar.",
+      "",
+      "Data input:",
+      "Awal shift:",
+      "- Silver di Central Market: " + v("sv-c0"),
+      optional("sv-i0", "Silver di Inventory (opsional)"),
+      "TL & RNG:"
+    ];
+    lines = lines.concat([
+      ["sv-o1", "Sell in storage"],
+      ["sv-o2", "Sell in Central Market (Tax)"],
+      ["sv-o3", "Listed in CM (Tax)"],
+      ["sv-o4", "Keep owner"]
+    ].map(optionLine));
+    lines.push(
+      "End shift:",
+      "- Silver di Central Market: " + v("sv-c1"),
+      optional("sv-i1", "Silver di Inventory (opsional)"),
+      "Total progress:",
+      "- Total progress sebelumnya (opsional): " + (prev ? v("sv-p0") : "(kosong, dihitung 0)"),
+      "- Total progress seluruhnya: " + v("sv-p1"),
+      "",
+      "Aturan yang dipakai tool:",
+      "- Silver bisa diisi angka biasa, pemisah ribuan (koma), atau akhiran k (ribu), m (juta), b (miliar).",
+      "- Silver awal dan akhir shift dijumlahkan dari Central Market dan Inventory (Inventory hanya jika dicentang), jadi perpindahan silver antara keduanya tidak memengaruhi hasil.",
+      "- Opsi TL & RNG yang tidak dicentang dihitung 0. Untuk Sell in Central Market (Tax), angka yang diisi adalah harga setelah dijual (sudah dikurangi tax).",
+      "- Opsi dengan hitung manual: beberapa angka dijumlahkan, satu angka per baris atau dipisah spasi. Koma adalah pemisah ribuan, bukan pemisah antar angka.",
+      "- Format ringkas: B = miliar, M = juta, K = ribu.",
+      "",
+      "Rumus yang dipakai:",
+      "1. Silver awal = silver Central Market awal + silver Inventory awal (jika dicentang)",
+      "2. Silver akhir = silver Central Market akhir + silver Inventory akhir (jika dicentang)",
+      "3. Selisih = silver akhir − silver awal (boleh negatif karena ada biaya seperti repair gear dan beli buff)",
+      "4. Total TL & RNG = jumlah semua opsi TL & RNG yang dicentang",
+      "5. Total perolehan silver = selisih + total TL & RNG",
+      "6. Total progress = total progress sebelumnya + total perolehan silver, dibandingkan dengan total progress seluruhnya (format: progress / target)",
+      "",
+      "Hasil dari tool:"
+    );
+    lines = lines.concat(results);
+    if (steps.length) {
+      lines.push("", "Langkah perhitungan dari tool:");
+      steps.forEach(function (s, i) { lines.push((i + 1) + ". " + s); });
+    }
+    lines.push(
+      "",
+      "Yang ingin saya ketahui:",
+      "1. Apakah rumusnya sudah benar, termasuk penjumlahan Central Market dengan Inventory dan penjumlahan TL & RNG?",
+      "2. Hitung ulang sendiri dari data input di atas (termasuk penjumlahan hitung manual), apakah hasilnya sama dengan hasil tool?",
+      "3. Apakah Total Progress dan format ringkasnya (B, M, K) sudah tepat?",
+      "",
+      "Jawab jujur dan jelas. Jika ada selisih, jelaskan di langkah mana. Jika tidak yakin, bilang tidak yakin."
+    );
+    return lines.join("\n");
+  };
+  document.getElementById("verify-silver-open").addEventListener("click", function () {
+    if (verifyDlg.open) return;
+    verifyOut.value = buildSilverVerifyPrompt();
+    if (typeof verifyDlg.showModal === "function") verifyDlg.showModal();
+    else verifyDlg.setAttribute("open", "");
+    fit(verifyOut);
+  });
+
+  /* Verifikasi Agris yang Digunakan (Claude, ChatGPT, Gemini) */
+  var buildUsedVerifyPrompt = function () {
+    var v = function (id) { return document.getElementById(id).value; };
+    var reset = document.getElementById("au-reset").checked;
+    var steps = ["au-s1", "au-s2", "au-s3"].map(v).filter(function (s) { return s; });
+    var lines = [
+      "Tolong verifikasi perhitungan Agris yang digunakan selama shift (Black Desert Online) di bawah ini. Saya ingin memastikan hasilnya benar.",
+      "",
+      "Data input:",
+      "- Agris awal (di awal shift): " + v("au-start"),
+      "- Agris akhir (sisa setelah grinding): " + v("au-end"),
+      "- Agris reset: " + (reset
+        ? "dicentang, Agris sebelum reset = " + v("au-before")
+        : "tidak dicentang (tidak ada reset selama shift)"),
+      "",
+      "Aturan yang dipakai tool:",
+      "- Reset Agris menambah 20,000 Agris per hari (pukul 06:00 UTC), tetapi Agris tidak bisa melebihi batas maksimal 100,000.",
+      "- Agris sebelum reset: jika reset terjadi di awal shift, diisi sama dengan Agris awal. Jika reset terjadi di tengah shift setelah sebagian Agris terpakai, diisi dengan sisa Agris saat itu.",
+      "- Agris sebelum reset tidak boleh lebih besar dari Agris awal dan tidak boleh lebih dari 100,000.",
+      "- Jika Agris akhir lebih besar dari total Agris yang tersedia, hasilnya menampilkan error.",
+      "",
+      "Rumus yang dipakai:",
+      "1. Agris dari reset = min(20,000, 100,000 − Agris sebelum reset) (hanya jika reset dicentang, jika tidak 0)",
+      "2. Total Agris = Agris awal + Agris dari reset",
+      "3. Agris yang digunakan = total Agris − Agris akhir",
+      "",
+      "Hasil dari tool:",
+      "- Agris yang digunakan: " + v("au-out")
+    ];
+    if (steps.length) {
+      lines.push("", "Langkah perhitungan dari tool:");
+      steps.forEach(function (s, i) { lines.push((i + 1) + ". " + s); });
+    }
+    lines.push(
+      "",
+      "Yang ingin saya ketahui:",
+      "1. Apakah rumusnya sudah benar, termasuk batas maksimal 100,000 saat reset?",
+      "2. Hitung ulang sendiri dari data input di atas, apakah hasilnya sama dengan hasil tool?",
+      "3. Apakah validasi (Agris sebelum reset tidak boleh lebih besar dari Agris awal, dan Agris akhir tidak boleh lebih besar dari total Agris) sudah masuk akal?",
+      "",
+      "Jawab jujur dan jelas. Jika ada selisih, jelaskan di langkah mana. Jika tidak yakin, bilang tidak yakin."
+    );
+    return lines.join("\n");
+  };
+  document.getElementById("verify-used-open").addEventListener("click", function () {
+    if (verifyDlg.open) return;
+    verifyOut.value = buildUsedVerifyPrompt();
+    if (typeof verifyDlg.showModal === "function") verifyDlg.showModal();
+    else verifyDlg.setAttribute("open", "");
+    fit(verifyOut);
+  });
+
+  /* Verifikasi Compen (Claude, ChatGPT, Gemini) */
+  var buildCompenVerifyPrompt = function () {
+    var v = function (id) { return document.getElementById(id).value; };
+    var price = v("cp-price").trim();
+    var steps = ["cp-s1", "cp-s2", "cp-s3", "cp-s4", "cp-s5", "cp-s6"].map(v).filter(function (s) { return s; });
+    var lines = [
+      "Tolong verifikasi perhitungan Compen (Black Desert Online) di bawah ini. Saya ingin memastikan hasilnya benar.",
+      "",
+      "Data input:",
+      "- Compen: " + v("cp-compen"),
+      "- Harga TL (opsional): " + (price ? price : "(kosong, jumlah TL tidak dihitung)"),
+      "- Persen TL (slider): " + v("cp-pct") + "%",
+      "",
+      "Aturan yang dipakai tool:",
+      "- Compen dan harga TL bisa diisi angka biasa, pemisah ribuan, atau akhiran k (ribu), m (juta), b (miliar).",
+      "- Slider Persen TL membagi compen antara TL dan RNG: 0% berarti semuanya RNG, 100% berarti semuanya TL. Contoh 40% TL berarti 60% RNG.",
+      "- Jumlah TL yang harus disell dibulatkan ke atas supaya silver dari TL mencapai bagian compen TL.",
+      "",
+      "Rumus yang dipakai:",
+      "1. Compen dan harga TL diubah ke silver = floor(nilai × pengali)",
+      "2. Compen TL = floor(compen × persen TL ÷ 100)",
+      "3. Compen RNG = compen − compen TL",
+      "4. Jumlah TL = ceil(compen TL ÷ harga TL) (hanya jika harga TL diisi)",
+      "5. Total silver dari TL = jumlah TL × harga TL",
+      "",
+      "Hasil dari tool:",
+      "- Compen: " + v("cp-o1")
+    ];
+    if (v("cp-o2")) lines.push("- TL, Persen: " + v("cp-o2"));
+    if (v("cp-o3")) lines.push("- TL, Silver: " + v("cp-o3"));
+    if (v("cp-o4")) lines.push("- TL, Jumlah TL yang harus disell: " + v("cp-o4"));
+    if (v("cp-o5")) lines.push("- RNG, Persen: " + v("cp-o5"));
+    if (v("cp-o6")) lines.push("- RNG, Silver: " + v("cp-o6"));
+    if (steps.length) {
+      lines.push("", "Langkah perhitungan dari tool:");
+      steps.forEach(function (s, i) { lines.push((i + 1) + ". " + s); });
+    }
+    lines.push(
+      "",
+      "Yang ingin saya ketahui:",
+      "1. Apakah rumusnya sudah benar untuk membagi compen antara TL dan RNG?",
+      "2. Hitung ulang sendiri dari data input di atas, apakah hasilnya sama dengan hasil tool?",
+      "3. Apakah pembulatan (floor untuk silver, ceil untuk jumlah TL) sudah tepat?",
+      "",
+      "Jawab jujur dan jelas. Jika ada selisih, jelaskan di langkah mana. Jika tidak yakin, bilang tidak yakin."
+    );
+    return lines.join("\n");
+  };
+  document.getElementById("verify-compen-open").addEventListener("click", function () {
+    if (verifyDlg.open) return;
+    verifyOut.value = buildCompenVerifyPrompt();
+    if (typeof verifyDlg.showModal === "function") verifyDlg.showModal();
+    else verifyDlg.setAttribute("open", "");
+    fit(verifyOut);
+  });
 
   /* 2. Progress hourly tanpa Agris */
   var calcHourly = function () {
@@ -1608,13 +2232,27 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     var startTerms = [];
     var endTerms = [];
     var optTerms = [];
+    var optParts = [];
 
     try {
       startTerms.push(parseSilver(text("sv-c0"), "central market silver (awal)", true).amount);
       if (isOn("sv-i0")) startTerms.push(parseSilver(text("sv-i0"), "inventory silver (awal)", true).amount);
 
-      [["sv-o1", "sell in storage"], ["sv-o2", "sell in central market"], ["sv-o3", "listed in cm"], ["sv-o4", "keep owner"]].forEach(function (o) {
-        if (isOn(o[0])) optTerms.push(parseSilver(text(o[0]), o[1], true).amount);
+      [["sv-o1", "sell in storage"], ["sv-o2", "sell in central market (sudah tax)"], ["sv-o3", "listed in cm (sudah tax)"], ["sv-o4", "keep owner"]].forEach(function (o) {
+        if (!isOn(o[0])) return;
+        if (document.getElementById(o[0] + "-m-on").checked) {
+          var entries = text(o[0] + "-m").split(/\s+/).filter(function (s) { return s; });
+          if (!entries.length) throw new Error("missing " + o[1] + " (manual)");
+          var amounts = entries.map(function (s) { return parseSilver(s, o[1] + " (manual)", true).amount; });
+          var manualSum = sum(amounts);
+          document.getElementById(o[0]).value = manualSum.toLocaleString("en-US");
+          optTerms.push(manualSum);
+          optParts.push(amounts.length > 1 ? "(" + amounts.join(" + ") + ")" : String(manualSum));
+        } else {
+          var one = parseSilver(text(o[0]), o[1], true).amount;
+          optTerms.push(one);
+          optParts.push(String(one));
+        }
       });
 
       endTerms.push(parseSilver(text("sv-c1"), "central market silver (akhir)", true).amount);
@@ -1664,7 +2302,8 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     put("sv-s1", line(startTerms));
     put("sv-s2", line(endTerms));
     put("sv-s3", endTotal + " − " + startTotal + " = " + diff);
-    put("sv-s4", optTerms.length ? line(optTerms) : null);
+    var optText = optParts.join(" + ");
+    put("sv-s4", optTerms.length ? (optText === String(optTotal) ? optText : optText + " = " + optTotal) : null);
     put("sv-s5", diff + " + " + optTotal + " = " + gain);
     put("sv-s6", progressError === null ? prev + " + " + gain + " = " + (prev + gain) : null);
   };
@@ -1744,6 +2383,15 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       var target = document.getElementById(cb.getAttribute("aria-controls"));
       if (target) target.disabled = !cb.checked;
     });
+    /* Silver (TL & RNG): kolom nilai aktif jika opsi dicentang dan Hitung manual mati; kotak manual aktif jika keduanya dicentang */
+    ["sv-o1", "sv-o2", "sv-o3", "sv-o4"].forEach(function (id) {
+      var on = document.getElementById(id + "-on").checked;
+      var manual = document.getElementById(id + "-m-on");
+      var useManual = on && manual.checked;
+      manual.disabled = !on;
+      document.getElementById(id + "-m").disabled = !useManual;
+      document.getElementById(id).disabled = !on || useManual;
+    });
   };
 
   var selectDefault = function (el) {
@@ -1753,7 +2401,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 
   var restoreInputs = function () {
     var data = readStore();
-    Array.prototype.forEach.call(document.querySelectorAll("main input, main select"), function (el) {
+    Array.prototype.forEach.call(document.querySelectorAll("main input, main select, main textarea:not([readonly])"), function (el) {
       if (!Object.prototype.hasOwnProperty.call(data, el.id) || typeof data[el.id] !== "string") return;
       if (el.tagName === "SELECT") {
         var exists = Array.prototype.some.call(el.options, function (o) { return o.value === data[el.id]; });
@@ -1775,7 +2423,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 
   var saveField = function (ev) {
     var el = ev.target;
-    if (!el || !el.id || (el.tagName !== "INPUT" && el.tagName !== "SELECT")) return;
+    if (!el || !el.id || (el.tagName !== "INPUT" && el.tagName !== "SELECT" && el.tagName !== "TEXTAREA")) return;
     var isCheck = el.type === "checkbox";
     var isSelect = el.tagName === "SELECT";
     if (ev.type === "change" && !isCheck && !isSelect) return;
@@ -1789,6 +2437,16 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
   };
   document.querySelector("main").addEventListener("input", saveField);
   document.querySelector("main").addEventListener("change", saveField);
+
+  /* Silver: saat Hitung manual dimatikan, kolom nilai kembali ke default */
+  ["sv-o1", "sv-o2", "sv-o3", "sv-o4"].forEach(function (id) {
+    document.getElementById(id + "-m-on").addEventListener("change", function (ev) {
+      if (ev.target.checked) return;
+      var el = document.getElementById(id);
+      var stored = readStore()[id];
+      el.value = typeof stored === "string" ? stored : el.defaultValue;
+    });
+  });
 
   /* Live update */
   [
@@ -1811,7 +2469,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 
     document.getElementById("reset-" + x[0].replace("form-", "")).addEventListener("click", function () {
       var data = readStore();
-      Array.prototype.forEach.call(form.querySelectorAll("input, select"), function (el) {
+      Array.prototype.forEach.call(form.querySelectorAll("input, select, textarea:not([readonly])"), function (el) {
         if (el.tagName === "SELECT") el.value = selectDefault(el);
         else if (el.type === "checkbox") el.checked = el.defaultChecked;
         else el.value = el.defaultValue;
@@ -1825,7 +2483,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 
     document.getElementById("clear-" + x[0].replace("form-", "")).addEventListener("click", function () {
       var data = readStore();
-      Array.prototype.forEach.call(form.querySelectorAll("input, select"), function (el) {
+      Array.prototype.forEach.call(form.querySelectorAll("input, select, textarea:not([readonly])"), function (el) {
         if (el.tagName === "SELECT") {
           var hasCustom = Array.prototype.some.call(el.options, function (o) { return o.value === "custom"; });
           if (!hasCustom) return;
