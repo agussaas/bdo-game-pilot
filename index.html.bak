@@ -477,11 +477,11 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 </ul>
 <div id="tax-images">
 <figure>
-<img src="gambar1.png" alt="Screenshot Garmoth contoh Options vp 4500" loading="lazy">
+<img src="bdo-tax-vp-4500.png" alt="Screenshot Garmoth options vp 4500" loading="lazy">
 <figcaption><strong>Garmoth VP tanpa Ring.</strong> Jika Value Pack aktif, Ring tidak aktif, dan poin Family Fame 4500, tulis <code>vp 4500</code></figcaption>
 </figure>
 <figure>
-<img src="gambar2.png" alt="Screenshot Garmoth contoh Options ring fame2 dan vp ring 4500" loading="lazy">
+<img src="bdo-tax-vp-ring-4500.png" alt="Screenshot Garmoth options vp ring 4500" loading="lazy">
 <figcaption><strong>Garmoth VP dengan Ring.</strong> Value Pack aktif, Ring aktif, dan Family Fame 4500, tulis <code>vp ring 4500</code></figcaption>
 </figure>
 </div><p><strong>Contoh:</strong></p>
