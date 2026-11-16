@@ -125,7 +125,13 @@ input:disabled, select:disabled, textarea:disabled { opacity: 0.55; cursor: not-
 figure { min-width: 0; margin: 0; }
 img { display: block; max-width: 100%; height: auto; border: 1px solid var(--bd); border-radius: 0.5rem; }
 figcaption { margin-top: 0.5rem; font-size: 0.875rem; }
-
+input.result { border-style: dashed; background: transparent; opacity: 0.85; cursor: default; }
+.table-wrap { overflow-x: auto; margin: 0 0 1rem; -webkit-overflow-scrolling: touch; }
+table { width: 100%; min-width: 46rem; border-collapse: collapse; }
+th, td { border: 1px solid var(--bd); padding: 0.4rem 0.5rem; text-align: left; vertical-align: middle; white-space: nowrap; }
+th { font-weight: 600; }
+td input { min-width: 7rem; }
+td select { min-width: 5.5rem; }
 details p:has(> label:only-child) { display: block; margin-bottom: 0.25rem; }
 details p:has(> label:only-child) > label { padding-top: 0; }
 
@@ -168,7 +174,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <button type="button" role="tab" id="tab-grinding" aria-controls="panel-grinding" aria-selected="false" tabindex="-1">Grinding Spot</button>
 <button type="button" role="tab" id="tab-used" aria-controls="panel-used" aria-selected="false" tabindex="-1">Agris yang Digunakan</button>
 <button type="button" role="tab" id="tab-ascendant" aria-controls="panel-ascendant" aria-selected="false" tabindex="-1">Ascendant</button>
-</nav>
+<button type="button" role="tab" id="tab-kpi" aria-controls="panel-kpi" aria-selected="false" tabindex="-1">KPI (AVG)</button></nav>
 </header>
 <main>
 
@@ -897,6 +903,46 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 </ul>
 </section>
 
+<!-- KPI (AVG) -->
+<section role="tabpanel" id="panel-kpi" aria-labelledby="tab-kpi" hidden>
+<h2>KPI (AVG)</h2>
+<div id="form-kpi">
+<fieldset>
+<legend>Input</legend>
+<div class="table-wrap">
+<table>
+<thead>
+<tr><th scope="col">Bulan</th><th scope="col">Input</th><th scope="col">KPI</th><th scope="col">AVG</th><th scope="col">Tier</th><th scope="col">Hapus</th></tr>
+</thead>
+<tbody id="kpi-body"></tbody>
+</table>
+</div>
+<p><button type="button" id="kpi-add-top">Tambah bulan di atas</button> <button type="button" id="kpi-add-bottom">Tambah bulan di bawah</button></p>
+<p><button type="button" id="reset-kpi">Reset</button> <button type="button" id="clear-kpi">Clear</button></p>
+</fieldset>
+<p><button type="button" id="verify-kpi-open" aria-haspopup="dialog">Verifikasi (ChatGPT, Claude, Gemini)</button></p>
+<p><strong>Note:</strong></p>
+<ul>
+<li>Avg adalah rata-rata KPI bulan ini dan 2 bulan sebelumnya (rata-rata 3 bulan terakhir)</li>
+<li>Kolom <em>Input</em> menentukan mana yang akan diisi, bisa: <em>KPI</em> atau <em>AVG</em></li>
+<li>Pilih <em>KPI</em>: AVG dihitung dari KPI. Pilih <em>AVG</em>: KPI dihitung balik dari AVG dan KPI bulan-bulan sebelumnya</li>
+<li>Angka boleh memakai titik atau koma sebagai desimal, misal <code>75.76</code> atau <code>75,76</code>. Nama bulan dan tahun bisa diubah, formatnya <code>June 2026</code></li>
+<li>Tier otomatis mengikuti AVG: di bawah <em>75</em> No Tier, <em>75–79.99</em> Tier 0, <em>80–89.99</em> Tier 1, <em>90–99.99</em> Tier 2, <em>100–109.99</em> Tier 3, <em>110 ke atas</em> Tier 4</li>
+</ul>
+<p><strong>Contoh:</strong></p>
+<ul>
+<li>Input KPI: June 2026 <code>65.27</code>, July 2026 <code>85.07</code>, August 2026 <code>59.61</code>, September 2026 <code>79.24</code></li>
+<li>AVG: June <samp>65.27</samp>, July <samp>75.17</samp>, August <samp>69.98</samp>, September <samp>74.64</samp> (85.07 + 59.61 + 79.24) ÷ 3</li>
+<li>Tier: June <samp>No Tier</samp>, July <samp>Tier 0</samp>, August <samp>No Tier</samp>, September <samp>No Tier</samp></li>
+<li>October 2026, Input AVG <code>75.76</code>: KPI <samp>88.43</samp> (3 × 75.76 − (59.61 + 79.24)), Tier <samp>Tier 0</samp></li>
+<li>Sebaliknya, Input KPI <code>88.43</code>: AVG Oktober <samp>75.76</samp></li>
+</ul>
+<details>
+<summary>Perhitungan</summary>
+<div id="kpi-steps"></div>
+</details></div>
+</section>
+
 </main>
 <dialog id="help-dialog" aria-labelledby="help-title">
 <h2 id="help-title">Help</h2>
@@ -941,7 +987,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     return /^-?(\d+\.?\d*|\.\d+)(e[+-]?\d+)?$/i.test(t) ? t : "";
   };
   var isNumInput = function (el) {
-    return el && el.tagName === "INPUT" && el.getAttribute("inputmode") === "decimal";
+    return el && el.tagName === "INPUT" && el.getAttribute("inputmode") === "decimal" && !el.hasAttribute("data-raw");
   };
   var formatNumber = function (el) {
     var raw = el.value;
@@ -2528,6 +2574,332 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     put("au-s3", total + " − " + end + " = " + used);
   };
 
+  /* 11. KPI (AVG) */
+  var KPI_KEY = "bdo-game-pilot:kpi";
+  var KPI_MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  var KPI_MAX_ROWS = 36;
+  var kpiDefaults = function () {
+    return [
+      { m: "June 2026", mode: "kpi", kpi: "65.27", avg: "" },
+      { m: "July 2026", mode: "kpi", kpi: "85.07", avg: "" },
+      { m: "August 2026", mode: "kpi", kpi: "59.61", avg: "" },
+      { m: "September 2026", mode: "kpi", kpi: "79.24", avg: "" },
+      { m: "October 2026", mode: "avg", kpi: "", avg: "75.76" }
+    ];
+  };
+  var kpiRows = kpiDefaults();
+  try {
+    var kpiSaved = JSON.parse(localStorage.getItem(KPI_KEY) || "null");
+    if (Array.isArray(kpiSaved) && kpiSaved.length && kpiSaved.length <= KPI_MAX_ROWS) {
+      kpiRows = kpiSaved.map(function (r) {
+        r = r || {};
+        var kpi = String(r.kpi || "");
+        var avg = String(r.avg || "");
+        var mode = r.mode === "avg" || r.mode === "kpi" ? r.mode : (kpi.trim() === "" && avg.trim() !== "" ? "avg" : "kpi");
+        return { m: String(r.m || ""), mode: mode, kpi: kpi, avg: avg };
+      });
+    }
+  } catch (e) {}
+  var kpiSave = function () {
+    try { localStorage.setItem(KPI_KEY, JSON.stringify(kpiRows)); } catch (e) {}
+  };
+
+  var kpiParse = function (s) {
+    var t = asciiDigits(String(s).trim().replace(/\s/g, ""));
+    if (t.indexOf(",") !== -1 && t.indexOf(".") === -1 && t.split(",").length === 2) t = t.replace(",", ".");
+    else t = t.replace(/,/g, "");
+    return /^-?(\d+\.?\d*|\.\d+)$/.test(t) ? Number(t) : NaN;
+  };
+  var kpiFmt = function (n) { return String(Math.round(n * 10000) / 10000); };
+
+  var kpiTier = function (avg) {
+    if (avg === null) return "";
+    var a = Math.round(avg * 100) / 100;
+    if (a >= 110) return "Tier 4";
+    if (a >= 100) return "Tier 3";
+    if (a >= 90) return "Tier 2";
+    if (a >= 80) return "Tier 1";
+    if (a >= 75) return "Tier 0";
+    return "No Tier";
+  };
+
+  var kpiCompute = function (rows) {
+    var eff = [];
+    return rows.map(function (r, i) {
+      var name = r.m.trim() || "Baris " + (i + 1);
+      var from = Math.max(0, i - 2);
+      var prev = eff.slice(from, i);
+      var prevNames = rows.slice(from, i).map(function (x, j) { return x.m.trim() || "Baris " + (from + j + 1); });
+      var n = prev.length + 1;
+      var known = prev.every(function (x) { return x !== null; });
+      var prevSum = prev.reduce(function (a, b) { return a + (b === null ? 0 : b); }, 0);
+      var o = { kpi: null, avg: null, tier: "", steps: [], step: "" };
+      var raw = r.mode === "avg" ? r.avg : r.kpi;
+      var typed = raw.trim() !== "";
+      var v = typed ? kpiParse(raw) : NaN;
+      var bad = typed && isNaN(v);
+      var st = o.steps;
+
+      if (typed && !bad && known) {
+        st.push({ t: "Jumlah bulan ini dan maksimal 2 bulan sebelumnya", s: "(n)", v: n + " (" + prevNames.concat(name).join(", ") + ")" });
+        if (r.mode === "avg") {
+          var total = n * v;
+          o.avg = v;
+          o.kpi = total - prevSum;
+          st.push({ t: "Jumlah bulan dikali AVG", s: "(total KPI)", v: n + " × " + kpiFmt(v) + " = " + kpiFmt(total) });
+          st.push({ t: "Total KPI dikurangi KPI bulan-bulan sebelumnya", s: "(KPI)", red: true,
+            v: kpiFmt(total) + (prev.length ? " − (" + prev.map(kpiFmt).join(" + ") + ")" : "") + " = " + kpiFmt(o.kpi) });
+        } else {
+          var terms = prev.map(kpiFmt).concat(kpiFmt(v));
+          var sum = prevSum + v;
+          o.kpi = v;
+          o.avg = sum / n;
+          st.push({ t: "KPI bulan-bulan sebelumnya ditambah KPI bulan ini", s: "(total KPI)", v: terms.join(" + ") + " = " + kpiFmt(sum) });
+          st.push({ t: "Total KPI dibagi jumlah bulan", s: "(AVG)", red: true, v: kpiFmt(sum) + " ÷ " + n + " = " + kpiFmt(o.avg) });
+        }
+        o.tier = kpiTier(o.avg);
+        st.push({ t: "AVG dibulatkan 2 desimal, dibandingkan dengan batas tier", s: "(Tier)", red: true, v: o.avg.toFixed(2) + " → " + o.tier });
+      } else if (bad) {
+        st.push({ t: "Status", s: "", v: "Angka tidak valid" });
+      } else if (typed) {
+        st.push({ t: "Status", s: "", v: "Tidak bisa dihitung, KPI bulan sebelumnya belum lengkap" });
+      } else {
+        st.push({ t: "Status", s: "", v: "Belum diisi" });
+      }
+      eff.push(o.kpi);
+      o.step = name + ": " + st.map(function (x) { return x.v; }).join(" ; ");
+      return o;
+    });
+  };
+
+  var kpiBody = document.getElementById("kpi-body");
+  var kpiStepsEl = document.getElementById("kpi-steps");
+
+  var kpiRefresh = function () {
+    var res = kpiCompute(kpiRows);
+    Array.prototype.forEach.call(kpiBody.rows, function (tr, i) {
+      var r = kpiRows[i];
+      var o = res[i];
+      var sel = tr.querySelector("select");
+      if (sel.value !== r.mode) sel.value = r.mode;
+      [["kpi", "KPI"], ["avg", "Avg"]].forEach(function (f) {
+        var el = tr.querySelector('input[data-f="' + f[0] + '"]');
+        var isInput = r.mode === f[0];
+        el.readOnly = !isInput;
+        el.classList.toggle("result", !isInput);
+        el.placeholder = isInput ? "isi " + f[1] : "hasil otomatis";
+        el.setAttribute("aria-label", f[1] + " baris " + (i + 1) + (isInput ? " (input)" : " (hasil)"));
+        if (!isInput) el.value = o[f[0]] === null ? "" : o[f[0]].toFixed(2);
+        else if (document.activeElement !== el) el.value = r[f[0]];
+      });
+      tr.querySelector('input[data-f="tier"]').value = o.tier;
+    });
+    kpiStepsEl.textContent = "";
+    res.forEach(function (o, i) {
+      var fs = document.createElement("fieldset");
+      var lg = document.createElement("legend");
+      lg.textContent = kpiRows[i].m.trim() || "Baris " + (i + 1);
+      fs.appendChild(lg);
+      o.steps.forEach(function (s, k) {
+        var id = "kpi-s-" + i + "-" + k;
+        var p1 = document.createElement("p");
+        var lb = document.createElement("label");
+        lb.htmlFor = id;
+        lb.appendChild(document.createTextNode(s.t + " "));
+        if (s.s) {
+          var sg = document.createElement("strong");
+          if (s.red) sg.className = "red";
+          sg.textContent = s.s;
+          lb.appendChild(sg);
+        }
+        p1.appendChild(lb);
+        var p2 = document.createElement("p");
+        var ta = document.createElement("textarea");
+        ta.id = id;
+        ta.rows = 1;
+        ta.cols = 50;
+        ta.readOnly = true;
+        ta.value = s.v;
+        p2.appendChild(ta);
+        fs.appendChild(p1);
+        fs.appendChild(p2);
+      });
+      kpiStepsEl.appendChild(fs);
+    });
+    fitAll();
+    return res;
+  };
+
+  var kpiBuild = function () {
+    kpiBody.textContent = "";
+    kpiRows.forEach(function (r, i) {
+      var tr = document.createElement("tr");
+      var cell = function (node) {
+        var td = document.createElement("td");
+        td.appendChild(node);
+        tr.appendChild(td);
+      };
+      var field = function (key, label) {
+        var inp = document.createElement("input");
+        inp.type = "text";
+        inp.setAttribute("data-f", key);
+        inp.setAttribute("data-raw", "");
+        inp.setAttribute("aria-label", label + " baris " + (i + 1));
+        if (key === "kpi" || key === "avg") inp.setAttribute("inputmode", "decimal");
+        if (key === "tier") {
+          inp.readOnly = true;
+          inp.classList.add("result");
+        }
+        if (key === "m") inp.value = r.m;
+        return inp;
+      };
+      cell(field("m", "Bulan"));
+      var sel = document.createElement("select");
+      sel.setAttribute("data-raw", "");
+      sel.setAttribute("aria-label", "Yang diinput baris " + (i + 1));
+      [["kpi", "KPI"], ["avg", "Avg"]].forEach(function (o) {
+        var opt = document.createElement("option");
+        opt.value = o[0];
+        opt.textContent = o[1];
+        sel.appendChild(opt);
+      });
+      sel.value = r.mode;
+      cell(sel);
+      cell(field("kpi", "KPI"));
+      cell(field("avg", "Avg"));
+      cell(field("tier", "Tier"));
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = "Hapus";
+      btn.setAttribute("aria-label", "Hapus baris " + (i + 1));
+      cell(btn);
+      kpiBody.appendChild(tr);
+    });
+    kpiRefresh();
+  };
+
+  var kpiIndex = function (el) {
+    var tr = el.closest ? el.closest("tr") : null;
+    return tr ? tr.sectionRowIndex : -1;
+  };
+  kpiBody.addEventListener("input", function (ev) {
+    var el = ev.target;
+    var f = el.getAttribute && el.getAttribute("data-f");
+    var i = kpiIndex(el);
+    if (!f || f === "tier" || i < 0 || el.tagName !== "INPUT" || el.readOnly) return;
+    kpiRows[i][f] = el.value;
+    kpiSave();
+    kpiRefresh();
+  });
+  kpiBody.addEventListener("change", function (ev) {
+    var el = ev.target;
+    var i = kpiIndex(el);
+    if (el.tagName !== "SELECT" || i < 0) return;
+    var next = el.value === "avg" ? "avg" : "kpi";
+    var other = next === "kpi" ? "avg" : "kpi";
+    var carried = kpiCompute(kpiRows)[i][next];
+    kpiRows[i].mode = next;
+    kpiRows[i][next] = carried === null ? "" : carried.toFixed(2);
+    kpiRows[i][other] = "";
+    kpiSave();
+    kpiRefresh();
+  });
+  kpiBody.addEventListener("focusout", function () { setTimeout(kpiRefresh, 0); });
+  kpiBody.addEventListener("click", function (ev) {
+    var btn = ev.target.closest ? ev.target.closest("button") : null;
+    if (!btn || kpiRows.length <= 1) return;
+    kpiRows.splice(kpiIndex(btn), 1);
+    kpiSave();
+    kpiBuild();
+  });
+
+  var kpiNextMonth = function (name, dir) {
+    var m = name.trim().match(/^([A-Za-z]+)\s+(\d{4})$/);
+    var word = m ? m[1] : name.trim();
+    var idx = KPI_MONTHS.map(function (x) { return x.toLowerCase(); }).indexOf(word.toLowerCase());
+    if (idx === -1) return "";
+    var next = idx + dir;
+    var year = m ? Number(m[2]) : null;
+    if (next > 11) { next = 0; if (year !== null) year += 1; }
+    if (next < 0) { next = 11; if (year !== null) year -= 1; }
+    return KPI_MONTHS[next] + (year !== null ? " " + year : "");
+  };
+  document.getElementById("kpi-add-bottom").addEventListener("click", function () {
+    if (kpiRows.length >= KPI_MAX_ROWS) return;
+    kpiRows.push({ m: kpiNextMonth(kpiRows[kpiRows.length - 1].m, 1), mode: "kpi", kpi: "", avg: "" });
+    kpiSave();
+    kpiBuild();
+  });
+  document.getElementById("kpi-add-top").addEventListener("click", function () {
+    if (kpiRows.length >= KPI_MAX_ROWS) return;
+    kpiRows.unshift({ m: kpiNextMonth(kpiRows[0].m, -1), mode: "kpi", kpi: "", avg: "" });
+    kpiSave();
+    kpiBuild();
+  });
+  document.getElementById("reset-kpi").addEventListener("click", function () {
+    kpiRows = kpiDefaults();
+    try { localStorage.removeItem(KPI_KEY); } catch (e) {}
+    kpiBuild();
+  });
+  document.getElementById("clear-kpi").addEventListener("click", function () {
+    kpiRows = kpiRows.map(function (r) { return { m: r.m, mode: r.mode, kpi: "", avg: "" }; });
+    kpiSave();
+    kpiBuild();
+  });
+
+  /* Verifikasi KPI (AVG) (Claude, ChatGPT, Gemini) */
+  var buildKpiVerifyPrompt = function () {
+    var res = kpiCompute(kpiRows);
+    var show = function (x) { return x === null ? "-" : x.toFixed(2); };
+    var inputs = kpiRows.map(function (r, i) {
+      var raw = r.mode === "avg" ? r.avg : r.kpi;
+      return (i + 1) + ". " + (r.m.trim() || "(tanpa nama)") +
+        " | Input: " + (r.mode === "avg" ? "AVG" : "KPI") + " = " + (raw.trim() || "(kosong)");
+    });
+    var outputs = res.map(function (o, i) {
+      return (i + 1) + ". " + (kpiRows[i].m.trim() || "(tanpa nama)") +
+        " | KPI: " + show(o.kpi) + " | AVG: " + show(o.avg) + " | Tier: " + (o.tier || "-");
+    });
+    var steps = res.map(function (o) { return o.step; }).filter(function (s) { return s; });
+    var lines = [
+      "Tolong verifikasi perhitungan KPI, rata-rata 3 bulan (AVG), dan Tier di bawah ini. Saya ingin memastikan hasilnya benar.",
+      "",
+      "Data input (tabel diurutkan dari bulan terlama ke terbaru, tiap bulan hanya satu nilai yang diinput, KPI atau AVG):"
+    ].concat(inputs, [
+      "",
+      "Aturan yang dipakai tool:",
+      "- AVG suatu bulan = rata-rata KPI bulan itu dan 2 bulan sebelumnya (3 bulan terakhir).",
+      "- Jika bulan sebelumnya tidak ada di tabel (baris pertama dan kedua), AVG dihitung dari bulan yang ada saja (1 atau 2 bulan).",
+      "- Jika yang diinput KPI, AVG dihitung dari KPI. Jika yang diinput AVG, KPI dihitung balik: KPI = n × AVG − jumlah KPI bulan-bulan sebelumnya (n = jumlah bulan, maksimal 3).",
+      "- Tier otomatis dari AVG (dibulatkan 2 desimal): di bawah 75 = No Tier, 75 sampai di bawah 80 = Tier 0, 80 sampai di bawah 90 = Tier 1, 90 sampai di bawah 100 = Tier 2, 100 sampai di bawah 110 = Tier 3, 110 ke atas = Tier 4.",
+      "",
+      "Hasil dari tool:"
+    ], outputs);
+    if (steps.length) {
+      lines.push("", "Langkah perhitungan dari tool:");
+      steps.forEach(function (s, i) { lines.push((i + 1) + ". " + s); });
+    }
+    lines.push(
+      "",
+      "Yang ingin saya ketahui:",
+      "1. Apakah rumus AVG (rata-rata 3 bulan terakhir) dan rumus hitung balik KPI dari AVG sudah benar, termasuk untuk baris pertama dan kedua yang periodenya belum genap 3 bulan?",
+      "2. Hitung ulang sendiri dari data input di atas, apakah hasilnya sama dengan hasil tool?",
+      "3. Apakah Tier yang tampil sudah sesuai dengan aturan di atas untuk tiap AVG?",
+      "",
+      "Jawab jujur dan jelas. Jika ada selisih, jelaskan di langkah mana. Jika tidak yakin, bilang tidak yakin."
+    );
+    return lines.join("\n");
+  };
+  document.getElementById("verify-kpi-open").addEventListener("click", function () {
+    if (verifyDlg.open) return;
+    verifyOut.value = buildKpiVerifyPrompt();
+    if (typeof verifyDlg.showModal === "function") verifyDlg.showModal();
+    else verifyDlg.setAttribute("open", "");
+    fit(verifyOut);
+  });
+
+  kpiBuild();
+
   /* Simpan input di localStorage (hanya nilai yang berbeda dari default) */
   var STORE_KEY = "bdo-game-pilot:inputs";
   var readStore = function () {
@@ -2593,7 +2965,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 
   var saveField = function (ev) {
     var el = ev.target;
-    if (!el || !el.id || (el.tagName !== "INPUT" && el.tagName !== "SELECT" && el.tagName !== "TEXTAREA")) return;
+    if (!el || !el.id || el.hasAttribute("data-raw") || (el.tagName !== "INPUT" && el.tagName !== "SELECT" && el.tagName !== "TEXTAREA")) return;
     var isCheck = el.type === "checkbox";
     var isSelect = el.tagName === "SELECT";
     if (ev.type === "change" && !isCheck && !isSelect) return;
