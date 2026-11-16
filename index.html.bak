@@ -174,9 +174,9 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <button type="button" role="tab" id="tab-grinding" aria-controls="panel-grinding" aria-selected="false" tabindex="-1">Grinding Spot</button>
 <button type="button" role="tab" id="tab-used" aria-controls="panel-used" aria-selected="false" tabindex="-1">Agris yang Digunakan</button>
 <button type="button" role="tab" id="tab-ascendant" aria-controls="panel-ascendant" aria-selected="false" tabindex="-1">Ascendant</button>
-<button type="button" role="tab" id="tab-kpi" aria-controls="panel-kpi" aria-selected="false" tabindex="-1">KPI (AVG)</button></nav>
-<button type="button" role="tab" id="tab-login" aria-controls="panel-login" aria-selected="false" tabindex="-1">Login Logout</button></nav>
-<button type="button" role="tab" id="tab-laporan" aria-controls="panel-laporan" aria-selected="false" tabindex="-1">Laporan</button></nav>
+<button type="button" role="tab" id="tab-kpi" aria-controls="panel-kpi" aria-selected="false" tabindex="-1">KPI (AVG)</button>
+<button type="button" role="tab" id="tab-login" aria-controls="panel-login" aria-selected="false" tabindex="-1">Login Logout</button>
+<button type="button" role="tab" id="tab-laporan" aria-controls="panel-laporan" aria-selected="false" tabindex="-1">Laporan</button>
 <button type="button" role="tab" id="tab-pilot" aria-controls="panel-pilot" aria-selected="false" tabindex="-1">Pilot</button></nav>
 </header>
 <main>
