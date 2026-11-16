@@ -177,7 +177,8 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <button type="button" role="tab" id="tab-kpi" aria-controls="panel-kpi" aria-selected="false" tabindex="-1">KPI (AVG)</button>
 <button type="button" role="tab" id="tab-login" aria-controls="panel-login" aria-selected="false" tabindex="-1">Login Logout</button>
 <button type="button" role="tab" id="tab-laporan" aria-controls="panel-laporan" aria-selected="false" tabindex="-1">Laporan</button>
-<button type="button" role="tab" id="tab-pilot" aria-controls="panel-pilot" aria-selected="false" tabindex="-1">Pilot</button></nav>
+<button type="button" role="tab" id="tab-pilot" aria-controls="panel-pilot" aria-selected="false" tabindex="-1">Pilot</button>
+</nav>
 </header>
 <main>
 
@@ -929,8 +930,8 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li>AVG adalah rata-rata KPI bulan ini dan 2 bulan sebelumnya (rata-rata 3 bulan terakhir)</li>
 <li>Kolom <em>Input</em> menentukan mana yang akan diisi, bisa: <em>KPI</em> atau <em>AVG</em></li>
 <li>Pilih <em>KPI</em>: AVG dihitung dari KPI. Pilih <em>AVG</em>: KPI dihitung balik dari AVG dan KPI bulan-bulan sebelumnya</li>
-<li>Angka boleh memakai titik atau koma sebagai desimal, misal <code>75.76</code> atau <code>75,76</code>. Nama bulan dan tahun bisa diubah, formatnya <code>June 2026</code></li>
-<li>Tier otomatis mengikuti AVG: di bawhah <em>75</em> No Tier, <em>75–79.99</em> Tier 0, <em>80–89.99</em> Tier 1, <em>90–99.99</em> Tier 2, <em>100–109.99</em> Tier 3, <em>110 ke atas</em> Tier 4</li>
+<li>Angka boleh memakai titik atau koma sebagai desimal, misal <code>75.76</code> atau <code>75,76</code>. Nama bulan dan tahun bisa diubah, format <code>June 2026</code></li>
+<li>Tier otomatis mengikuti AVG: di bawah <em>75</em> No Tier, <em>75–79.99</em> Tier 0, <em>80–89.99</em> Tier 1, <em>90–99.99</em> Tier 2, <em>100–109.99</em> Tier 3, <em>110 ke atas</em> Tier 4</li>
 </ul>
 <p><strong>Contoh:</strong></p>
 <ul>
@@ -973,6 +974,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li><a href="http://t.me/Agus_HK059" target="_blank" rel="noopener noreferrer">AGUS</a></li>
 </ul>
 <p><em>Use at on your own risk!</em></p>
+<p>(v1.0)</p>
 <p><button type="button" id="help-close">Tutup</button></p>
 </dialog>
 <dialog id="verify-dialog" aria-labelledby="verify-title">
