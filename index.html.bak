@@ -3091,7 +3091,9 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 
   /* 12. Login Logout */
   var PILOTS = {
-    agus: { nama: "AGUS", divisi: "ASCENDANT", absen: "HK059" }
+    agus: { nama: "AGUS", divisi: "ASCENDANT", absen: "HK059" },
+    ali: { nama: "ALI", divisi: "ASCENDANT", absen: "HK098" },
+    denis: { nama: "DENIS", divisi: "ASCENDANT", absen: "HK111" }
   };
 
   var calcLogin = function () {
