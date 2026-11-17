@@ -5,5 +5,3 @@
 [AGUS](http://t.me/Agus_HK059)
 
 Use at on your own risk!
-
-(v1.0)
