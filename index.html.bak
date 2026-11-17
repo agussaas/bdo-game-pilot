@@ -916,7 +916,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <div class="table-wrap">
 <table>
 <thead>
-<tr><th scope="col">Bulan</th><th scope="col">Input</th><th scope="col">KPI</th><th scope="col">AVG</th><th scope="col">Tier</th><th scope="col">Hapus</th></tr>
+<tr><th scope="col">Bulan</th><th scope="col">Input</th><th scope="col">KPI</th><th scope="col">AVG</th><th scope="col">Tier</th><th scope="col">Action</th></tr>
 </thead>
 <tbody id="kpi-body"></tbody>
 </table>
@@ -950,19 +950,186 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <!-- Login Logout -->
 <section role="tabpanel" id="panel-login" aria-labelledby="tab-login" hidden>
 <h2>Login Logout</h2>
-<p><strong>Under Construction</strong></p>
+
+<div id="form-login">
+<fieldset>
+<legend>Login</legend>
+<p><label for="lg-pilot">Pilot:</label> <select id="lg-pilot" name="pilot" aria-label="Pilih data pilot (Login)">
+<option value="agus" selected>AGUS</option>
+<option value="custom">Edit (custom)</option>
+</select></p>
+<p><label for="lg-nama">Nama:</label> <input type="text" id="lg-nama" name="nama" value="AGUS"></p>
+<p><label for="lg-divisi">Divisi:</label> <select id="lg-divisi" name="divisi">
+<option value="ASCENDANT" selected>ASCENDANT</option>
+<option value="UNDERCITY">UNDERCITY</option>
+<option value="GW2">GW2</option>
+<option value="MOKOKO">MOKOKO</option>
+<option value="HQ">HQ</option>
+</select></p>
+<p><label for="lg-absen">No Absen:</label> <input type="text" id="lg-absen" name="absen" value="HK059"></p>
+<p><label for="lg-order">No Order:</label> <input type="text" inputmode="numeric" id="lg-order" name="order" value=""></p>
+<p><button type="button" id="reset-login">Reset</button> <button type="button" id="clear-login">Clear</button></p>
+</fieldset>
+<p><label for="lg-out">Login:</label> <textarea id="lg-out" name="login-out" rows="5" cols="40" readonly></textarea></p>
+</div>
+
+<div id="form-logout">
+<fieldset>
+<legend>Logout</legend>
+<p><label for="lo-pilot">Pilot:</label> <select id="lo-pilot" name="pilot" aria-label="Pilih data pilot (Logout)">
+<option value="agus" selected>AGUS</option>
+<option value="custom">Edit (custom)</option>
+</select></p>
+<p><label for="lo-login">No Login:</label> <input type="text" id="lo-login" name="login" value=""></p>
+<p><label for="lo-order">No Order:</label> <input type="text" inputmode="numeric" id="lo-order" name="order" value=""></p>
+<p><label for="lo-nama">Nama:</label> <input type="text" id="lo-nama" name="nama" value="AGUS"></p>
+<p><label for="lo-divisi">Divisi:</label> <select id="lo-divisi" name="divisi">
+<option value="ASCENDANT" selected>ASCENDANT</option>
+<option value="UNDERCITY">UNDERCITY</option>
+<option value="GW2">GW2</option>
+<option value="MOKOKO">MOKOKO</option>
+<option value="HQ">HQ</option>
+</select></p>
+<p><label for="lo-absen">No Absen:</label> <input type="text" id="lo-absen" name="absen" value="HK059"></p>
+<p><label for="lo-type">Type Job:</label> <select id="lo-type" name="type">
+<option value="LVL">LVL</option>
+<option value="FARM">FARM</option>
+<option value="ACV">ACV</option>
+<option value="HOURLY" selected>HOURLY</option>
+<option value="LAIN2">LAIN2</option>
+</select></p>
+<p id="lo-lain-row" hidden><label for="lo-lain">Keterangan LAIN2:</label> <select id="lo-lain" name="lain">
+<option value="Used" selected>Used</option>
+<option value="Kosong">Kosong</option>
+<option value="IT">IT</option>
+<option value="MT">MT</option>
+<option value="TR">TR</option>
+<option value="Authen">Authen</option>
+<option value="Kajian">Kajian</option>
+</select></p>
+<p id="lo-progress-row"><label for="lo-progress">Progress:</label> <input type="text" id="lo-progress" name="progress" value=""></p>
+<p><button type="button" id="reset-logout">Reset</button> <button type="button" id="clear-logout">Clear</button></p>
+</fieldset>
+<p><label for="lo-out">Logout:</label> <textarea id="lo-out" name="logout-out" rows="8" cols="40" readonly></textarea></p>
+</div>
+<p><strong>Note:</strong></p>
+<ul>
+<li>Pilih <em>Pilot</em> untuk otomatis mengisi Nama, Divisi, dan No Absen</li>
+<li><em>Type Job: LAIN2</em> dipakai untuk pekerjaan di luar jam order:
+<ul>
+<li><code>Used</code>: owner masih login atau main</li>
+<li><code>Kosong</code>: jamkos, tidak ada orderan</li>
+<li><code>IT</code>: kendala teknis, lampu mati, PC bermasalah, dll</li>
+<li><code>MT</code>: BDO lagi maintenance</li>
+<li><code>TR</code>: lagi bantu anak training</li>
+<li><code>Authen</code>: tidak bisa login karena masih authen</li>
+<li><code>Kajian</code>: jika ada pengajian</li>
+</ul>
+</li>
+<li><em>No Order</em> untuk jamkos formatnya <code>141</code> diikuti nomor PC <em>dua digit</em>, sampai PC 12:
+<ul>
+<li>PC 1 = <code>14101</code></li>
+<li>PC 2 = <code>14102</code></li>
+<li>PC 11 = <code>14111</code></li>
+<li>PC 12 = <code>14112</code></li>
+</ul>
+</li>
 </section>
 
 <!-- Laporan -->
 <section role="tabpanel" id="panel-laporan" aria-labelledby="tab-laporan" hidden>
 <h2>Laporan</h2>
-<p><strong>Under Construction</strong></p>
+<div id="form-laporan">
+<fieldset>
+<legend>Input</legend>
+<p><label for="rp-pilot">Pilot:</label> <select id="rp-pilot" name="pilot" aria-label="Pilih data pilot (Laporan)">
+<option value="agus" selected>AGUS</option>
+<option value="custom">Edit (custom)</option>
+</select></p>
+<p><label for="rp-login">No Login:</label> <input type="text" id="rp-login" name="login" value=""></p>
+<p><label for="rp-order">No Order:</label> <input type="text" id="rp-order" name="order" value=""></p>
+<p><label for="rp-nama">Nama:</label> <input type="text" id="rp-nama" name="nama" value="AGUS"></p>
+<p><label for="rp-divisi">Divisi:</label> <select id="rp-divisi" name="divisi">
+<option value="ASCENDANT" selected>ASCENDANT</option>
+<option value="UNDERCITY">UNDERCITY</option>
+<option value="GW2">GW2</option>
+<option value="MOKOKO">MOKOKO</option>
+<option value="HQ">HQ</option>
+</select></p>
+<p><label for="rp-absen">No Absen:</label> <input type="text" id="rp-absen" name="absen" value="HK059"></p>
+<p><label for="rp-type">Type Job:</label> <select id="rp-type" name="type">
+<option value="HOURLY" selected>HOURLY</option>
+<option value="FARM">FARM</option>
+</select></p>
+<p><label for="rp-progress">Progress:</label> <input type="text" id="rp-progress" name="progress" value=""></p>
+<p><label for="rp-ls">LS:</label> <input type="text" id="rp-ls" name="ls" value=""></p>
+<p><label for="rp-spot">Grinding Spot:</label> <input type="text" id="rp-spot" name="spot" value=""></p>
+<p><label for="rp-tl">TL:</label> <input type="text" id="rp-tl" name="tl" value=""></p>
+<p><label for="rp-agris">Agris yang digunakan:</label> <input type="text" id="rp-agris" name="agris" value="0 K"></p>
+<p id="rp-sell-row" hidden><label for="rp-sell">Sell in storage:</label> <input type="text" id="rp-sell" name="sell" value=""></p>
+<p id="rp-listed-row" hidden><label for="rp-listed">Listed CM (TAX):</label> <input type="text" id="rp-listed" name="listed" value=""></p>
+<p id="rp-keep-row" hidden><label for="rp-keep">Keep:</label> <input type="text" id="rp-keep" name="keep" value=""></p>
+<p><label for="rp-crystal">Crystal (Replace/Broken):</label> <input type="text" id="rp-crystal" name="crystal" value=""></p>
+<p><label for="rp-total">Total (Hours/Progress):</label> <input type="text" id="rp-total" name="total" value=""></p>
+<p><label for="rp-target">Target:</label> <input type="text" id="rp-target" name="target" value=""></p>
+<p><label for="rp-class">Class:</label> <input type="text" id="rp-class" name="class" value=""></p>
+<p><label for="rp-ket">Keterangan:</label> <textarea id="rp-ket" name="ket" rows="3" cols="40" placeholder="Satu keterangan per baris"></textarea></p>
+<p><label for="rp-kendala">Kendala:</label> <textarea id="rp-kendala" name="kendala" rows="3" cols="40" placeholder="Satu kendala per baris"></textarea></p>
+<p><label for="rp-note">Note:</label> <textarea id="rp-note" name="note" rows="3" cols="40" placeholder="Satu note per baris"></textarea></p>
+<p><button type="button" id="reset-laporan">Reset</button> <button type="button" id="clear-laporan">Clear</button></p>
+</fieldset>
+<p><label for="rp-out">Laporan:</label> <textarea id="rp-out" name="laporan-out" rows="25" cols="40" readonly></textarea></p>
+</div>
+<p><strong>Note:</strong></p>
+<ul>
+<li>Pilih <em>Pilot</em> untuk otomatis mengisi Nama, Divisi, dan No Absen</li>
+<li><em>HOURLY</em>: Progress diisi waktu (contoh <code>56 M</code>), Total diisi total jam (contoh <code>43 H 20 M</code>) dan Target diisi target jam (contoh <code>70 H</code>)</li>
+<li><em>FARM</em>: Progress diisi silver (contoh <code>11.2 B</code>), Total diisi total progress (contoh <code>369 B</code>) dan Target diisi total silver (contoh <code>500 B</code>). Sell in storage, Listed CM (TAX), dan Keep hanya muncul di FARM</li>
+<li>Field yang dikosongkan akan tampil <code>-</code> di output, kecuali Progress, TL, Class, dan Agris yang selalu mengikuti isi form</li>
+<li>Keterangan, Kendala, dan Note: tulis hanya satu per baris, jika kosong: <code>-</code></li>
+</ul>
 </section>
 
 <!-- Pilot -->
 <section role="tabpanel" id="panel-pilot" aria-labelledby="tab-pilot" hidden>
 <h2>Pilot</h2>
-<p><strong>Under Construction</strong></p>
+
+<div id="form-calc">
+<fieldset>
+<legend>Calculator</legend>
+<p><label for="pc-in">Input:</label> <input type="text" id="pc-in" name="calc" value="1.5b * 65%" autocomplete="off" spellcheck="false"></p>
+<p><button type="button" id="reset-calc">Reset</button> <button type="button" id="clear-calc">Clear</button></p>
+</fieldset>
+<p><label for="pc-out">Result:</label> <textarea id="pc-out" name="calc-out" rows="1" cols="40" readonly></textarea></p>
+</div>
+
+<fieldset>
+<legend>Notepad</legend>
+<p><textarea id="pn-note" name="note" rows="12" cols="40" placeholder="Tulis apa saja di sini" aria-label="Catatan"></textarea></p>
+<p><button type="button" id="clear-note">Clear</button></p>
+</fieldset>
+
+<p><strong>Note:</strong></p>
+<ul>
+<li>Hitung di kolom <em>Input</em>, hasilnya akan muncul otomatis di <em>Result</em></li>
+<li>Operasi perhitungan yang bisa dipakai:
+<ul>
+<li><code>+</code> tambah</li>
+<li><code>-</code> kurang</li>
+<li><code>*</code> kali (boleh juga <code>x</code> atau <code>×</code>)</li>
+<li><code>/</code> bagi (boleh juga <code>÷</code>)</li>
+<li><code>^</code> pangkat, contoh <code>2^3</code> = 8</li>
+<li><code>%</code> persen, contoh <code>15%</code> = 0.15</li>
+<li><code>( )</code> kurung</li>
+</ul>
+</li>
+<li>Urutan perhitungan: kurung dulu, lalu <code>%</code> dan <code>^</code>, lalu <code>*</code> dan <code>/</code>, terakhir <code>+</code> dan <code>-</code></li>
+<li>Satuan ditulis langsung setelah angka tanpa spasi: <code>k</code> (ribu), <code>m</code> (juta), <code>b</code> (miliar), <code>t</code> (triliun), contoh <code>500k</code>, <code>1.5m</code>, <code>2b</code></li>
+<li>Angka memakai titik sebagai desimal (<code>12.5</code>). Koma dianggap pemisah ribuan, jadi <code>1,000,000</code> sama dengan <code>1000000</code></li>
+<li><code>%</code> hanya membagi angka di depannya dengan 100. Untuk menambah persen tulis lengkap: <code>200 + 200 * 10%</code> = 220, bukan <code>200 + 10%</code> yang hasilnya 200.1</li>
+<li>Hasil di atas 1,000 ditampilkan: <code>K</code> ribu, <code>M</code> juta, <code>B</code> miliar (dalam kurung)</li>
+<li>Jika salah tulis, Result otomatis menampilkan <em>error message</em>, misalnya kurung kurang, karakter tidak dikenal, atau tidak bisa dibagi nol</li>
+<li>Contoh: <code>1.5b * 65%</code> hasilnya <samp>975,000,000 (975 M)</samp>, <code>(5m + 250k) * 2</code> hasilnya <samp>10,500,000 (10.5 M)</samp>, <code>100 / 8</code> hasilnya <samp>12.5</samp></li>
 </section>
 
 </main>
@@ -974,7 +1141,6 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li><a href="http://t.me/Agus_HK059" target="_blank" rel="noopener noreferrer">AGUS</a></li>
 </ul>
 <p><em>Use at on your own risk!</em></p>
-<p>(v1.0)</p>
 <p><button type="button" id="help-close">Tutup</button></p>
 </dialog>
 <dialog id="verify-dialog" aria-labelledby="verify-title">
@@ -1121,7 +1287,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     document.getElementById("sw-out").value = code;
   };
 
-  /* Klik/hover stopwatch: langsung siap di copy */
+  /* Klik stopwatch: langsung siap di copy */
   var swOut = document.getElementById("sw-out");
   var selectSwOut = function () {
     swOut.select();
@@ -1399,7 +1565,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     fit(verifyOut);
   });
 
-  /* Verifikasi Progress Hourly dengan Agris (Claude, ChatGPT, Gemini) */
+  /* Verifikasi BDO Tax Calculator (Claude, ChatGPT, Gemini) */
   var buildTaxVerifyPrompt = function () {
     var v = function (id) { return document.getElementById(id).value; };
     var rows = function (pairs) {
@@ -2705,7 +2871,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       var o = res[i];
       var sel = tr.querySelector("select");
       if (sel.value !== r.mode) sel.value = r.mode;
-      [["kpi", "KPI"], ["avg", "Avg"]].forEach(function (f) {
+      [["kpi", "KPI"], ["avg", "AVG"]].forEach(function (f) {
         var el = tr.querySelector('input[data-f="' + f[0] + '"]');
         var isInput = r.mode === f[0];
         el.readOnly = !isInput;
@@ -2780,7 +2946,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       var sel = document.createElement("select");
       sel.setAttribute("data-raw", "");
       sel.setAttribute("aria-label", "Yang diinput baris " + (i + 1));
-      [["kpi", "KPI"], ["avg", "Avg"]].forEach(function (o) {
+      [["kpi", "KPI"], ["avg", "AVG"]].forEach(function (o) {
         var opt = document.createElement("option");
         opt.value = o[0];
         opt.textContent = o[1];
@@ -2789,7 +2955,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       sel.value = r.mode;
       cell(sel);
       cell(field("kpi", "KPI"));
-      cell(field("avg", "Avg"));
+      cell(field("avg", "AVG"));
       cell(field("tier", "Tier"));
       var btn = document.createElement("button");
       btn.type = "button";
@@ -2923,6 +3089,259 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 
   kpiBuild();
 
+  /* 12. Login Logout */
+  var PILOTS = {
+    agus: { nama: "AGUS", divisi: "ASCENDANT", absen: "HK059" }
+  };
+
+  var calcLogin = function () {
+    var v = function (id) { return document.getElementById(id).value.trim(); };
+    document.getElementById("lg-out").value = [
+      "Login",
+      "Nama: " + v("lg-nama"),
+      "Divisi: " + v("lg-divisi"),
+      "No Absen : " + v("lg-absen"),
+      "No Order: " + v("lg-order")
+    ].join("\n");
+  };
+
+  var calcLogout = function () {
+    var v = function (id) { return document.getElementById(id).value.trim(); };
+    var lain = v("lo-type") === "LAIN2";
+    document.getElementById("lo-lain-row").hidden = !lain;
+    document.getElementById("lo-progress-row").hidden = lain;
+    var lines = [
+      "Logout",
+      "No Login: " + v("lo-login"),
+      "No order: " + v("lo-order"),
+      "Nama: " + v("lo-nama"),
+      "Divisi: " + v("lo-divisi"),
+      "No Absen : " + v("lo-absen"),
+      "Type Job: " + v("lo-type")
+    ];
+    lines.push(lain ? v("lo-lain") : "Progress: " + v("lo-progress"));
+    document.getElementById("lo-out").value = lines.join("\n");
+  };
+
+  /* Pilih pilot untuk otomatis isi form */
+  var applyPilot = function (selectId, map) {
+    var p = PILOTS[document.getElementById(selectId).value];
+    if (!p) return;
+    Object.keys(map).forEach(function (id) {
+      var el = document.getElementById(id);
+      el.value = p[map[id]];
+      el.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+  };
+  document.getElementById("lg-pilot").addEventListener("change", function () {
+    applyPilot("lg-pilot", { "lg-nama": "nama", "lg-divisi": "divisi", "lg-absen": "absen" });
+  });
+  document.getElementById("lo-pilot").addEventListener("change", function () {
+    applyPilot("lo-pilot", { "lo-nama": "nama", "lo-divisi": "divisi", "lo-absen": "absen" });
+  });
+
+  /* Output Login/Logout: klik otomatis langsung di copy */
+  ["lg-out", "lo-out", "rp-out"].forEach(function (id) {
+    var el = document.getElementById(id);
+    var selectAll = function () {
+      el.select();
+      el.setSelectionRange(0, el.value.length);
+    };
+    el.addEventListener("click", selectAll);
+    el.addEventListener("focus", selectAll);
+  });
+
+  /* 13. Laporan */
+  var calcLaporan = function () {
+    var v = function (id) { return document.getElementById(id).value.trim(); };
+    var dash = function (s) { return s ? s : "-"; };
+    var list = function (label, id) {
+      var items = document.getElementById(id).value.split("\n").map(function (s) {
+        return s.replace(/^\s*-\s*/, "").trim();
+      }).filter(function (s) { return s; });
+      return items.length
+        ? [label + " :"].concat(items.map(function (s) { return "- " + s; }))
+        : [label + " : -"];
+    };
+
+    var farm = v("rp-type") === "FARM";
+    ["rp-sell-row", "rp-listed-row", "rp-keep-row"].forEach(function (id) {
+      document.getElementById(id).hidden = !farm;
+    });
+
+    var spot = v("rp-spot").toUpperCase();
+    var total = v("rp-total");
+    var target = v("rp-target");
+    var totalText = total ? (target ? total + " / " + target : total) : "-";
+
+    var head = [
+      "Logout",
+      "No Login: " + v("rp-login"),
+      "No order: " + v("rp-order"),
+      "Nama: " + v("rp-nama"),
+      "Divisi: " + v("rp-divisi"),
+      "No Absen : " + v("rp-absen"),
+      "Type Job: " + v("rp-type"),
+      "Progress: " + v("rp-progress") + " (" + v("rp-ls") + ", " + spot + " " + v("rp-tl") + " / " + v("rp-agris") + " AGRIS)",
+      ""
+    ];
+
+    var mid = farm ? [
+      "Gaining :",
+      "- " + spot + " : " + v("rp-tl"),
+      "========================================",
+      "Sell in storage : " + dash(v("rp-sell")),
+      "Listed CM (TAX) : " + dash(v("rp-listed")),
+      "Keep : " + dash(v("rp-keep")),
+      "Progress : " + v("rp-progress"),
+      "========================================",
+      "Broken crystal : " + dash(v("rp-crystal")),
+      "Total Progress : " + totalText
+    ] : [
+      "Progress :",
+      "- " + v("rp-progress"),
+      "- " + spot + " : " + v("rp-tl"),
+      "",
+      "================================",
+      "Replace crystal : " + dash(v("rp-crystal")),
+      "Total hours : " + totalText
+    ];
+
+    var tail = [""].concat(list("Keterangan", "rp-ket"), [
+      "",
+      "Class : " + v("rp-class"),
+      (farm ? "Grinding Spot : " : "Grinding Spot: ") + spot,
+      (farm ? "Agris yang Digunakan : " : "Agris Yang Digunakan : ") + v("rp-agris"),
+      ""
+    ], list("Kendala", "rp-kendala"), [""], list("Note", "rp-note"));
+
+    document.getElementById("rp-out").value = head.concat(mid, tail).join("\n");
+  };
+
+  document.getElementById("rp-pilot").addEventListener("change", function () {
+    applyPilot("rp-pilot", { "rp-nama": "nama", "rp-divisi": "divisi", "rp-absen": "absen" });
+  });
+
+  /* 14. Pilot: Calculator */
+  var CALC_SUFFIX = { k: 1e3, m: 1e6, b: 1e9, t: 1e12 };
+
+  var calcEval = function (text) {
+    var src = text.toLowerCase().replace(/,/g, "").replace(/[x×]/g, "*").replace(/÷/g, "/");
+    var tokens = [];
+    var i = 0;
+    while (i < src.length) {
+      var ch = src.charAt(i);
+      if (/\s/.test(ch)) { i++; continue; }
+      var m = /^(\d+\.?\d*|\.\d+)([kmbt])?/.exec(src.slice(i));
+      if (m) {
+        var after = src.charAt(i + m[0].length);
+        if (/[a-z]/.test(after)) throw new Error("Satuan tidak dikenal: '" + after + "'");
+        tokens.push({ n: Number(m[1]) * (m[2] ? CALC_SUFFIX[m[2]] : 1) });
+        i += m[0].length;
+      } else if ("+-*/^()%".indexOf(ch) !== -1) {
+        tokens.push({ o: ch });
+        i++;
+      } else {
+        throw new Error("Karakter tidak dikenal: '" + ch + "'");
+      }
+    }
+
+    var pos = 0;
+    var isOp = function (o) { return tokens[pos] && tokens[pos].o === o; };
+    var expr, term, unary, power, postfix, primary;
+    primary = function () {
+      var t = tokens[pos];
+      if (!t) throw new Error("Operasi belum lengkap");
+      if (t.n !== undefined) { pos++; return t.n; }
+      if (t.o === "(") {
+        pos++;
+        var v = expr();
+        if (!isOp(")")) throw new Error("Kurung tutup ) kurang");
+        pos++;
+        return v;
+      }
+      throw new Error("Operasi tidak valid dekat '" + t.o + "'");
+    };
+    postfix = function () {
+      var v = primary();
+      while (isOp("%")) { pos++; v = v / 100; }
+      return v;
+    };
+    power = function () {
+      var b = postfix();
+      if (isOp("^")) { pos++; return Math.pow(b, unary()); }
+      return b;
+    };
+    unary = function () {
+      if (isOp("-")) { pos++; return -unary(); }
+      if (isOp("+")) { pos++; return unary(); }
+      return power();
+    };
+    term = function () {
+      var v = unary();
+      while (isOp("*") || isOp("/")) {
+        var o = tokens[pos++].o;
+        var r = unary();
+        if (o === "*") v *= r;
+        else {
+          if (r === 0) throw new Error("Tidak bisa dibagi nol");
+          v /= r;
+        }
+      }
+      return v;
+    };
+    expr = function () {
+      var v = term();
+      while (isOp("+") || isOp("-")) {
+        var o = tokens[pos++].o;
+        var r = term();
+        v = o === "+" ? v + r : v - r;
+      }
+      return v;
+    };
+
+    var result = expr();
+    if (pos < tokens.length) {
+      var t = tokens[pos];
+      throw new Error(t.o === ")" ? "Kurung buka ( kurang" : "Operasi tidak valid dekat '" + (t.o !== undefined ? t.o : t.n) + "'");
+    }
+    return result;
+  };
+
+  var calcFormat = function (n) {
+    var r = Number(n.toPrecision(12));
+    if (r === 0) r = 0;
+    var full = r.toLocaleString("en-US", { maximumFractionDigits: 10 });
+    var abs = Math.abs(r);
+    if (abs < 1000) return full;
+    var unit = abs >= 1e9 ? ["B", 1e9] : abs >= 1e6 ? ["M", 1e6] : ["K", 1e3];
+    var short = Math.round(abs / unit[1] * 100) / 100;
+    return full + " (" + (r < 0 ? "-" : "") + short + " " + unit[0] + ")";
+  };
+
+  var calcCalculator = function () {
+    var out = document.getElementById("pc-out");
+    var text = document.getElementById("pc-in").value;
+    if (!text.trim()) { out.value = ""; return; }
+    try {
+      var r = calcEval(text);
+      if (!isFinite(r)) throw new Error("Hasil tidak valid (terlalu besar atau bukan angka)");
+      out.value = calcFormat(r);
+    } catch (e) {
+      out.value = e.message;
+    }
+  };
+
+  /* Pilot: Notepad (tersimpan otomatis di browser localStorage) */
+  document.getElementById("pn-note").addEventListener("input", function () { fit(this); });
+
+  document.getElementById("clear-note").addEventListener("click", function () {
+    var el = document.getElementById("pn-note");
+    el.value = "";
+    el.dispatchEvent(new Event("input", { bubbles: true }));
+    el.focus();
+  });
+
   /* Simpan input di localStorage (hanya nilai yang berbeda dari default) */
   var STORE_KEY = "bdo-game-pilot:inputs";
   var readStore = function () {
@@ -3024,7 +3443,11 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     ["form-totaltl", calcTotalTL],
     ["form-compen", calcCompen],
     ["form-silver", calcSilver],
-    ["form-used", calcAgrisUsed]
+    ["form-used", calcAgrisUsed],
+    ["form-login", calcLogin],
+    ["form-logout", calcLogout],
+    ["form-laporan", calcLaporan],
+    ["form-calc", calcCalculator]
   ].forEach(function (x) {
     var form = document.getElementById(x[0]);
     form.addEventListener("input", function () { x[1](); fitAll(); });
