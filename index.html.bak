@@ -75,6 +75,7 @@ main > section { min-width: 0; }
 fieldset { min-width: 0; margin: 0 0 1.25rem; padding: 0.75rem 1rem 0.25rem; border-radius: 0.5rem; }
 legend { padding: 0 0.5rem; font-weight: 600; }
 fieldset fieldset { margin: 0 0 0.9rem; }
+fieldset.import-box { border: 1px solid var(--bd); padding: 0.75rem 1rem; margin-bottom: 1.25rem; }
 p { margin: 0 0 0.9rem; }
 p:has(> label:first-child) { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.35rem; }
 label { overflow-wrap: anywhere; }
@@ -1019,7 +1020,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><strong>Note:</strong></p>
 <ul>
 <li>Pilih <em>Pilot</em> untuk otomatis mengisi Nama, Divisi, dan No Absen</li>
-<li><em>Type Job: LAIN2</em> dipakai untuk pekerjaan di luar jam order:
+<li><em>Type Job: LAIN2</em> dipakai untuk di luar jam order:
 <ul>
 <li><code>Used</code>: owner masih login atau main</li>
 <li><code>Kosong</code>: jamkos, tidak ada orderan</li>
@@ -1052,6 +1053,12 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <option value="denis">DENIS</option>
 <option value="custom">Edit (custom)</option>
 </select></p>
+<fieldset class="import-box">
+<legend>Import</legend>
+<p><textarea id="rp-import-text" rows="4" cols="40" placeholder="Paste laporan di sini"></textarea></p>
+<p><button type="button" id="btn-import-laporan">Load</button> <button type="button" id="clear-import">Clear</button></p>
+<p><label for="rp-import-log"><strong>Keterangan:</strong></label><textarea id="rp-import-log" name="import-log" readonly></textarea></p>
+</fieldset>
 <p><label for="rp-login">No Login:</label> <input type="text" id="rp-login" name="login" value=""></p>
 <p><label for="rp-order">No Order:</label> <input type="text" id="rp-order" name="order" value=""></p>
 <p><label for="rp-nama">Nama:</label> <input type="text" id="rp-nama" name="nama" value="AGUS"></p>
@@ -1068,7 +1075,9 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <option value="FARM">FARM</option>
 </select></p>
 <p><label for="rp-progress">Progress:</label> <input type="text" id="rp-progress" name="progress" value=""></p>
+<p><label for="rp-p-spot">Spot (Progress):</label> <input type="text" id="rp-p-spot" name="p-spot" value=""></p>
 <p><label for="rp-ls">LS:</label> <input type="text" id="rp-ls" name="ls" value=""></p>
+<p><label for="rp-buff">Buff (Opsional):</label> <input type="text" id="rp-buff" name="buff" value=""></p>
 <p><label for="rp-spot">Grinding Spot:</label> <input type="text" id="rp-spot" name="spot" value=""></p>
 <p><label for="rp-tl">TL:</label> <input type="text" id="rp-tl" name="tl" value=""></p>
 <p><label for="rp-agris">Agris yang digunakan:</label> <input type="text" id="rp-agris" name="agris" value="0 K"></p>
@@ -1077,7 +1086,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p id="rp-keep-row" hidden><label for="rp-keep">Keep:</label> <input type="text" id="rp-keep" name="keep" value=""></p>
 <p><label for="rp-crystal">Crystal (Replace/Broken):</label> <input type="text" id="rp-crystal" name="crystal" value=""></p>
 <p><label for="rp-total">Total (Hours/Progress):</label> <input type="text" id="rp-total" name="total" value=""></p>
-<p><label for="rp-target">Target:</label> <input type="text" id="rp-target" name="target" value=""></p>
+<p><label for="rp-target">Target Seluruhnya:</label> <input type="text" id="rp-target" name="target" value=""></p>
 <p><label for="rp-class">Class:</label> <input type="text" id="rp-class" name="class" value=""></p>
 <p><label for="rp-ket">Keterangan:</label> <textarea id="rp-ket" name="ket" rows="3" cols="40" placeholder="Satu keterangan per baris"></textarea></p>
 <p><label for="rp-kendala">Kendala:</label> <textarea id="rp-kendala" name="kendala" rows="3" cols="40" placeholder="Satu kendala per baris"></textarea></p>
@@ -1090,9 +1099,11 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <ul>
 <li>Pilih <em>Pilot</em> untuk otomatis mengisi Nama, Divisi, dan No Absen</li>
 <li><em>HOURLY</em>: Progress diisi waktu (contoh <code>56 M</code>), Total diisi total jam (contoh <code>43 H 20 M</code>) dan Target diisi target jam (contoh <code>70 H</code>)</li>
-<li><em>FARM</em>: Progress diisi silver (contoh <code>11.2 B</code>), Total diisi total progress (contoh <code>369 B</code>) dan Target diisi total silver (contoh <code>500 B</code>). Sell in storage, Listed CM (TAX), dan Keep hanya muncul di FARM</li>
+<li><em>FARM</em>: Progress diisi silver (contoh <code>11.2 B</code>), Total diisi total progress (contoh <code>369 B</code>) dan Target diisi target silver keseluruhan (contoh <code>500 B</code>). Sell in storage, Listed CM (TAX), dan Keep hanya muncul di FARM</li>
 <li>Field yang dikosongkan akan tampil <code>-</code> di output, kecuali Progress, TL, Class, dan Agris yang selalu mengikuti isi form</li>
 <li>Keterangan, Kendala, dan Note: tulis hanya satu per baris, jika kosong: <code>-</code></li>
+<li>Form import laporan hanya support <em>HOURLY</em> dan <em>FARM</em></li>
+<li>Bagian <em>No Login</em>, <em>Nama</em>, <em>Divisi</em>, <em>No Absen</em>, <em>Crysal (Replace/Broken)</em> tidak di parse di form load import</li>
 </ul>
 </section>
 
@@ -1118,7 +1129,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><strong>Note:</strong></p>
 <ul>
 <li>Hitung di kolom <em>Input</em>, hasilnya akan muncul otomatis di <em>Result</em></li>
-<li>Operasi perhitungan yang bisa dipakai:
+<li>Operasi perhitungan:
 <ul>
 <li><code>+</code> tambah</li>
 <li><code>-</code> kurang</li>
@@ -3178,9 +3189,40 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     });
 
     var spot = v("rp-spot").toUpperCase();
+    var pSpot = v("rp-p-spot") ? v("rp-p-spot").toUpperCase() : spot;
+    var ls = v("rp-ls");
+    var tl = v("rp-tl");
+    var agris = v("rp-agris");
+    var buff = v("rp-buff");
+
     var total = v("rp-total");
     var target = v("rp-target");
     var totalText = total ? (target ? total + " / " + target : total) : "-";
+
+    var spotTl = [pSpot, tl].filter(Boolean).join(" ");
+    
+    // Bagian sebelum Agris (LS + Spot/TL)
+    var frontParts = [];
+    if (ls) frontParts.push(ls);
+    if (spotTl) frontParts.push(spotTl);
+    var frontStr = frontParts.join(", ");
+
+    // Bagian Agris
+    var agrisStr = agris ? agris + " AGRIS" : "";
+
+    // Gabung semuanya sesuai urutan
+    var insideParts = [];
+    if (frontStr || agrisStr) {
+      insideParts.push(frontStr + (frontStr && agrisStr ? " / " : "") + agrisStr);
+    }
+    if (buff) {
+      insideParts.push(buff);
+    }
+
+    var progressDetail = "";
+    if (insideParts.length > 0) {
+      progressDetail = " (" + insideParts.join(", ") + ")";
+    }
 
     var head = [
       "Logout",
@@ -3190,13 +3232,13 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       "Divisi: " + v("rp-divisi"),
       "No Absen : " + v("rp-absen"),
       "Type Job: " + v("rp-type"),
-      "Progress: " + v("rp-progress") + " (" + v("rp-ls") + ", " + spot + " " + v("rp-tl") + " / " + v("rp-agris") + " AGRIS)",
+      "Progress: " + v("rp-progress") + progressDetail,
       ""
     ];
 
     var mid = farm ? [
       "Gaining :",
-      "- " + spot + " : " + v("rp-tl"),
+      "- " + pSpot + " : " + v("rp-tl"),
       "========================================",
       "Sell in storage : " + dash(v("rp-sell")),
       "Listed CM (TAX) : " + dash(v("rp-listed")),
@@ -3208,7 +3250,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     ] : [
       "Progress :",
       "- " + v("rp-progress"),
-      "- " + spot + " : " + v("rp-tl"),
+      "- " + pSpot + " : " + v("rp-tl"),
       "",
       "================================",
       "Replace crystal : " + dash(v("rp-crystal")),
@@ -3223,14 +3265,277 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       ""
     ], list("Kendala", "rp-kendala"), [""], list("Note", "rp-note"));
 
-    document.getElementById("rp-out").value = head.concat(mid, tail).join("\n");
+    var outEl = document.getElementById("rp-out");
+    if (outEl) {
+      outEl.value = head.concat(mid, tail).join("\n");
+      outEl.style.height = "auto";
+      outEl.style.height = outEl.scrollHeight + "px";
+    }
   };
 
   document.getElementById("rp-pilot").addEventListener("change", function () {
     applyPilot("rp-pilot", { "rp-nama": "nama", "rp-divisi": "divisi", "rp-absen": "absen" });
   });
 
-  /* 14. Pilot: Calculator */
+// 14. Import Laporan
+  var importLaporan = function () {
+    var rawText = document.getElementById("rp-import-text").value;
+    var logEl = document.getElementById("rp-import-log");
+    var logs = [];
+    var logThis = function(msg) { 
+      logs.push(msg); 
+      if(logEl) { 
+        logEl.value = logs.join("\n"); 
+        logEl.style.height = "auto"; 
+        logEl.style.height = logEl.scrollHeight + "px"; 
+      } 
+    };
+
+    if (!rawText) {
+      if(logEl) logEl.value = "Kotak import masih kosong";
+      return;
+    }
+
+    if(logEl) logEl.value = "";
+    logs = [];
+
+    // A. Kosongkan field input form
+    document.getElementById("rp-progress").value = "";
+    document.getElementById("rp-p-spot").value = "";
+    document.getElementById("rp-ls").value = "";
+    document.getElementById("rp-buff").value = "";
+    document.getElementById("rp-tl").value = "";
+    document.getElementById("rp-agris").value = "0 K";
+    document.getElementById("rp-sell").value = "";
+    document.getElementById("rp-listed").value = "";
+    document.getElementById("rp-keep").value = "";
+    document.getElementById("rp-total").value = "";
+    document.getElementById("rp-target").value = "";
+    document.getElementById("rp-crystal").value = "";
+    document.getElementById("rp-ket").value = "";
+    document.getElementById("rp-kendala").value = "";
+    document.getElementById("rp-note").value = "";
+
+    // B. Type Job (HOURLY atau FARM)
+    var matchType = rawText.match(/Type Job\s*:\s*(.+)/i);
+    var jobType = matchType ? matchType[1].trim().toUpperCase() : "HOURLY";
+    document.getElementById("rp-type").value = jobType;
+    if (matchType) {
+      logThis("[OK] Type Job: " + jobType);
+    } else {
+      logThis("[FAILED] Type Job tidak ditemukan");
+    }
+    
+    calcLaporan();
+
+    // C. Parse No Order
+    var matchOrder = rawText.match(/No\s+order\s*:\s*(.+)/i);
+    if (matchOrder) {
+      document.getElementById("rp-order").value = matchOrder[1].trim();
+      logThis("[OK] No order: " + matchOrder[1].trim());
+    } else {
+      logThis("[FAILED] No order tidak ditemukan");
+    }
+
+    // D. Parse Class
+    var matchClass = rawText.match(/(?:Class|Character)\s*:\s*(.+)/i);
+    if (matchClass) {
+      document.getElementById("rp-class").value = matchClass[1].trim();
+      logThis("[OK] Class: " + matchClass[1].trim());
+    } else {
+      logThis("[FAILED] Class tidak ditemukan");
+    }
+
+    // E. Parse Grinding Spot
+    var matchSpot = rawText.match(/Grinding Spot\s*:\s*(.+)/i) || rawText.match(/Spot\s*:\s*(.+)/i);
+    if (matchSpot) {
+      document.getElementById("rp-spot").value = matchSpot[1].trim();
+      logThis("[OK] Grinding Spot: " + matchSpot[1].trim());
+    } else {
+      logThis("[FAILED] Grinding Spot tidak ditemukan");
+    }
+
+    // F. Parse Agris yang digunakan
+    var matchAgris = rawText.match(/Agris\s*(?:yang\s*[dD]igunakan)?\s*:\s*(.+)/i);
+    if (matchAgris) {
+      document.getElementById("rp-agris").value = matchAgris[1].trim();
+      logThis("[OK] Agris: " + matchAgris[1].trim());
+    } else {
+      logThis("[FAILED] Agris tidak ditemukan");
+    }
+
+    // G. Parse Total Hours / Target seluruhnya
+    if (jobType === "FARM") {
+      var matchSell = rawText.match(/Sell in storage\s*:\s*(.+)/i);
+      if (matchSell) {
+        document.getElementById("rp-sell").value = matchSell[1].trim();
+        logThis("[OK] Sell in storage: " + matchSell[1].trim());
+      } else {
+        logThis("[FAILED] Sell in storage tidak ditemukan");
+      }
+
+      var matchListed = rawText.match(/Listed CM \(TAX\)\s*:\s*(.+)/i);
+      if (matchListed) {
+        document.getElementById("rp-listed").value = matchListed[1].trim();
+        logThis("[OK] Listed CM (TAX): " + matchListed[1].trim());
+      } else {
+        logThis("[FAILED] Listed CM (TAX) tidak ditemukan");
+      }
+
+      var matchKeep = rawText.match(/Keep\s*:\s*(.+)/i);
+      if (matchKeep) {
+        document.getElementById("rp-keep").value = matchKeep[1].trim();
+        logThis("[OK] Keep: " + matchKeep[1].trim());
+      } else {
+        logThis("[FAILED] Keep tidak ditemukan");
+      }
+
+      var matchTotProgress = rawText.match(/Total Progress\s*:\s*(.+)/i);
+      if (matchTotProgress) {
+        var partsTot = matchTotProgress[1].split("/");
+        document.getElementById("rp-total").value = partsTot[0].trim();
+        if (partsTot[1]) document.getElementById("rp-target").value = partsTot[1].trim();
+        logThis("[OK] Total Progress: " + matchTotProgress[1].trim());
+      } else {
+        logThis("[FAILED] Total Progress tidak ditemukan");
+      }
+    } else {
+      var matchTotal = rawText.match(/Total\s+hours?\s*:\s*(.+)/i);
+      if (matchTotal) {
+        var partsTotal = matchTotal[1].split("/");
+        document.getElementById("rp-total").value = partsTotal[0].trim();
+        if (partsTotal[1]) document.getElementById("rp-target").value = partsTotal[1].trim();
+        logThis("[OK] Total hours: " + matchTotal[1].trim());
+      } else {
+        logThis("[FAILED] Total hours tidak ditemukan");
+      }
+    }
+
+    // H. Parse Progress
+    var matchFullProg = rawText.match(/Progress\s*:\s*([^\(\n]+)(?:\(([^)]+)\))?/i);
+    if (matchFullProg) {
+      if (matchFullProg[1]) {
+        document.getElementById("rp-progress").value = matchFullProg[1].trim();
+        logThis("[OK] Progress: " + matchFullProg[1].trim());
+      }
+      
+      if (matchFullProg[2]) {
+        var insideParen = matchFullProg[2];
+        var beforeSlash = insideParen.split("/")[0].trim();
+        
+        beforeSlash = beforeSlash.replace(/,/g, " ").replace(/\s+/g, " ");
+        var tokens = beforeSlash.split(" ");
+
+        var startIndex = 0;
+        if (tokens.length > 0 && tokens[0].toUpperCase().startsWith("LS")) {
+          document.getElementById("rp-ls").value = tokens[0];
+          startIndex = 1;
+        }
+
+        var restTokens = tokens.slice(startIndex);
+
+        if (restTokens.length >= 2 && restTokens[restTokens.length - 1].toUpperCase() === "K" && !isNaN(restTokens[restTokens.length - 2])) {
+          document.getElementById("rp-tl").value = restTokens.slice(-2).join(" ");
+          document.getElementById("rp-p-spot").value = restTokens.slice(0, -2).join(" ");
+        } else if (restTokens.length >= 2 && !isNaN(restTokens[restTokens.length - 1])) {
+          document.getElementById("rp-tl").value = restTokens[restTokens.length - 1];
+          document.getElementById("rp-p-spot").value = restTokens.slice(0, -1).join(" ");
+        } else if (restTokens.length > 0) {
+          document.getElementById("rp-p-spot").value = restTokens.join(" ");
+        }
+        logThis("[OK] Progress: " + insideParen);
+      }
+    } else {
+      logThis("[FAILED] Progress tidak ditemukan");
+    }
+
+    // I. Parse Keterangan
+    var matchKet = rawText.match(/Keterangan\s*:\s*\n?([\s\S]*?)(?=\n\s*(?:Class\s*:|Character\s*:|Grinding Spot\s*:|Agris|Kendala|Note|================|$))/i);
+    if (matchKet) {
+      var ketText = matchKet[1].trim();
+      if (ketText && ketText !== "-" && !/^(?:Class|Character)\s*:/i.test(ketText)) {
+        document.getElementById("rp-ket").value = ketText;
+        logThis("[OK] Keterangan terbaca");
+      } else {
+        document.getElementById("rp-ket").value = "";
+        logThis("[WARN] Keterangan kosong");
+      }
+    } else {
+      logThis("[FAILED] Keterangan tidak ditemukan");
+    }
+
+    // J. Parse Kendala
+    var matchKendala = rawText.match(/Kendala\s*:\s*\n?([\s\S]*?)(?=\n\s*(?:Class|Grinding Spot|Agris|Keterangan|Note|================|$))/i);
+    if (matchKendala) {
+      var kendalaText = matchKendala[1].trim();
+      if (kendalaText && kendalaText !== "-") {
+        document.getElementById("rp-kendala").value = kendalaText;
+        logThis("[OK] Kendala terbaca");
+      } else {
+        document.getElementById("rp-kendala").value = "";
+        logThis("[WARN] Kendala kosong");
+      }
+    } else {
+      logThis("[FAILED] Kendala tidak ditemukan");
+    }
+
+    // K. Parse Note
+    var matchNote = rawText.match(/Note\s*:\s*\n?([\s\S]*?)$/i);
+    if (matchNote) {
+      var noteContent = matchNote[1].trim();
+      if (noteContent && noteContent !== "-") {
+        document.getElementById("rp-note").value = noteContent;
+        logThis("[OK] Note terbaca");
+      } else {
+        document.getElementById("rp-note").value = "";
+        logThis("[WARN] Note kosong");
+      }
+    } else {
+      logThis("[FAILED] Note tidak ditemukan");
+    }
+
+    // L. Simpan ke localStorage
+    calcLaporan();
+
+    var storeData = readStore();
+    var inputs = document.querySelectorAll("#form-laporan input, #form-laporan select, #form-laporan textarea");
+    inputs.forEach(function (el) {
+      if (el.id && el.id !== "rp-import-text" && el.id !== "rp-import-log") {
+        if (el.value.trim() !== "") {
+          storeData[el.id] = el.value;
+        } else {
+          delete storeData[el.id];
+        }
+      }
+    });
+    writeStore(storeData);
+  };
+
+  // Event listener button Load & Clear Import
+  var btnImport = document.getElementById("btn-import-laporan");
+  if (btnImport) {
+    btnImport.addEventListener("click", importLaporan);
+  }
+
+  var btnClearImport = document.getElementById("clear-import");
+  if (btnClearImport) {
+    btnClearImport.addEventListener("click", function () {
+      var importTextEl = document.getElementById("rp-import-text");
+      var logEl = document.getElementById("rp-import-log");
+      importTextEl.value = "";
+      importTextEl.style.height = "";
+      if (logEl) {
+        logEl.value = "";
+        logEl.style.height = "";
+      }
+      var storeData = readStore();
+      delete storeData["rp-import-text"];
+      writeStore(storeData);
+      importTextEl.focus();
+    });
+  }
+
+  /* 15. Pilot: Calculator */
   var CALC_SUFFIX = { k: 1e3, m: 1e6, b: 1e9, t: 1e12 };
 
   var calcEval = function (text) {
@@ -3340,7 +3645,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     }
   };
 
-  /* Pilot: Notepad (tersimpan otomatis di browser localStorage) */
+  /* Pilot: Notepad */
   document.getElementById("pn-note").addEventListener("input", function () { fit(this); });
 
   document.getElementById("clear-note").addEventListener("click", function () {
@@ -3350,7 +3655,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     el.focus();
   });
 
-  /* Simpan input di localStorage (hanya nilai yang berbeda dari default) */
+  /* Simpan input di localStorage */
   var STORE_KEY = "bdo-game-pilot:inputs";
   var readStore = function () {
     try {
@@ -3372,11 +3677,14 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       var target = document.getElementById(cb.getAttribute("aria-controls"));
       if (target) target.disabled = !cb.checked;
     });
+
     /* Hourly tanpa Agris: item dan patokan Agris aktif jika 100% Drop Amount dicentang */
     var hdOn = document.getElementById("h-drop-on").checked;
     document.getElementById("h-drop").disabled = !hdOn;
     document.getElementById("h-drate").disabled = !hdOn;
-    /* Silver (TL & RNG): kolom nilai aktif jika opsi dicentang dan Hitung manual mati; kotak manual aktif jika keduanya dicentang */    ["sv-o1", "sv-o2", "sv-o3", "sv-o4"].forEach(function (id) {
+
+    /* Silver (TL & RNG): kolom nilai aktif jika opsi dicentang dan Hitung manual mati; kotak manual aktif jika keduanya dicentang */
+    ["sv-o1", "sv-o2", "sv-o3", "sv-o4"].forEach(function (id) {
       var on = document.getElementById(id + "-on").checked;
       var manual = document.getElementById(id + "-m-on");
       var useManual = on && manual.checked;
@@ -3466,6 +3774,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     document.getElementById("reset-" + x[0].replace("form-", "")).addEventListener("click", function () {
       var data = readStore();
       Array.prototype.forEach.call(form.querySelectorAll("input, select, textarea:not([readonly])"), function (el) {
+        if (el.id === "rp-import-text") return;
         if (el.tagName === "SELECT") el.value = selectDefault(el);
         else if (el.type === "checkbox") el.checked = el.defaultChecked;
         else el.value = el.defaultValue;
@@ -3477,9 +3786,10 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       fitAll();
     });
 
-    document.getElementById("clear-" + x[0].replace("form-", "")).addEventListener("click", function () {
+document.getElementById("clear-" + x[0].replace("form-", "")).addEventListener("click", function () {
       var data = readStore();
       Array.prototype.forEach.call(form.querySelectorAll("input, select, textarea:not([readonly])"), function (el) {
+        if (el.id === "rp-import-text") return;
         if (el.tagName === "SELECT") {
           var hasCustom = Array.prototype.some.call(el.options, function (o) { return o.value === "custom"; });
           if (!hasCustom) return;
