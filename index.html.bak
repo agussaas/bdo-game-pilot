@@ -956,6 +956,8 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <legend>Login</legend>
 <p><label for="lg-pilot">Pilot:</label> <select id="lg-pilot" name="pilot" aria-label="Pilih data pilot (Login)">
 <option value="agus" selected>AGUS</option>
+<option value="ali">ALI</option>
+<option value="denis">DENIS</option>
 <option value="custom">Edit (custom)</option>
 </select></p>
 <p><label for="lg-nama">Nama:</label> <input type="text" id="lg-nama" name="nama" value="AGUS"></p>
@@ -978,6 +980,8 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <legend>Logout</legend>
 <p><label for="lo-pilot">Pilot:</label> <select id="lo-pilot" name="pilot" aria-label="Pilih data pilot (Logout)">
 <option value="agus" selected>AGUS</option>
+<option value="ali">ALI</option>
+<option value="denis">DENIS</option>
 <option value="custom">Edit (custom)</option>
 </select></p>
 <p><label for="lo-login">No Login:</label> <input type="text" id="lo-login" name="login" value=""></p>
@@ -1044,6 +1048,8 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <legend>Input</legend>
 <p><label for="rp-pilot">Pilot:</label> <select id="rp-pilot" name="pilot" aria-label="Pilih data pilot (Laporan)">
 <option value="agus" selected>AGUS</option>
+<option value="ali">ALI</option>
+<option value="denis">DENIS</option>
 <option value="custom">Edit (custom)</option>
 </select></p>
 <p><label for="rp-login">No Login:</label> <input type="text" id="rp-login" name="login" value=""></p>
