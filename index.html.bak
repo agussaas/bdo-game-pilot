@@ -3209,8 +3209,8 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 
     var tail = [""].concat(list("Keterangan", "rp-ket"), [
       "",
-      "Class : " + v("rp-class"),
-      (farm ? "Grinding Spot : " : "Grinding Spot: ") + spot,
+      "Class : " + v("rp-class").toUpperCase(),
+      (farm ? "Grinding Spot : " : "Grinding Spot : ") + spot,
       (farm ? "Agris yang Digunakan : " : "Agris Yang Digunakan : ") + v("rp-agris"),
       ""
     ], list("Kendala", "rp-kendala"), [""], list("Note", "rp-note"));
