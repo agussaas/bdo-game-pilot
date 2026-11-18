@@ -18,6 +18,22 @@
 <link rel="manifest" href="site.webmanifest">
 
 <style>
+/* Fallback warna untuk browser tanpa light-dark() */
+:root { --bg: #ffffff; --fg: #1a1a1a; --ctl: #f3f3f3; --bd: #6b6b6b; --sel-bg: #1a1a1a; --sel-fg: #ffffff; }
+.up { color: #0b6b2b; }
+.down, .red { color: #b00020; }
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #121212; --fg: #ededed; --ctl: #262626; --bd: #9a9a9a; --sel-bg: #ededed; --sel-fg: #121212; }
+  .up { color: #6fe39a; }
+  .down, .red { color: #ff8a8a; }
+}
+:root[data-theme="light"] { --bg: #ffffff; --fg: #1a1a1a; --ctl: #f3f3f3; --bd: #6b6b6b; --sel-bg: #1a1a1a; --sel-fg: #ffffff; }
+:root[data-theme="light"] .up { color: #0b6b2b; }
+:root[data-theme="light"] .down, :root[data-theme="light"] .red { color: #b00020; }
+:root[data-theme="dark"] { --bg: #121212; --fg: #ededed; --ctl: #262626; --bd: #9a9a9a; --sel-bg: #ededed; --sel-fg: #121212; }
+:root[data-theme="dark"] .up { color: #6fe39a; }
+:root[data-theme="dark"] .down, :root[data-theme="dark"] .red { color: #ff8a8a; }
+
 /* Reset */
 :root { color-scheme: light dark; }
 :root[data-theme="light"] { color-scheme: light; }
@@ -150,6 +166,24 @@ details p:has(> label:only-child) > label { padding-top: 0; }
 try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved === "dark") document.documentElement.setAttribute("data-theme", saved); } catch (e) {}
 </script>
 
+<script>
+/* Cek browser: BigInt, regex \p{} dan matchAll wajib ada */
+(function () {
+  var ok = true;
+  try {
+    new Function("return 1n + 1n");
+    new RegExp("\\p{Nd}", "u");
+    if (!"".matchAll) ok = false;
+  } catch (e) { ok = false; }
+  if (ok) return;
+  document.addEventListener("DOMContentLoaded", function () {
+    var d = document.createElement("p");
+    d.setAttribute("role", "alert");
+    d.textContent = "Browser kamu terlalu lama untuk tool ini. Perbarui browser (Chrome, Edge, Firefox, atau Safari terbaru) supaya semua tab berfungsi.";
+    document.body.insertBefore(d, document.body.firstChild);
+  });
+})();
+</script>
 </head>
 
 <body>
@@ -203,6 +237,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li>Play dulu 1–3 detik, yang penting stopwatch udah jalan</li>
 <li>Buka browser console, tekan <strong>F12</strong></li>
 <li>Paste, ketik <code>allow pasting</code> terus enter jika tidak bisa paste</li>
+<li class="red">Hanya paste kode dari tab ini. Jangan pernah paste kode dari orang yang tidak dikenal ke browser console, karena bisa dipakai untuk mencuri akun kamu</li>
 <li>Jika <strong>F12</strong> membuka tab <em>Elements</em>, klik pada tab <em>Console</em> untuk membuka browser console</li>
 </ul>
 <figure>
@@ -792,6 +827,10 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <ul>
 <li>1 Jam <code>500</code> Coral</li>
 </ul>
+<p><strong>Tenebraum</strong></p>
+<ul>
+<li>1 Jam LS2 <code>10,000</code> TL</li>
+</ul>
 <p><strong>Zephyros</strong></p>
 <ul>
 <li>1 Jam LS2 <code>13,000</code> TL</li>
@@ -1039,6 +1078,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li>PC 12 = <code>14112</code></li>
 </ul>
 </li>
+</ul>
 </section>
 
 <!-- Laporan -->
@@ -1057,7 +1097,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <legend>Import</legend>
 <p><textarea id="rp-import-text" rows="4" cols="40" placeholder="Paste laporan di sini"></textarea></p>
 <p><button type="button" id="btn-import-laporan">Load</button> <button type="button" id="clear-import">Clear</button></p>
-<p><label for="rp-import-log"><strong>Keterangan:</strong></label><textarea id="rp-import-log" name="import-log" readonly></textarea></p>
+<p><label for="rp-import-log"><strong>Logs:</strong></label><textarea id="rp-import-log" name="import-log" readonly></textarea></p>
 </fieldset>
 <p><label for="rp-login">No Login:</label> <input type="text" id="rp-login" name="login" value=""></p>
 <p><label for="rp-order">No Order:</label> <input type="text" id="rp-order" name="order" value=""></p>
@@ -1103,7 +1143,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li>Field yang dikosongkan akan tampil <code>-</code> di output, kecuali Progress, TL, Class, dan Agris yang selalu mengikuti isi form</li>
 <li>Keterangan, Kendala, dan Note: tulis hanya satu per baris, jika kosong: <code>-</code></li>
 <li>Form import laporan hanya support <em>HOURLY</em> dan <em>FARM</em></li>
-<li>Bagian <em>No Login</em>, <em>Nama</em>, <em>Divisi</em>, <em>No Absen</em>, <em>Crysal (Replace/Broken)</em> tidak di parse di form load import</li>
+<li>Bagian <em>No Login</em>, <em>Nama</em>, <em>Divisi</em>, <em>No Absen</em>, <em>Agris yang digunakan</em>, <em>Crystal (Replace/Broken)</em> tidak di parse di form load import</li>
 </ul>
 </section>
 
@@ -1144,9 +1184,10 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li>Satuan ditulis langsung setelah angka tanpa spasi: <code>k</code> (ribu), <code>m</code> (juta), <code>b</code> (miliar), <code>t</code> (triliun), contoh <code>500k</code>, <code>1.5m</code>, <code>2b</code></li>
 <li>Angka memakai titik sebagai desimal (<code>12.5</code>). Koma dianggap pemisah ribuan, jadi <code>1,000,000</code> sama dengan <code>1000000</code></li>
 <li><code>%</code> hanya membagi angka di depannya dengan 100. Untuk menambah persen tulis lengkap: <code>200 + 200 * 10%</code> = 220, bukan <code>200 + 10%</code> yang hasilnya 200.1</li>
-<li>Hasil di atas 1,000 ditampilkan: <code>K</code> ribu, <code>M</code> juta, <code>B</code> miliar (dalam kurung)</li>
+<li>Hasil di atas 1,000 ditampilkan: <code>K</code> ribu, <code>M</code> juta, <code>B</code> miliar, <code>T</code> triliun (dalam kurung)</li>
 <li>Jika salah tulis, Result otomatis menampilkan <em>error message</em>, misalnya kurung kurang, karakter tidak dikenal, atau tidak bisa dibagi nol</li>
 <li>Contoh: <code>1.5b * 65%</code> hasilnya <samp>975,000,000 (975 M)</samp>, <code>(5m + 250k) * 2</code> hasilnya <samp>10,500,000 (10.5 M)</samp>, <code>100 / 8</code> hasilnya <samp>12.5</samp></li>
+</ul>
 </section>
 
 </main>
@@ -1157,7 +1198,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li><a href="https://t.me/+Xmmz3gE42BYzNmM1" target="_blank" rel="noopener noreferrer">Telegram Channel</a></li>
 <li><a href="http://t.me/Agus_HK059" target="_blank" rel="noopener noreferrer">AGUS</a></li>
 </ul>
-<p><em>Use at on your own risk!</em></p>
+<p><em>Use at your own risk!</em></p>
 <p><button type="button" id="help-close">Tutup</button></p>
 </dialog>
 <dialog id="verify-dialog" aria-labelledby="verify-title">
@@ -1177,8 +1218,14 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     el.style.height = (el.scrollHeight + el.offsetHeight - el.clientHeight) + "px";
   };
   var fitAll = function () {
-    Array.prototype.forEach.call(document.querySelectorAll("textarea"), fit);
+    var list = Array.prototype.filter.call(document.querySelectorAll("textarea"), function (el) { return el.clientWidth; });
+    list.forEach(function (el) { el.style.height = "auto"; });
+    var heights = list.map(function (el) { return el.scrollHeight + el.offsetHeight - el.clientHeight; });
+    list.forEach(function (el, k) { el.style.height = heights[k] + "px"; });
   };
+
+  /* Detik dari jam, toleran error float (mis. 31744.999999999) */
+  var floorSec = function (h) { return Math.floor(h * 3600 + 1e-7); };
 
   /* Textarea untuk perhitungan per langkah */
   var fill = function (prefix, lines, count) {
@@ -1284,6 +1331,8 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       var n = null;
       if (ev.key === "ArrowRight") n = tabs[(i + 1) % tabs.length];
       if (ev.key === "ArrowLeft") n = tabs[(i + tabs.length - 1) % tabs.length];
+      if (ev.key === "Home") n = tabs[0];
+      if (ev.key === "End") n = tabs[tabs.length - 1];
       if (n) { ev.preventDefault(); activate(n); n.focus(); }
     });
   });
@@ -1950,7 +1999,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     }
     var totalHours = dropOn ? hoursWith + hoursWithout : t / p;
 
-    var totalSeconds = Math.floor(totalHours * 3600);
+    var totalSeconds = floorSec(totalHours);
     var hours = Math.floor(totalSeconds / 3600);
     var minutes = Math.floor((totalSeconds % 3600) / 60);
     var seconds = totalSeconds % 60;
@@ -2013,30 +2062,28 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     var maxAgrisHours = agrisHours + dropItems;
     var maxAgrisTL = maxAgrisHours * agrisRate;
 
-    var agrisTL = 0;
+    
     var normalTL = 0;
     var hoursWithAgris = 0;
     var hoursWithoutAgris = 0;
 
     if (totalTL <= maxAgrisTL) {
-      agrisTL = totalTL;
-      hoursWithAgris = agrisTL / agrisRate;
+      hoursWithAgris = totalTL / agrisRate;
     } else {
-      agrisTL = maxAgrisTL;
       normalTL = totalTL - maxAgrisTL;
       hoursWithAgris = maxAgrisHours;
       hoursWithoutAgris = normalTL / normalRate;
     }
 
     var formatHours = function (h) {
-      var totalSecs = Math.floor(h * 3600);
+      var totalSecs = floorSec(h);
       var hrs = Math.floor(totalSecs / 3600);
       var mins = Math.floor((totalSecs % 3600) / 60);
       var secs = totalSecs % 60;
       return hrs + " Hours " + mins + " Minutes " + secs + " Seconds";
     };
 
-    var totalSeconds = Math.floor((hoursWithAgris + hoursWithoutAgris) * 3600);
+    var totalSeconds = floorSec(hoursWithAgris + hoursWithoutAgris);
     var hours = Math.floor(totalSeconds / 3600);
     var minutes = Math.floor((totalSeconds % 3600) / 60);
     var seconds = totalSeconds % 60;
@@ -2046,7 +2093,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     withoutA.value = formatHours(hoursWithoutAgris);
 
     var breakdown = function (h) {
-      var secs = Math.floor(h * 3600);
+      var secs = floorSec(h);
       return [
         "floor(" + h + " × 3600) = " + secs,
         "floor(" + secs + " ÷ 3600) = " + Math.floor(secs / 3600),
@@ -2105,6 +2152,8 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     var x = document.getElementById("t-now").value.replace(/,/g, "");
     if (!x) { out.value = ""; fill("t-s", [], 5); return; }
 
+    var okT = /^\s*(?:\d+\s*[hm][a-z]*\s*)+$/i;
+    if (!okT.test(i) || !okT.test(x)) { out.value = "Invalid input."; fill("t-s", [], 5); return; }
     var totalMinutes = p(i) + p(x);
     var hours = Math.floor(totalMinutes / 60);
     var minutes = totalMinutes % 60;
@@ -2133,20 +2182,20 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       return String((cp - start) % 10);
     }).join("");
   };
-  var pyFloat = function (text) {
+  var parseFloatStrict = function (text) {
     var t = asciiDigits(text.trim());
     if (/^[+-]?(inf|infinity)$/i.test(t)) return t.charAt(0) === "-" ? -Infinity : Infinity;
     if (/^[+-]?nan$/i.test(t)) return NaN;
     return /^[+-]?(\d+\.?\d*|\.\d+)(e[+-]?\d+)?$/.test(t) ? Number(t) : NaN;
   };
-  var pyRound = function (x) {
+  var roundHalfEven = function (x) {
     var r = Math.round(x);
     return (Math.abs(x % 1) === 0.5 && r % 2 !== 0) ? r - 1 : r;
   };
 
   var parseDuration = function (text, defaultUnit, label, allowZero) {
     var cleaned = text.trim().toLowerCase().replace(/[,_]/g, "");
-    if (!cleaned) throw new Error("missing " + label);
+    if (!cleaned) throw new Error(label + " belum diisi");
 
     var unit = defaultUnit;
     var last = cleaned.charAt(cleaned.length - 1);
@@ -2155,23 +2204,23 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       cleaned = cleaned.slice(0, -1);
     }
 
-    var value = pyFloat(cleaned);
-    if (isNaN(value)) throw new Error("'" + text + "' is not a valid " + label);
-    var seconds = value * DURATION_UNITS[unit];
+    var value = parseFloatStrict(cleaned);
+    if (isNaN(value)) throw new Error("'" + text + "' bukan " + label + " yang valid");
+    var seconds = Number((value * DURATION_UNITS[unit]).toPrecision(15));
 
-    if (!isFinite(seconds)) throw new Error("'" + text + "' is not a valid " + label);
+    if (!isFinite(seconds)) throw new Error("'" + text + "' bukan " + label + " yang valid");
     if (allowZero) {
-      if (seconds < 0) throw new Error(label + " cannot be negative");
+      if (seconds < 0) throw new Error(label + " tidak boleh negatif");
     } else if (seconds <= 0) {
-      throw new Error(label + " must be greater than zero");
+      throw new Error(label + " harus lebih dari nol");
     }
-    if (seconds > MAX_SECONDS) throw new Error(label + " is too large");
+    if (seconds > MAX_SECONDS) throw new Error(label + " terlalu besar");
     return { value: value, mult: DURATION_UNITS[unit], seconds: seconds };
   };
 
   var parsePrice = function (text) {
     var cleaned = text.trim().toLowerCase().replace(/[,_]/g, "");
-    if (!cleaned) throw new Error("missing price");
+    if (!cleaned) throw new Error("harga belum diisi");
 
     var mult = 1;
     var last = cleaned.charAt(cleaned.length - 1);
@@ -2180,18 +2229,18 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       cleaned = cleaned.slice(0, -1);
     }
 
-    var value = pyFloat(cleaned);
-    if (isNaN(value)) throw new Error("'" + text + "' is not a valid price");
-    var price = value * mult;
+    var value = parseFloatStrict(cleaned);
+    if (isNaN(value)) throw new Error("'" + text + "' bukan harga yang valid");
+    var price = Number((value * mult).toPrecision(15));
 
-    if (!isFinite(price)) throw new Error("'" + text + "' is not a valid price");
-    if (price <= 0) throw new Error("price must be greater than zero");
-    if (price > 1e15) throw new Error("price is too large");
+    if (!isFinite(price)) throw new Error("'" + text + "' bukan harga yang valid");
+    if (price <= 0) throw new Error("harga harus lebih dari nol");
+    if (price > 1e15) throw new Error("harga terlalu besar");
     return { value: value, mult: mult, price: BigInt(Math.trunc(price)) };
   };
 
   var fmtDuration = function (seconds) {
-    var total = pyRound(seconds);
+    var total = roundHalfEven(seconds);
     var hours = Math.floor(total / 3600);
     var rem = total % 3600;
     var minutes = Math.floor(rem / 60);
@@ -2217,15 +2266,15 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 
     var shift, duration, cooldown, priceText, price, cycle, ratio, count;
     try {
-      shift = parseDuration(document.getElementById("b-shift").value, "h", "shift length", false);
-      duration = parseDuration(document.getElementById("b-duration").value, "m", "buff duration", false);
+      shift = parseDuration(document.getElementById("b-shift").value, "h", "durasi shift", false);
+      duration = parseDuration(document.getElementById("b-duration").value, "m", "durasi buff", false);
       cooldown = parseDuration(document.getElementById("b-cooldown").value, "s", "cooldown", true);
       priceText = document.getElementById("b-price").value;
       price = priceText.trim() ? parsePrice(priceText) : null;
 
       cycle = duration.seconds + cooldown.seconds;
-      ratio = shift.seconds / cycle;
-      if (!isFinite(ratio)) throw new Error("result is too large");
+      ratio = Number((shift.seconds / cycle).toPrecision(12));
+      if (!isFinite(ratio)) throw new Error("hasil terlalu besar");
       count = Math.max(1, Math.ceil(ratio));
     } catch (e) {
       clearAll(e.message);
@@ -2264,6 +2313,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
   var TAX_VP = 0.30;
   var TAX_RING = 0.05;
   var TAX_FAME = { 1: 0.005, 2: 0.010, 3: 0.015 };
+  var TAX_FAME_MIL = { 1: 5, 2: 10, 3: 15 };
   var TAX_FAME_PCT = { 1: "0.5%", 2: "1.0%", 3: "1.5%" };
   var TAX_SUFFIXES = { k: 1000, m: 1000000, b: 1000000000, t: 1000000000000 };
 
@@ -2276,7 +2326,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 
   var parseTaxPrice = function (text) {
     var cleaned = text.trim().toLowerCase().replace(/[,_]/g, "");
-    if (!cleaned) throw new Error("missing price");
+    if (!cleaned) throw new Error("harga belum diisi");
 
     var mult = 1;
     var last = cleaned.charAt(cleaned.length - 1);
@@ -2285,20 +2335,20 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       cleaned = cleaned.slice(0, -1);
     }
 
-    var value = pyFloat(cleaned);
-    if (isNaN(value)) throw new Error("'" + text + "' is not a valid price");
-    var price = value * mult;
+    var value = parseFloatStrict(cleaned);
+    if (isNaN(value)) throw new Error("'" + text + "' bukan harga yang valid");
+    var price = Number((value * mult).toPrecision(15));
 
-    if (isNaN(price)) throw new Error("'" + text + "' is not a valid price");
-    if (price <= 0) throw new Error("price must be greater than zero");
-    if (price > 1e15) throw new Error("price is too large");
+    if (isNaN(price)) throw new Error("'" + text + "' bukan harga yang valid");
+    if (price <= 0) throw new Error("harga harus lebih dari nol");
+    if (price > 1e15) throw new Error("harga terlalu besar");
     return { value: value, mult: mult, price: Math.trunc(price) };
   };
 
   var parseTaxFlags = function (tokens) {
     var o = { vp: false, ring: false, fame: 0, famePoints: null };
     tokens.forEach(function (raw) {
-      var token = raw.trim().toLowerCase();
+      var token = raw.trim().toLowerCase().replace(/,/g, "");
       if (token === "vp") {
         o.vp = true;
       } else if (token === "ring") {
@@ -2310,18 +2360,18 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
         o.famePoints = BigInt(asciiDigits(token));
         o.fame = fameTier(o.famePoints);
       } else {
-        throw new Error("unknown option '" + token + "' \u2014 use: vp, ring, fame1, fame2, fame3, " +
-          "or your Family Fame points (e.g. 4500)");
+        throw new Error("Opsi tidak dikenal '" + token + "' \u2014 pakai: vp, ring, fame1, fame2, fame3, " +
+          "atau poin Family Fame (contoh 4500)");
       }
     });
     return o;
   };
 
   var taxBreakdown = function (price, vp, ring, fame, famePoints) {
-    var profit = price * TAX_BASE;
-    var vpBonus = vp ? profit * TAX_VP : 0;
-    var ringBonus = ring ? profit * TAX_RING : 0;
-    var fameBonus = fame ? profit * TAX_FAME[fame] : 0;
+    var profit = price * 65 / 100;
+    var vpBonus = vp ? profit * 30 / 100 : 0;
+    var ringBonus = ring ? profit * 5 / 100 : 0;
+    var fameBonus = fame ? profit * TAX_FAME_MIL[fame] / 1000 : 0;
     var total = profit + vpBonus + ringBonus + fameBonus;
     return {
       price: price, tax: price - profit, profit: profit,
@@ -2330,7 +2380,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     };
   };
 
-  var money = function (value) { return pyRound(value).toLocaleString("en-US"); };
+  var money = function (value) { return roundHalfEven(value).toLocaleString("en-US"); };
 
   var put = function (id, text) {
     if (!id) return;
@@ -2382,7 +2432,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     if (r.fameBonus) terms.push(String(r.fameBonus));
     put(ids.total, terms.length > 1 ? terms.join(" + ") + " = " + r.total : null);
     put(ids.rate, r.total + " ÷ " + r.price + " = " + r.rate);
-    put(ids.pct, r.rate + " × 100 = " + (r.rate * 100));
+    put(ids.pct, r.rate + " × 100 = " + Number((r.rate * 100).toPrecision(12)));
   };
 
   var OUT1 = { price: "d-o1", tax: "d-o2", profit: "d-o3", vp: "d-o4", ring: "d-o5", fame: "d-o6", receive: "d-o7" };
@@ -2395,7 +2445,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     try {
       parsed = parseTaxPrice(document.getElementById("d-price").value);
       options = parseTaxFlags(document.getElementById("d-options").value.split(/\s+/).filter(function (t) { return t; }));
-      if (parsed.price === 0) throw new Error("price must be greater than zero");
+      if (parsed.price === 0) throw new Error("harga harus lebih dari nol");
     } catch (e) {
       Object.keys(OUT1).forEach(function (k) { put(OUT1[k], null); });
       Object.keys(OUT2).forEach(function (k) { put(OUT2[k], null); });
@@ -2454,6 +2504,12 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     var start = Number(a);
     var end = Number(b);
     var gain = end - start;
+    if (gain < 0) {
+      out.value = "TL akhir lebih kecil dari TL awal";
+      hidePrice();
+      put("tl-s1", null);
+      return;
+    }
     out.value = gain.toLocaleString("en-US");
     put("tl-s1", end + " − " + start + " = " + gain);
 
@@ -2486,7 +2542,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
   /* 8. Compen */
   var parseSilver = function (text, label, allowZero) {
     var cleaned = text.trim().toLowerCase().replace(/[,_]/g, "");
-    if (!cleaned) throw new Error("missing " + label);
+    if (!cleaned) throw new Error(label + " belum diisi");
 
     var mult = 1;
     var last = cleaned.charAt(cleaned.length - 1);
@@ -2495,19 +2551,19 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       cleaned = cleaned.slice(0, -1);
     }
 
-    var value = pyFloat(cleaned);
-    if (isNaN(value)) throw new Error("'" + text + "' is not a valid " + label);
-    var amount = value * mult;
+    var value = parseFloatStrict(cleaned);
+    if (isNaN(value)) throw new Error("'" + text + "' bukan " + label + " yang valid");
+    var amount = Number((value * mult).toPrecision(15));
 
-    if (!isFinite(amount)) throw new Error("'" + text + "' is not a valid " + label);
+    if (!isFinite(amount)) throw new Error("'" + text + "' bukan " + label + " yang valid");
     if (allowZero) {
-      if (amount < 0) throw new Error(label + " cannot be negative");
+      if (amount < 0) throw new Error(label + " tidak boleh negatif");
     } else if (amount <= 0) {
-      throw new Error(label + " must be greater than zero");
+      throw new Error(label + " harus lebih dari nol");
     }
-    if (amount > 1e15) throw new Error(label + " is too large");
+    if (amount > 1e15) throw new Error(label + " terlalu besar");
     var whole = BigInt(Math.trunc(amount));
-    if (!allowZero && whole === 0n) throw new Error(label + " must be greater than zero");
+    if (!allowZero && whole === 0n) throw new Error(label + " harus lebih dari nol");
     return { value: value, mult: mult, amount: whole };
   };
 
@@ -2520,7 +2576,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     try {
       compen = parseSilver(document.getElementById("cp-compen").value, "compen");
       var priceText = document.getElementById("cp-price").value;
-      price = priceText.trim() ? parseSilver(priceText, "TL price") : null;
+      price = priceText.trim() ? parseSilver(priceText, "harga TL") : null;
     } catch (e) {
       outs.forEach(function (id) { put(id, null); });
       steps.forEach(function (id) { put(id, null); });
@@ -3005,7 +3061,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     var other = next === "kpi" ? "avg" : "kpi";
     var carried = kpiCompute(kpiRows)[i][next];
     kpiRows[i].mode = next;
-    kpiRows[i][next] = carried === null ? "" : carried.toFixed(2);
+    kpiRows[i][next] = carried === null ? "" : kpiFmt(carried);
     kpiRows[i][other] = "";
     kpiSave();
     kpiRefresh();
@@ -3119,7 +3175,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       "Login",
       "Nama: " + v("lg-nama"),
       "Divisi: " + v("lg-divisi"),
-      "No Absen : " + v("lg-absen"),
+      "No Absen: " + v("lg-absen"),
       "No Order: " + v("lg-order")
     ].join("\n");
   };
@@ -3157,6 +3213,26 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
   });
   document.getElementById("lo-pilot").addEventListener("change", function () {
     applyPilot("lo-pilot", { "lo-nama": "nama", "lo-divisi": "divisi", "lo-absen": "absen" });
+  });
+
+  /* Edit manual Nama/Divisi/No Absen: dropdown Pilot pindah ke custom */
+  [["lg", "lg-pilot"], ["lo", "lo-pilot"], ["rp", "rp-pilot"]].forEach(function (g) {
+    ["nama", "divisi", "absen"].forEach(function (f) {
+      document.getElementById(g[0] + "-" + f).addEventListener("input", function () {
+        setTimeout(function () {
+          var sel = document.getElementById(g[1]);
+          var p = PILOTS[sel.value];
+          if (!p) return;
+          var differs = ["nama", "divisi", "absen"].some(function (k) {
+            return document.getElementById(g[0] + "-" + k).value !== p[k];
+          });
+          if (differs) {
+            sel.value = "custom";
+            sel.dispatchEvent(new Event("change", { bubbles: true }));
+          }
+        }, 0);
+      });
+    });
   });
 
   /* Output Login/Logout: klik otomatis langsung di copy */
@@ -3260,7 +3336,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     var tail = [""].concat(list("Keterangan", "rp-ket"), [
       "",
       "Class : " + v("rp-class").toUpperCase(),
-      (farm ? "Grinding Spot : " : "Grinding Spot : ") + spot,
+      "Grinding Spot : " + spot,
       (farm ? "Agris yang Digunakan : " : "Agris Yang Digunakan : ") + v("rp-agris"),
       ""
     ], list("Kendala", "rp-kendala"), [""], list("Note", "rp-note"));
@@ -3300,6 +3376,9 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     logs = [];
 
     // A. Kosongkan field input form
+    document.getElementById("rp-order").value = "";
+    document.getElementById("rp-class").value = "";
+    document.getElementById("rp-spot").value = "";
     document.getElementById("rp-progress").value = "";
     document.getElementById("rp-p-spot").value = "";
     document.getElementById("rp-ls").value = "";
@@ -3338,7 +3417,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     }
 
     // D. Parse Class
-    var matchClass = rawText.match(/(?:Class|Character)\s*:\s*(.+)/i);
+    var matchClass = rawText.match(/(?:^|\n)[ \t]*(?:Class|Character)\s*:\s*(.+)/i);
     if (matchClass) {
       document.getElementById("rp-class").value = matchClass[1].trim();
       logThis("[OK] Class: " + matchClass[1].trim());
@@ -3347,7 +3426,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     }
 
     // E. Parse Grinding Spot
-    var matchSpot = rawText.match(/Grinding Spot\s*:\s*(.+)/i) || rawText.match(/Spot\s*:\s*(.+)/i);
+    var matchSpot = rawText.match(/(?:^|\n)[ \t]*Grinding Spot\s*:\s*(.+)/i) || rawText.match(/(?:^|\n)[ \t]*Spot\s*:\s*(.+)/i);
     if (matchSpot) {
       document.getElementById("rp-spot").value = matchSpot[1].trim();
       logThis("[OK] Grinding Spot: " + matchSpot[1].trim());
@@ -3355,16 +3434,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       logThis("[FAILED] Grinding Spot tidak ditemukan");
     }
 
-    // F. Parse Agris yang digunakan
-    var matchAgris = rawText.match(/Agris\s*(?:yang\s*[dD]igunakan)?\s*:\s*(.+)/i);
-    if (matchAgris) {
-      document.getElementById("rp-agris").value = matchAgris[1].trim();
-      logThis("[OK] Agris: " + matchAgris[1].trim());
-    } else {
-      logThis("[FAILED] Agris tidak ditemukan");
-    }
-
-    // G. Parse Total Hours / Target seluruhnya
+    // F. Parse Total Hours / Target seluruhnya
     if (jobType === "FARM") {
       var matchSell = rawText.match(/Sell in storage\s*:\s*(.+)/i);
       if (matchSell) {
@@ -3382,7 +3452,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
         logThis("[FAILED] Listed CM (TAX) tidak ditemukan");
       }
 
-      var matchKeep = rawText.match(/Keep\s*:\s*(.+)/i);
+      var matchKeep = rawText.match(/(?:^|\n)[ \t]*Keep\s*:\s*(.+)/i);
       if (matchKeep) {
         document.getElementById("rp-keep").value = matchKeep[1].trim();
         logThis("[OK] Keep: " + matchKeep[1].trim());
@@ -3411,7 +3481,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       }
     }
 
-    // H. Parse Progress
+    // G. Parse Progress
     var matchFullProg = rawText.match(/Progress\s*:\s*([^\(\n]+)(?:\(([^)]+)\))?/i);
     if (matchFullProg) {
       if (matchFullProg[1]) {
@@ -3421,23 +3491,28 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       
       if (matchFullProg[2]) {
         var insideParen = matchFullProg[2];
-        var beforeSlash = insideParen.split("/")[0].trim();
-        
-        beforeSlash = beforeSlash.replace(/,/g, " ").replace(/\s+/g, " ");
-        var tokens = beforeSlash.split(" ");
-
-        var startIndex = 0;
-        if (tokens.length > 0 && tokens[0].toUpperCase().startsWith("LS")) {
-          document.getElementById("rp-ls").value = tokens[0];
-          startIndex = 1;
+        var isNum = function (x) { return x !== "" && !isNaN(x.replace(/,/g, "")); };
+        var splitC = function (str) {
+          return str.split(/,(?!\d{3}\b)/).map(function (x) { return x.trim(); }).filter(function (x) { return x; });
+        };
+        var slashParts = insideParen.split("/");
+        var headParts = splitC(slashParts[0]);
+        var buffParts = slashParts.length > 1 ? splitC(slashParts.slice(1).join("/")).slice(1) : [];
+        var firstPart = headParts.shift() || "";
+        var firstTok = firstPart.split(/\s+/).filter(function (x) { return x; });
+        var spotStr = firstPart;
+        if (firstTok.length && firstTok[0].toUpperCase().indexOf("LS") === 0) {
+          document.getElementById("rp-ls").value = firstTok[0];
+          spotStr = firstTok.slice(1).join(" ") || headParts.shift() || "";
         }
+        if (slashParts.length === 1) buffParts = headParts;
+        if (buffParts.length) document.getElementById("rp-buff").value = buffParts.join(", ");
+        var restTokens = spotStr.split(/\s+/).filter(function (x) { return x; });
 
-        var restTokens = tokens.slice(startIndex);
-
-        if (restTokens.length >= 2 && restTokens[restTokens.length - 1].toUpperCase() === "K" && !isNaN(restTokens[restTokens.length - 2])) {
+        if (restTokens.length >= 2 && restTokens[restTokens.length - 1].toUpperCase() === "K" && isNum(restTokens[restTokens.length - 2])) {
           document.getElementById("rp-tl").value = restTokens.slice(-2).join(" ");
           document.getElementById("rp-p-spot").value = restTokens.slice(0, -2).join(" ");
-        } else if (restTokens.length >= 2 && !isNaN(restTokens[restTokens.length - 1])) {
+        } else if (restTokens.length >= 2 && isNum(restTokens[restTokens.length - 1])) {
           document.getElementById("rp-tl").value = restTokens[restTokens.length - 1];
           document.getElementById("rp-p-spot").value = restTokens.slice(0, -1).join(" ");
         } else if (restTokens.length > 0) {
@@ -3449,8 +3524,8 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       logThis("[FAILED] Progress tidak ditemukan");
     }
 
-    // I. Parse Keterangan
-    var matchKet = rawText.match(/Keterangan\s*:\s*\n?([\s\S]*?)(?=\n\s*(?:Class\s*:|Character\s*:|Grinding Spot\s*:|Agris|Kendala|Note|================|$))/i);
+    // H. Parse Keterangan
+    var matchKet = rawText.match(/(?:^|\n)[ \t]*Keterangan\s*:\s*\n?([\s\S]*?)(?=\n\s*(?:Class\s*:|Character\s*:|Grinding Spot\s*:|Agris[^\n:]*:|Kendala\s*:|Note\s*:|======|$))/i);
     if (matchKet) {
       var ketText = matchKet[1].trim();
       if (ketText && ketText !== "-" && !/^(?:Class|Character)\s*:/i.test(ketText)) {
@@ -3464,8 +3539,8 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       logThis("[FAILED] Keterangan tidak ditemukan");
     }
 
-    // J. Parse Kendala
-    var matchKendala = rawText.match(/Kendala\s*:\s*\n?([\s\S]*?)(?=\n\s*(?:Class|Grinding Spot|Agris|Keterangan|Note|================|$))/i);
+    // I. Parse Kendala
+    var matchKendala = rawText.match(/(?:^|\n)[ \t]*Kendala\s*:\s*\n?([\s\S]*?)(?=\n\s*(?:Class\s*:|Character\s*:|Grinding Spot\s*:|Agris[^\n:]*:|Keterangan\s*:|Note\s*:|======|$))/i);
     if (matchKendala) {
       var kendalaText = matchKendala[1].trim();
       if (kendalaText && kendalaText !== "-") {
@@ -3479,8 +3554,8 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       logThis("[FAILED] Kendala tidak ditemukan");
     }
 
-    // K. Parse Note
-    var matchNote = rawText.match(/Note\s*:\s*\n?([\s\S]*?)$/i);
+    // J. Parse Note
+    var matchNote = rawText.match(/(?:^|\n)[ \t]*Note[ \t]*:[ \t]*\n?([\s\S]*)/i);
     if (matchNote) {
       var noteContent = matchNote[1].trim();
       if (noteContent && noteContent !== "-") {
@@ -3494,7 +3569,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       logThis("[FAILED] Note tidak ditemukan");
     }
 
-    // L. Simpan ke localStorage
+    // K. Simpan ke localStorage
     calcLaporan();
 
     var storeData = readStore();
@@ -3627,7 +3702,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     var full = r.toLocaleString("en-US", { maximumFractionDigits: 10 });
     var abs = Math.abs(r);
     if (abs < 1000) return full;
-    var unit = abs >= 1e9 ? ["B", 1e9] : abs >= 1e6 ? ["M", 1e6] : ["K", 1e3];
+    var unit = abs >= 1e12 ? ["T", 1e12] : abs >= 1e9 ? ["B", 1e9] : abs >= 1e6 ? ["M", 1e6] : ["K", 1e3];
     var short = Math.round(abs / unit[1] * 100) / 100;
     return full + " (" + (r < 0 ? "-" : "") + short + " " + unit[0] + ")";
   };
@@ -3765,6 +3840,8 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     ["form-laporan", calcLaporan],
     ["form-calc", calcCalculator]
   ].forEach(function (x) {
+    var fn = x[1];
+    x = [x[0], function () { try { fn(); } catch (e) { if (window.console) console.error(x[0], e); } }];
     var form = document.getElementById(x[0]);
     form.addEventListener("input", function () { x[1](); fitAll(); });
     form.addEventListener("change", function (ev) {
@@ -3812,6 +3889,9 @@ document.getElementById("clear-" + x[0].replace("form-", "")).addEventListener("
       writeStore(data);
       syncEnabled();
       x[1]();
+      if (!/^form-(stopwatch|login|logout|laporan|calc)$/.test(x[0])) {
+        Array.prototype.forEach.call(form.querySelectorAll("textarea[readonly]"), function (el) { el.value = ""; });
+      }
       fitAll();
     });
 
