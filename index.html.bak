@@ -1246,8 +1246,6 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <dialog id="purge-dialog" aria-labelledby="purge-title">
 <h2 id="purge-title">Purge</h2>
 <p><button type="button" id="purge-reset">Reset</button> <button type="button" id="purge-clear">Clear</button></p>
-<p class="red"><em>Tidak bisa di-undo!</em></p>
-<p><button type="button" id="purge-close">Tutup</button></p>
 </dialog>
 <dialog id="verify-dialog" aria-labelledby="verify-title">
 <h2 id="verify-title">Verifikasi (ChatGPT, Claude, Gemini)</h2>
@@ -1369,7 +1367,6 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     if (typeof purgeDlg.showModal === "function") purgeDlg.showModal();
     else purgeDlg.setAttribute("open", "");
   });
-  document.getElementById("purge-close").addEventListener("click", closePurge);
   purgeDlg.addEventListener("click", function (ev) {
     if (ev.target !== purgeDlg) return;
     var r = purgeDlg.getBoundingClientRect();
