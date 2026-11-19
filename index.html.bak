@@ -194,7 +194,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <!-- Header button -->
 <button type="button" id="theme-toggle"><span id="theme-icon" aria-hidden="true">☾</span> <span id="theme-label">Mode Gelap</span></button>
 <button type="button" id="help-open" aria-haspopup="dialog"><span aria-hidden="true">?</span> <span>Help</span></button>
-
+<button type="button" id="purge-open" aria-haspopup="dialog"><span aria-hidden="true">🗑</span> <span>Purge</span></button>
 <!-- List semua tab -->
 <nav role="tablist" aria-label="Tab">
 <button type="button" role="tab" id="tab-stopwatch" aria-controls="panel-stopwatch" aria-selected="true">Google Stopwatch</button>
@@ -998,7 +998,21 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><label for="lg-pilot">Pilot:</label> <select id="lg-pilot" name="pilot" aria-label="Pilih data pilot (Login)">
 <option value="agus" selected>AGUS</option>
 <option value="ali">ALI</option>
+<option value="anas">ANAS</option>
+<option value="arsif">ARSIF</option>
+<option value="azwary">AZWARY</option>
+<option value="bobby">BOBBY</option>
 <option value="denis">DENIS</option>
+<option value="fajar">FAJAR</option>
+<option value="faris">FARIS</option>
+<option value="faza">FAZA</option>
+<option value="heri">HERI</option>
+<option value="insan">INSAN</option>
+<option value="jibril">JIBRIL</option>
+<option value="mosa">MOSA</option>
+<option value="nafis">NAFIS</option>
+<option value="rei">REI</option>
+<option value="revi">REVI</option>
 <option value="custom">Edit (custom)</option>
 </select></p>
 <p><label for="lg-nama">Nama:</label> <input type="text" id="lg-nama" name="nama" value="AGUS"></p>
@@ -1022,7 +1036,21 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><label for="lo-pilot">Pilot:</label> <select id="lo-pilot" name="pilot" aria-label="Pilih data pilot (Logout)">
 <option value="agus" selected>AGUS</option>
 <option value="ali">ALI</option>
+<option value="anas">ANAS</option>
+<option value="arsif">ARSIF</option>
+<option value="azwary">AZWARY</option>
+<option value="bobby">BOBBY</option>
 <option value="denis">DENIS</option>
+<option value="fajar">FAJAR</option>
+<option value="faris">FARIS</option>
+<option value="faza">FAZA</option>
+<option value="heri">HERI</option>
+<option value="insan">INSAN</option>
+<option value="jibril">JIBRIL</option>
+<option value="mosa">MOSA</option>
+<option value="nafis">NAFIS</option>
+<option value="rei">REI</option>
+<option value="revi">REVI</option>
 <option value="custom">Edit (custom)</option>
 </select></p>
 <p><label for="lo-login">No Login:</label> <input type="text" id="lo-login" name="login" value=""></p>
@@ -1091,7 +1119,21 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><label for="rp-pilot">Pilot:</label> <select id="rp-pilot" name="pilot" aria-label="Pilih data pilot (Laporan)">
 <option value="agus" selected>AGUS</option>
 <option value="ali">ALI</option>
+<option value="anas">ANAS</option>
+<option value="arsif">ARSIF</option>
+<option value="azwary">AZWARY</option>
+<option value="bobby">BOBBY</option>
 <option value="denis">DENIS</option>
+<option value="fajar">FAJAR</option>
+<option value="faris">FARIS</option>
+<option value="faza">FAZA</option>
+<option value="heri">HERI</option>
+<option value="insan">INSAN</option>
+<option value="jibril">JIBRIL</option>
+<option value="mosa">MOSA</option>
+<option value="nafis">NAFIS</option>
+<option value="rei">REI</option>
+<option value="revi">REVI</option>
 <option value="custom">Edit (custom)</option>
 </select></p>
 <fieldset class="import-box">
@@ -1144,8 +1186,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li>Field yang dikosongkan akan tampil <code>-</code> di output, kecuali Progress, TL, Class, dan Agris yang selalu mengikuti isi form</li>
 <li>Keterangan, Kendala, dan Note: tulis hanya satu per baris, jika kosong: <code>-</code></li>
 <li>Form import laporan hanya support <em>HOURLY</em> dan <em>FARM</em></li>
-<li>Bagian <em>No Login</em>, <em>Nama</em>, <em>Divisi</em>, <em>No Absen</em>, <em>Agris yang digunakan</em>, <em>Crystal (Replace/Broken)</em> tidak di parse di form load import</li>
-</ul>
+<li class="red">Bagian <em>No Login</em>, <em>Nama</em>, <em>Divisi</em>, <em>No Absen</em>, <em>Agris yang digunakan</em>, <em>Crystal (Replace/Broken)</em> tidak di parse di form load import</li></ul>
 </section>
 
 <!-- Pilot -->
@@ -1201,6 +1242,14 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 </ul>
 <p><em>Use at your own risk!</em></p>
 <p><button type="button" id="help-close">Tutup</button></p>
+</dialog>
+<dialog id="purge-dialog" aria-labelledby="purge-title">
+<h2 id="purge-title">Purge</h2>
+<p><strong>Reset</strong>: reset semua tab</p>
+<p><strong>Clear</strong>: clear semua tab</p>
+<p><button type="button" id="purge-reset">Reset</button> <button type="button" id="purge-clear">Clear</button></p>
+<p class="red"><em>Tidak bisa di-undo.</em></p>
+<p><button type="button" id="purge-close">Tutup</button></p>
 </dialog>
 <dialog id="verify-dialog" aria-labelledby="verify-title">
 <h2 id="verify-title">Verifikasi (ChatGPT, Claude, Gemini)</h2>
@@ -1310,6 +1359,33 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     var inside = ev.clientX >= r.left && ev.clientX <= r.right && ev.clientY >= r.top && ev.clientY <= r.bottom;
     if (!inside) closeHelp();
   });
+
+  /* Purge (global Reset dan Clear) */
+  var purgeDlg = document.getElementById("purge-dialog");
+  var closePurge = function () {
+    if (typeof purgeDlg.close === "function") purgeDlg.close();
+    else purgeDlg.removeAttribute("open");
+  };
+  document.getElementById("purge-open").addEventListener("click", function () {
+    if (purgeDlg.open) return;
+    if (typeof purgeDlg.showModal === "function") purgeDlg.showModal();
+    else purgeDlg.setAttribute("open", "");
+  });
+  document.getElementById("purge-close").addEventListener("click", closePurge);
+  purgeDlg.addEventListener("click", function (ev) {
+    if (ev.target !== purgeDlg) return;
+    var r = purgeDlg.getBoundingClientRect();
+    var inside = ev.clientX >= r.left && ev.clientX <= r.right && ev.clientY >= r.top && ev.clientY <= r.bottom;
+    if (!inside) closePurge();
+  });
+  var purgeAll = function (prefix) {
+    Array.prototype.forEach.call(document.querySelectorAll('main button[id^="' + prefix + '-"]'), function (b) {
+      b.click();
+    });
+    closePurge();
+  };
+  document.getElementById("purge-reset").addEventListener("click", function () { purgeAll("reset"); });
+  document.getElementById("purge-clear").addEventListener("click", function () { purgeAll("clear"); });
 
   /* Tabs */
   var TAB_KEY = "bdo-game-pilot:tab";
@@ -3167,7 +3243,21 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
   var PILOTS = {
     agus: { nama: "AGUS", divisi: "ASCENDANT", absen: "HK059" },
     ali: { nama: "ALI", divisi: "ASCENDANT", absen: "HK098" },
-    denis: { nama: "DENIS", divisi: "ASCENDANT", absen: "HK111" }
+    anas: { nama: "ANAS", divisi: "ASCENDANT", absen: "HK018" },
+    arsif: { nama: "ARSIF", divisi: "ASCENDANT", absen: "HK052" },
+    azwary: { nama: "AZWARY", divisi: "ASCENDANT", absen: "HK076" },
+    bobby: { nama: "BOBBY", divisi: "ASCENDANT", absen: "HK064" },
+    denis: { nama: "DENIS", divisi: "ASCENDANT", absen: "HK111" },
+    fajar: { nama: "FAJAR", divisi: "ASCENDANT", absen: "HK092" },
+    faris: { nama: "FARIS", divisi: "ASCENDANT", absen: "ST002" },
+    faza: { nama: "FAZA", divisi: "ASCENDANT", absen: "HK022" },
+    heri: { nama: "HERI", divisi: "ASCENDANT", absen: "HK084" },
+    insan: { nama: "INSAN", divisi: "ASCENDANT", absen: "HK093" },
+    jibril: { nama: "JIBRIL", divisi: "ASCENDANT", absen: "HK019" },
+    mosa: { nama: "MOSA", divisi: "ASCENDANT", absen: "HK040" },
+    nafis: { nama: "NAFIS", divisi: "ASCENDANT", absen: "HK063" },
+    rei: { nama: "REI", divisi: "ASCENDANT", absen: "HK120" },
+    revi: { nama: "REVI", divisi: "ASCENDANT", absen: "HK058" }
   };
 
   var calcLogin = function () {
