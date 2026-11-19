@@ -907,30 +907,6 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <!-- Ascendant -->
 <section role="tabpanel" id="panel-ascendant" aria-labelledby="tab-ascendant" hidden>
 <h2>Ascendant</h2>
-<p><strong>Grinding</strong></p>
-<ul>
-<li>Jika Maid sedikit, TL bisa ditaruh di kuda. Jadi pada saat inventory sudah penuh pergi ke kuda dan pencet <strong>F6</strong> di keyboard lalu pindahkan semua TL-nya disana</li>
-<li>Jika Maid-nya banyak jangan pergi ke kota, taruh aja di spot grinding dan usahakan jauh dari mob agar pas owner mau login atau shift berikutnya <em>tidak mati tiba-tiba</em></li>
-<li>Jangan letakkan TL di kuda jika Maid-nya banyak, taruh aja di storage <em>(wasting time banget kalo di kuda)</em></li>
-<li>Jika total TL di storage sudah mencapai ratusan ribu <em>k</em> arahkan mouse ke TL-nya jika ingin mengetahui total TL-nya secara akurat</li>
-<li>Jika silver di central market pada saat awal shift dan akhir shift nambah tanpa ada aktivitas sell; berarti ada aktivitas diluar grinding, usahakan cek selalu agar silver dari aktivitas owner tidak masuk ke progress</li>
-</ul>
-<p><strong>Buff</strong></p>
-<ul>
-<li>Jika ada Guild Manor <em>pencet G</em> coba pergi kesana, barangkali ada buff yang bisa digunakan untuk grinding</li>
-<li>Baik hourly maupun silver, usahakan tetap membeli buff drop rate 50% di tenda</li>
-<li>Usahakan selalu mengecek persen drop rate ketika mau grinding karena ini berpengaruh sekali ke progress</li>
-<li>Hati hati jika pakai buff <em>Blessing of Old Moon Scroll</em> karena ini seperti memakai Agris <em>(100% Drop Amount)</em></li>
-<li>Jika terlanjur pakai buff <em>Blessing of Old Moon Scroll</em>, centang <em>100% Drop Amount</em> di tab Progress Hourly (Dengan Agris) dan isi jumlah item yang dipakai</li>
-</ul>
-<p><strong>Death</strong></p>
-<ul>
-<li>Selalu <em>cek Elion's Tear</em> dan <em>Elion's Blessing</em> sebelum grinding buat jaga-jaga kalau pas character mati dan <em>Fairy Tear</em> gak ada bisa pakai ini</li>
-<li>Jangan pernah dan mencoba untuk restore crystal pada saat character mati, boleh restore jika sudah mendapatkan persetujuan dari owner</li>
-<li>Compen crystal pecah pedomannya untuk saat ini adalah <em>50% TL dan 50% RNG</em></li>
-<li>Gunakan <em>Fairy Tear</em> jika character mati, ini wajib banget dan jangan lupa kalau ada itu ya pakai</li>
-<li>Jika <em>Elion's Tear, Elion's Blessing, maupun Fairy Tear</em> gak ada pada saat character mati, ya pilihan terakhir ya ke safe zone</li>
-</ul>
 <p><strong>Link</strong></p>
 <ul>
 <li><a href="https://garmoth.com" target="_blank" rel="noopener noreferrer">Garmoth</a></li>
