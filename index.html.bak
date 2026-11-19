@@ -1185,7 +1185,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li><em>FARM</em>: Progress diisi silver (contoh <code>11.2 B</code>), Total diisi total progress (contoh <code>369 B</code>) dan Target diisi target silver keseluruhan (contoh <code>500 B</code>). Sell in storage, Listed CM (TAX), dan Keep hanya muncul di FARM</li>
 <li>Field yang dikosongkan akan tampil <code>-</code> di output, kecuali Progress, TL, Class, dan Agris yang selalu mengikuti isi form</li>
 <li>Keterangan, Kendala, dan Note: tulis hanya satu per baris, jika kosong: <code>-</code></li>
-<li>Form import laporan hanya support <em>HOURLY</em> dan <em>FARM</em></li>
+<li class="red">Form import laporan hanya support <em>HOURLY</em> dan <em>FARM</em></li>
 <li class="red">Bagian <em>No Login</em>, <em>Nama</em>, <em>Divisi</em>, <em>No Absen</em>, <em>Agris yang digunakan</em>, <em>Crystal (Replace/Broken)</em> tidak di parse di form load import</li></ul>
 </section>
 
@@ -1245,10 +1245,8 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 </dialog>
 <dialog id="purge-dialog" aria-labelledby="purge-title">
 <h2 id="purge-title">Purge</h2>
-<p><strong>Reset</strong>: reset semua tab</p>
-<p><strong>Clear</strong>: clear semua tab</p>
 <p><button type="button" id="purge-reset">Reset</button> <button type="button" id="purge-clear">Clear</button></p>
-<p class="red"><em>Tidak bisa di-undo.</em></p>
+<p class="red"><em>Tidak bisa di-undo!</em></p>
 <p><button type="button" id="purge-close">Tutup</button></p>
 </dialog>
 <dialog id="verify-dialog" aria-labelledby="verify-title">
