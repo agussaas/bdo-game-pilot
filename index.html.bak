@@ -179,7 +179,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
   document.addEventListener("DOMContentLoaded", function () {
     var d = document.createElement("p");
     d.setAttribute("role", "alert");
-    d.textContent = "Browser kamu terlalu lama untuk tool ini. Perbarui browser (Chrome, Edge, Firefox, atau Safari terbaru) supaya semua tab berfungsi.";
+    d.textContent = "Browser kamu belum diupdate. Perbarui browser (Chrome, Edge, Firefox, atau Safari terbaru) supaya semua tab dapat berjalan dengan baik.";
     document.body.insertBefore(d, document.body.firstChild);
   });
 })();
@@ -237,8 +237,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li>Play dulu 1–3 detik, yang penting stopwatch udah jalan</li>
 <li>Buka browser console, tekan <strong>F12</strong></li>
 <li>Paste, ketik <code>allow pasting</code> terus enter jika tidak bisa paste</li>
-<li class="red">Hanya paste kode dari tab ini. Jangan pernah paste kode dari orang yang tidak dikenal ke browser console, karena bisa dipakai untuk mencuri akun kamu</li>
-<li>Jika <strong>F12</strong> membuka tab <em>Elements</em>, klik pada tab <em>Console</em> untuk membuka browser console</li>
+<li class="red">Jika <strong>F12</strong> membuka tab <em>Elements</em>, klik pada tab <em>Console</em> untuk membuka browser console</li>
 </ul>
 <figure>
 <img src="browser-console.png" alt="Screenshot browser console" loading="lazy">
@@ -270,7 +269,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><strong>Note:</strong></p>
 <ul>
 <li><em>100% Drop Amount</em>: centang jika memakai <em>Blessing of Old Moon Scroll</em> atau <em>[Event] Golden Blessing of Agris</em>, lalu isi total berapa yang digunakan dan patokan <em>TL/hr dengan Agris-nya</em></li>
-<li>Buff <em>Blessing of Old Moon Scroll</em> dan <em>[Event] Golden Blessing of Agris</em> efeknya seperti memakai Agris 1 jam</li>
+<li class="red">Buff <em>Blessing of Old Moon Scroll</em> dan <em>[Event] Golden Blessing of Agris</em> efeknya seperti memakai Agris 1 jam</li>
 </ul>
 <details>
 <summary>Perhitungan</summary>
@@ -320,7 +319,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><strong>Note:</strong></p>
 <ul>
 <li>Harus ada patokan <em>Agris yang digunakan</em> dan <em>total TL</em> per jam</li>
-<li><em>100% Drop Amount</em>: centang jika memakai <em>Blessing of Old Moon Scroll</em> atau <em>[Event] Golden Blessing of Agris</em>, tiap buff berdurasi 1 jam dan efeknya seperti memakai Agris 1 jam</li>
+<li class="red"><em>100% Drop Amount</em>: centang jika memakai <em>Blessing of Old Moon Scroll</em> atau <em>[Event] Golden Blessing of Agris</em>, tiap buff berdurasi 1 jam dan efeknya seperti memakai Agris 1 jam</li>
 </ul>
 <div id="note-images">
 <figure>
@@ -517,7 +516,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li>Cara mengisi Options: tulis hanya yang aktif, yang tidak aktif tidak perlu ditulis. Lihat dua contoh gambar di bawah</li>
 <li>Jika tidak ada yang aktif, kosongkan Options</li>
 <li>Jika Options kosong, result akan menampilkan dua versi: biasa dan with Value Pack</li>
-<li>Jika ada lebih dari satu input Family Fame, maka otomatis yang terakhir sendiri masuk ke perhitungan</li>
+<li class="red">Jika ada lebih dari satu input Family Fame, maka otomatis yang terakhir sendiri masuk ke perhitungan</li>
 <li>Pajak total <em>35%</em> (30% Central Market dan 5% territory), jadi seller menerima <em>65%</em></li>
 <li>Semua bonus dihitung dari profit setelah pajak <em>(65%)</em>, lalu dijumlahkan: <em>Value Pack +30%</em>, <em>Ring/Pass +5%</em>, <em>Family Fame 1000–3999 +0.5%</em>, <em>4000–6999 +1.0%</em>, <em>7000 ke atas +1.5%</em></li>
 </ul>
@@ -621,7 +620,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li><em>TL akhir</em> adalah TL setelah grinding selama shift yang sudah ditaruh di storage</li>
 <li>Total perolehan TL didapat dari TL akhir dikurangi TL awal</li>
 <li>Harga TL bersifat opsional: jika dicentang, kolomnya aktif dan harga ikut dihitung, jika tidak, kolomnya nonaktif dan hanya total perolehan TL saja yang akan ditampilkan</li>
-<li>Harga dipilih dari daftar spot. Jika tidak ada di daftar, pilih <em>Edit (custom)</em> lalu isi harga dari TL tersebut</li>
+<li class="red">Harga dipilih dari daftar spot. Jika tidak ada di daftar, pilih <em>Edit (custom)</em> lalu isi harga dari TL tersebut</li>
 <li>Harga TL seluruhnya didapat dari <em>total perolehan TL dikali harga TL</em></li>
 </ul>
 <p><strong>Contoh:</strong></p>
@@ -675,7 +674,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li>Compen bisa diisi angka biasa, pemisah ribuan, atau akhiran <code>k</code>, <code>m</code>, <code>b</code>, contoh <code>500k</code>, <code>100m</code>, <code>3b</code></li>
 <li>Harga TL adalah harga satu TL dalam silver, bisa diisi dengan format yang sama. Jika dikosongkan, Jumlah TL yang harus disell tidak akan dihitung</li>
 <li>Slider Persen TL mengatur pembagian compen antara <em>TL</em> dan <em>RNG</em>: paling kiri <em>0%</em> TL (semuanya RNG) dan paling kanan <em>100%</em> TL (semuanya TL), misal <em>40%</em> TL berarti <em>60%</em> RNG</li>
-<li>Jumlah TL yang harus disell <em>dibulatkan ke atas</em> supaya silver dari TL mencapai bagian compen TL</li>
+<li class="red">Jumlah TL yang harus disell <em>dibulatkan ke atas</em> supaya silver dari TL mencapai bagian compen TL</li>
 <li>Sisa compen di luar bagian TL adalah bagian dari <em>RNG</em></li>
 </ul>
 <p><strong>Contoh:</strong></p>
@@ -881,8 +880,8 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li><em>Agris awal</em> adalah Agris yang ada di awal shift</li>
 <li><em>Agris akhir</em> adalah Agris yang tersisa setelah selesai grinding</li>
 <li>Agris yang digunakan didapat dari total agris dikurangi agris akhir</li>
-<li>Agris reset akan menambah <em>20,000</em> Agris per hari (pukul 06:00 UTC), tetapi Agris tidak bisa melebihi batas maksimal <em>100,000</em></li>
-<li>Pengisian Agris sebelum reset; jika reset terjadi di awal shift, isi sama dengan agris awal. Jika reset terjadi di tengah shift setelah sebagian Agris terpakai, isi dengan sisa Agris saat itu. Kolom ini hanya aktif jika Agris reset dicentang</li>
+<li class="red">Agris reset akan menambah <em>20,000</em> Agris per hari (pukul 06:00 UTC), tetapi Agris tidak bisa melebihi batas maksimal <em>100,000</em></li>
+<li class="red">Pengisian Agris sebelum reset; jika reset terjadi di awal shift, isi sama dengan agris awal. Jika reset terjadi di tengah shift setelah sebagian Agris terpakai, isi dengan sisa Agris saat itu. Kolom ini hanya aktif jika Agris reset dicentang</li>
 <li>Agris sebelum reset tidak boleh lebih besar dari agris awal dan tidak boleh lebih dari <em>100,000</em></li>
 <li>Jika agris akhir lebih besar dari total agris yang tersedia, hasilnya akan menampilkan error</li>
 </ul>
@@ -938,6 +937,8 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li><a href="https://bdocodex.com/" target="_blank" rel="noopener noreferrer">BDO Codex</a></li>
 <li><a href="https://www.bdoclasshub.com" target="_blank" rel="noopener noreferrer">BDO Class Hub</a></li>
 <li><a href="https://korbdo.co.kr" target="_blank" rel="noopener noreferrer">Tachyon</a></li>
+<li><a href="https://bdolytics.com/en" target="_blank" rel="noopener noreferrer">BDOlytics</a></li>
+<li><a href="https://www.blackdesertfoundry.com" target="_blank" rel="noopener noreferrer">Black Desert Foundry</a></li>
 </ul>
 <p><strong>Jadwal</strong></p>
 <ul>
@@ -969,7 +970,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <ul>
 <li>AVG adalah rata-rata KPI bulan ini dan 2 bulan sebelumnya (rata-rata 3 bulan terakhir)</li>
 <li>Kolom <em>Input</em> menentukan mana yang akan diisi, bisa: <em>KPI</em> atau <em>AVG</em></li>
-<li>Pilih <em>KPI</em>: AVG dihitung dari KPI. Pilih <em>AVG</em>: KPI dihitung balik dari AVG dan KPI bulan-bulan sebelumnya</li>
+<li class="red">Pilih <em>KPI</em>: AVG dihitung dari KPI. Pilih <em>AVG</em>: KPI dihitung balik dari AVG dan KPI bulan-bulan sebelumnya</li>
 <li>Angka boleh memakai titik atau koma sebagai desimal, misal <code>75.76</code> atau <code>75,76</code>. Nama bulan dan tahun bisa diubah, format <code>June 2026</code></li>
 <li>Tier otomatis mengikuti AVG: di bawah <em>75</em> No Tier, <em>75–79.99</em> Tier 0, <em>80–89.99</em> Tier 1, <em>90–99.99</em> Tier 2, <em>100–109.99</em> Tier 3, <em>110 ke atas</em> Tier 4</li>
 </ul>
@@ -1097,7 +1098,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <legend>Import</legend>
 <p><textarea id="rp-import-text" rows="4" cols="40" placeholder="Paste laporan di sini"></textarea></p>
 <p><button type="button" id="btn-import-laporan">Load</button> <button type="button" id="clear-import">Clear</button></p>
-<p><label for="rp-import-log"><strong>Logs:</strong></label><textarea id="rp-import-log" name="import-log" readonly></textarea></p>
+<p><label for="rp-import-log"><strong>Log Message:</strong></label><textarea id="rp-import-log" name="import-log" readonly></textarea></p>
 </fieldset>
 <p><label for="rp-login">No Login:</label> <input type="text" id="rp-login" name="login" value=""></p>
 <p><label for="rp-order">No Order:</label> <input type="text" id="rp-order" name="order" value=""></p>
@@ -1183,7 +1184,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li>Urutan perhitungan: kurung dulu, lalu <code>%</code> dan <code>^</code>, lalu <code>*</code> dan <code>/</code>, terakhir <code>+</code> dan <code>-</code></li>
 <li>Satuan ditulis langsung setelah angka tanpa spasi: <code>k</code> (ribu), <code>m</code> (juta), <code>b</code> (miliar), <code>t</code> (triliun), contoh <code>500k</code>, <code>1.5m</code>, <code>2b</code></li>
 <li>Angka memakai titik sebagai desimal (<code>12.5</code>). Koma dianggap pemisah ribuan, jadi <code>1,000,000</code> sama dengan <code>1000000</code></li>
-<li><code>%</code> hanya membagi angka di depannya dengan 100. Untuk menambah persen tulis lengkap: <code>200 + 200 * 10%</code> = 220, bukan <code>200 + 10%</code> yang hasilnya 200.1</li>
+<li class="red"><code>%</code> hanya membagi angka di depannya dengan 100. Untuk menambah persen tulis lengkap: <code>200 + 200 * 10%</code> = 220, bukan <code>200 + 10%</code> yang hasilnya 200.1</li>
 <li>Hasil di atas 1,000 ditampilkan: <code>K</code> ribu, <code>M</code> juta, <code>B</code> miliar, <code>T</code> triliun (dalam kurung)</li>
 <li>Jika salah tulis, Result otomatis menampilkan <em>error message</em>, misalnya kurung kurang, karakter tidak dikenal, atau tidak bisa dibagi nol</li>
 <li>Contoh: <code>1.5b * 65%</code> hasilnya <samp>975,000,000 (975 M)</samp>, <code>(5m + 250k) * 2</code> hasilnya <samp>10,500,000 (10.5 M)</samp>, <code>100 / 8</code> hasilnya <samp>12.5</samp></li>
