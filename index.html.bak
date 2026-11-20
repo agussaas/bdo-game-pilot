@@ -669,6 +669,21 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <legend>RNG</legend>
 <p><label for="cp-o5">Persen:</label> <textarea id="cp-o5" name="cp-o5" rows="1" cols="40" readonly></textarea></p>
 <p><label for="cp-o6">Silver:</label> <textarea id="cp-o6" name="cp-o6" rows="1" cols="40" readonly></textarea></p>
+<p><input type="checkbox" id="cp-items-on" name="items-on" aria-controls="cp-items"> <label for="cp-items-on">Item RNG (opsional)</label></p>
+<fieldset id="cp-items" disabled>
+<legend>Item RNG</legend>
+<div class="table-wrap">
+<table>
+<thead>
+<tr><th scope="col">Item</th><th scope="col">Harga</th><th scope="col">Qty</th><th scope="col">Subtotal</th><th scope="col">Action</th></tr>
+</thead>
+<tbody id="cp-item-body"></tbody>
+</table>
+</div>
+<p><button type="button" id="cp-item-add">Tambah item</button></p>
+</fieldset>
+<p><label for="cp-o7">Total item:</label> <textarea id="cp-o7" name="cp-o7" rows="1" cols="40" readonly></textarea></p>
+<p><label for="cp-o8">Sisa RNG:</label> <textarea id="cp-o8" name="cp-o8" rows="1" cols="40" readonly></textarea></p>
 </fieldset>
 <p><button type="button" id="verify-compen-open" aria-haspopup="dialog">Verifikasi (ChatGPT, Claude, Gemini)</button></p>
 <p><strong>Note:</strong></p>
@@ -677,6 +692,10 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li>Harga TL adalah harga satu TL dalam silver, bisa diisi dengan format yang sama. Jika dikosongkan, Jumlah TL yang harus disell tidak akan dihitung</li>
 <li>Slider Persen TL mengatur pembagian compen antara <em>TL</em> dan <em>RNG</em>: paling kiri <em>0%</em> TL (semuanya RNG) dan paling kanan <em>100%</em> TL (semuanya TL), misal <em>40%</em> TL berarti <em>60%</em> RNG</li>
 <li class="red">Jumlah TL yang harus disell <em>dibulatkan ke atas</em> supaya silver dari TL mencapai bagian compen TL</li>
+<li><em>Item RNG</em> (opsional): centang dulu untuk mengaktifkan, lalu isi nama item, harga item, dan qty. Klik <em>Tambah item</em> untuk baris baru</li>
+<li>Harga item bisa diisi angka biasa, pemisah ribuan, atau akhiran <code>k</code>, <code>m</code>, <code>b</code>. Qty kosong dihitung <code>1</code>. Baris yang harganya kosong diabaikan</li>
+<li><em>Total item</em> adalah jumlah semua harga dikali qty. <em>Sisa RNG</em> adalah bagian RNG dikurangi total item, jika negatif berarti total item melebihi bagian RNG</li>
+<li class="red">Isi tabel Item RNG tersimpan di browser dan ikut <em>Import/Export</em>. Tombol <em>Reset</em> dan <em>Clear</em> mengembalikan tabel ke satu baris kosong</li>
 <li>Sisa compen di luar bagian TL adalah bagian dari <em>RNG</em></li>
 </ul>
 <p><strong>Contoh:</strong></p>
@@ -690,6 +709,9 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li>TL, Jumlah TL yang harus disell: <samp>8,286 TL</samp></li>
 <li>RNG, Persen: <samp>50%</samp></li>
 <li>RNG, Silver: <samp>1,500,000,000 silver</samp></li>
+<li>Item RNG dicentang: Item A harga <code>450m</code> qty <code>2</code>, Item B harga <code>300m</code> qty <code>1</code></li>
+<li>Total item: <samp>1,200,000,000 silver (2 item)</samp></li>
+<li>Sisa RNG: <samp>300,000,000 silver (RNG yang belum tertutup item)</samp></li>
 </ul>
 <details>
 <summary>Perhitungan</summary>
@@ -705,6 +727,12 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><textarea id="cp-s5" name="cp-s5" rows="1" cols="50" readonly></textarea></p>
 <p><label for="cp-s6">Total silver dari TL: jumlah TL dikali harga TL</label></p>
 <p><textarea id="cp-s6" name="cp-s6" rows="1" cols="50" readonly></textarea></p>
+<p><label for="cp-s7">Subtotal tiap item: harga item dikali qty <strong>(silver)</strong></label></p>
+<p><textarea id="cp-s7" name="cp-s7" rows="1" cols="50" readonly></textarea></p>
+<p><label for="cp-s8">Total item: semua subtotal dijumlahkan <strong class="red">(silver)</strong></label></p>
+<p><textarea id="cp-s8" name="cp-s8" rows="1" cols="50" readonly></textarea></p>
+<p><label for="cp-s9">Sisa RNG: silver RNG dikurangi total item <strong class="red">(silver)</strong></label></p>
+<p><textarea id="cp-s9" name="cp-s9" rows="1" cols="50" readonly></textarea></p>
 </details>
 </div>
 </section>
@@ -1378,7 +1406,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
   document.getElementById("purge-clear").addEventListener("click", function () { purgeAll("clear"); });
 
   /* Import/Export (data tersimpan di localStorage) */
-  var DATA_KEYS = ["bdo-game-pilot:inputs", "bdo-game-pilot:kpi", "bdo-game-pilot:tab", "theme"];
+  var DATA_KEYS = ["bdo-game-pilot:inputs", "bdo-game-pilot:kpi", "bdo-game-pilot:compen-items", "bdo-game-pilot:tab", "theme"];
   var dataDlg = document.getElementById("data-dialog");
   var dataMsg = document.getElementById("data-msg");
   var dataFile = document.getElementById("data-file");
@@ -1462,6 +1490,8 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
             if (!o || typeof o !== "object" || Array.isArray(o)) throw new Error("data input tidak valid");
           } else if (k === "bdo-game-pilot:kpi") {
             if (!Array.isArray(JSON.parse(s))) throw new Error("data KPI tidak valid");
+          } else if (k === "bdo-game-pilot:compen-items") {
+            if (!Array.isArray(JSON.parse(s))) throw new Error("data item RNG tidak valid");
           } else if (k === "theme") {
             if (s !== "light" && s !== "dark") throw new Error("data tema tidak valid");
           } else if (k === "bdo-game-pilot:tab") {
@@ -2102,7 +2132,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
   var buildCompenVerifyPrompt = function () {
     var v = function (id) { return document.getElementById(id).value; };
     var price = v("cp-price").trim();
-    var steps = ["cp-s1", "cp-s2", "cp-s3", "cp-s4", "cp-s5", "cp-s6"].map(v).filter(function (s) { return s; });
+    var steps = ["cp-s1", "cp-s2", "cp-s3", "cp-s4", "cp-s5", "cp-s6", "cp-s7", "cp-s8", "cp-s9"].map(v).filter(function (s) { return s; });
     var lines = [
       "Tolong verifikasi perhitungan Compen (Black Desert Online) di bawah ini. Saya ingin memastikan hasilnya benar.",
       "",
@@ -2131,6 +2161,21 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     if (v("cp-o4")) lines.push("- TL, Jumlah TL yang harus disell: " + v("cp-o4"));
     if (v("cp-o5")) lines.push("- RNG, Persen: " + v("cp-o5"));
     if (v("cp-o6")) lines.push("- RNG, Silver: " + v("cp-o6"));
+    if (document.getElementById("cp-items-on").checked) {
+      lines.push(
+        "",
+        "Item RNG (opsional, dicentang):",
+        "- Subtotal tiap item = harga item × qty (harga memakai akhiran k, m, b, diubah ke silver dengan floor(nilai × pengali), qty kosong dihitung 1, baris tanpa harga diabaikan)",
+        "- Total item = jumlah semua subtotal",
+        "- Sisa RNG = silver RNG − total item (negatif berarti total item melebihi bagian RNG)"
+      );
+      cpItemRows().forEach(function (r, i) {
+        if (!r.p.trim()) return;
+        lines.push("- Item " + (i + 1) + ": nama " + (r.n.trim() || "(kosong)") + ", harga " + r.p + ", qty " + (r.q.trim() || "(kosong)") + ", subtotal " + (r.sub.value || "-"));
+      });
+      if (v("cp-o7")) lines.push("- Total item: " + v("cp-o7"));
+      if (v("cp-o8")) lines.push("- Sisa RNG: " + v("cp-o8"));
+    }
     if (steps.length) {
       lines.push("", "Langkah perhitungan dari tool:");
       steps.forEach(function (s, i) { lines.push((i + 1) + ". " + s); });
@@ -2753,8 +2798,8 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
   };
 
   var calcCompen = function () {
-    var outs = ["cp-o1", "cp-o2", "cp-o3", "cp-o4", "cp-o5", "cp-o6"];
-    var steps = ["cp-s1", "cp-s2", "cp-s3", "cp-s4", "cp-s5", "cp-s6"];
+    var outs = ["cp-o1", "cp-o2", "cp-o3", "cp-o4", "cp-o5", "cp-o6", "cp-o7", "cp-o8"];
+    var steps = ["cp-s1", "cp-s2", "cp-s3", "cp-s4", "cp-s5", "cp-s6", "cp-s7", "cp-s8", "cp-s9"];
     var groups = [document.getElementById("cp-tl"), document.getElementById("cp-rng")];
     var compen, price;
 
@@ -2784,6 +2829,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     put("cp-o4", count === null ? null : count.toLocaleString("en-US") + " TL");
     put("cp-o5", (100 - pct) + "%");
     put("cp-o6", silver(rngSilver));
+    calcCompenItems(rngSilver);
 
     put("cp-s1", "floor(" + compen.value + " × " + compen.mult + ") = " + total);
     put("cp-s2", price ? "floor(" + price.value + " × " + price.mult + ") = " + price.amount : null);
@@ -2792,6 +2838,165 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     put("cp-s5", price ? "ceil(" + tlSilver + " ÷ " + price.amount + ") = " + count : null);
     put("cp-s6", price ? count + " × " + price.amount + " = " + (count * price.amount) : null);
   };
+
+  /* 8b. Compen: Item RNG (opsional) */
+  var CP_KEY = "bdo-game-pilot:compen-items";
+  var CP_MAX_ITEMS = 50;
+  var cpBody = document.getElementById("cp-item-body");
+  var cpSilver = function (v) { return v.toLocaleString("en-US") + " silver"; };
+
+  var cpItemRows = function () {
+    return Array.prototype.map.call(cpBody.rows, function (tr) {
+      var f = function (k) { return tr.querySelector('[data-f="' + k + '"]'); };
+      return { n: f("n").value, p: f("p").value, q: f("q").value, sub: f("sub") };
+    });
+  };
+  var cpData = function () {
+    return cpItemRows().map(function (r) { return { n: r.n, p: r.p, q: r.q }; });
+  };
+  var cpSave = function () {
+    try { localStorage.setItem(CP_KEY, JSON.stringify(cpData())); } catch (e) {}
+  };
+  var cpLoad = function () {
+    try {
+      var s = JSON.parse(localStorage.getItem(CP_KEY) || "null");
+      if (Array.isArray(s) && s.length && s.length <= CP_MAX_ITEMS) {
+        return s.map(function (r) {
+          r = r || {};
+          return { n: String(r.n || "").slice(0, 60), p: String(r.p || "").slice(0, 30), q: String(r.q || "").slice(0, 12) };
+        });
+      }
+    } catch (e) {}
+    return [{ n: "", p: "", q: "1" }];
+  };
+
+  var cpAddRow = function (r) {
+    var i = cpBody.rows.length + 1;
+    var tr = document.createElement("tr");
+    var cell = function (node) {
+      var td = document.createElement("td");
+      td.appendChild(node);
+      tr.appendChild(td);
+    };
+    var field = function (key, label, value, placeholder, readOnly) {
+      var inp = document.createElement("input");
+      inp.type = "text";
+      inp.setAttribute("data-f", key);
+      inp.setAttribute("data-raw", "");
+      inp.setAttribute("aria-label", label + " " + i);
+      if (value) inp.setAttribute("value", value);
+      if (placeholder) inp.placeholder = placeholder;
+      if (readOnly) {
+        inp.readOnly = true;
+        inp.classList.add("result");
+      }
+      return inp;
+    };
+    var name = field("n", "Nama item", r.n, "nama item");
+    name.maxLength = 60;
+    var qty = field("q", "Qty item", r.q, "1");
+    qty.setAttribute("inputmode", "numeric");
+    var del = document.createElement("button");
+    del.type = "button";
+    del.textContent = "Hapus";
+    del.setAttribute("aria-label", "Hapus item " + i);
+    cell(name);
+    cell(field("p", "Harga item", r.p, "contoh 450m"));
+    cell(qty);
+    cell(field("sub", "Subtotal item", "", "hasil otomatis", true));
+    cell(del);
+    cpBody.appendChild(tr);
+  };
+  var cpBuild = function (data) {
+    cpBody.textContent = "";
+    data.forEach(function (r) { cpAddRow(r); });
+  };
+
+  var calcCompenItems = function (rngSilver) {
+    var hideOut = function () {
+      ["cp-o7", "cp-o8", "cp-s7", "cp-s8", "cp-s9"].forEach(function (id) { put(id, null); });
+    };
+    var rows = cpItemRows();
+    if (!document.getElementById("cp-items-on").checked) {
+      rows.forEach(function (r) { r.sub.value = ""; });
+      hideOut();
+      return;
+    }
+
+    var total = 0n;
+    var used = 0;
+    var parts = [];
+    var lines = [];
+    var err = null;
+    rows.forEach(function (r, i) {
+      var label = r.n.trim() || "Item " + (i + 1);
+      if (!r.p.trim()) { r.sub.value = ""; return; }
+      try {
+        var price = parseSilver(r.p, "harga item", false);
+        var qtyText = asciiDigits(r.q.trim().replace(/[,_]/g, ""));
+        var qty = 1n;
+        if (qtyText !== "") {
+          if (!/^[0-9]+$/.test(qtyText)) throw new Error("qty tidak valid");
+          if (qtyText.length > 9) throw new Error("qty terlalu besar");
+          qty = BigInt(qtyText);
+          if (qty === 0n) throw new Error("qty harus lebih dari nol");
+        }
+        var sub = price.amount * qty;
+        total += sub;
+        used++;
+        parts.push(sub);
+        lines.push(label + ": " + price.amount + " × " + qty + " = " + sub);
+        r.sub.value = sub.toLocaleString("en-US");
+      } catch (e) {
+        r.sub.value = e.message;
+        if (!err) err = label + ": " + e.message;
+      }
+    });
+
+    if (err) {
+      hideOut();
+      put("cp-o7", err);
+      return;
+    }
+    if (!used) {
+      hideOut();
+      return;
+    }
+
+    var left = rngSilver - total;
+    put("cp-o7", cpSilver(total) + " (" + used + " item)");
+    put("cp-o8", cpSilver(left) + (left > 0n ? " (RNG yang belum tertutup item)" : left < 0n ? " (total item melebihi bagian RNG)" : " (pas dengan bagian RNG)"));
+    put("cp-s7", lines.join("\n"));
+    put("cp-s8", (parts.length > 1 ? parts.join(" + ") + " = " : "") + total);
+    put("cp-s9", rngSilver + " − " + total + " = " + left);
+  };
+
+  cpBody.addEventListener("input", cpSave);
+  cpBody.addEventListener("click", function (ev) {
+    var btn = ev.target.closest ? ev.target.closest("button") : null;
+    if (!btn) return;
+    var data = cpData();
+    if (data.length <= 1) data = [{ n: "", p: "", q: "1" }];
+    else data.splice(btn.closest("tr").sectionRowIndex, 1);
+    cpBuild(data);
+    cpSave();
+    calcCompen();
+    fitAll();
+  });
+  document.getElementById("cp-item-add").addEventListener("click", function () {
+    if (cpBody.rows.length >= CP_MAX_ITEMS) return;
+    cpAddRow({ n: "", p: "", q: "1" });
+    cpSave();
+    calcCompen();
+    fitAll();
+  });
+  var cpResetRows = function () {
+    cpBuild([{ n: "", p: "", q: "1" }]);
+    try { localStorage.removeItem(CP_KEY); } catch (e) {}
+  };
+  document.getElementById("reset-compen").addEventListener("click", cpResetRows);
+  document.getElementById("clear-compen").addEventListener("click", cpResetRows);
+  cpBuild(cpLoad());
 
   /* 9. Silver */
   var compactSilver = function (big) {
