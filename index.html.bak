@@ -1216,7 +1216,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li>Jika salah tulis, Result otomatis menampilkan <em>error message</em>, misalnya kurung kurang, karakter tidak dikenal, atau tidak bisa dibagi nol</li>
 <li>Upload Image: pilih gambar lewat tombol <em>Choose File</em> (boleh banyak sekaligus), atau tekan <strong>Ctrl+V</strong> di tab Pilot setelah copy atau screenshot ke clipboard, atau klik <em>Paste dari clipboard</em></li>
 <li>Gambar disimpan di browser ini (maks 10 MB per gambar, maks 100 gambar). Klik gambar untuk membuka ukuran penuh, <em>Unduh</em> untuk menyimpan, <em>Hapus</em> untuk menghapus satu gambar</li>
-<li class="red">Gambar tidak ikut tombol <em>Purge</em> dan tidak ikut <em>Import/Export</em></li>
+<li class="red">Gambar tidak ikut tombol <em>Purge</em>, tetapi ikut <em>Import/Export</em> (file export bisa besar jika gambarnya banyak)</li>
 <li>Contoh: <code>1.5b * 65%</code> hasilnya <samp>975,000,000 (975 M)</samp>, <code>(5m + 250k) * 2</code> hasilnya <samp>10,500,000 (10.5 M)</samp>, <code>100 / 8</code> hasilnya <samp>12.5</samp></li>
 </ul>
 </section>
@@ -1407,7 +1407,8 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
         if (s !== null) data[k] = s;
       } catch (e) {}
     });
-    var json = JSON.stringify({ app: "bdo-game-pilot", version: 1, exported: new Date().toISOString(), data: data }, null, 2);
+    imgExportAll().then(function (images) {
+    var json = JSON.stringify({ app: "bdo-game-pilot", version: 2, exported: new Date().toISOString(), data: data, images: images }, null, 2);
     var d = new Date();
     var pad = function (n) { return String(n).padStart(2, "0"); };
     var name = "bdo-game-pilot-" + d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + ".json";
@@ -1419,7 +1420,10 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     a.click();
     document.body.removeChild(a);
     setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
-    dataMsg.textContent = "Export berhasil: " + name;
+    dataMsg.textContent = "Export berhasil: " + name + " (" + images.length + " gambar)";
+    }).catch(function (e) {
+      dataMsg.textContent = "Export gagal: " + ((e && e.message) || "terjadi kesalahan");
+    });
   });
 
   document.getElementById("data-import").addEventListener("click", function () {
@@ -1429,7 +1433,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
   dataFile.addEventListener("change", function () {
     var f = dataFile.files && dataFile.files[0];
     if (!f) return;
-    if (f.size > 5 * 1024 * 1024) {
+    if (f.size > 200 * 1024 * 1024) {
       dataMsg.textContent = "Import gagal: file terlalu besar";
       dataFile.value = "";
       return;
@@ -1445,6 +1449,9 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
         var parsed = JSON.parse(String(reader.result));
         if (!parsed || parsed.app !== "bdo-game-pilot" || !parsed.data || typeof parsed.data !== "object" || Array.isArray(parsed.data)) {
           throw new Error("file bukan hasil export BDO Game Pilot");
+        }
+        if (parsed.images !== undefined && !imgValid(parsed.images)) {
+          throw new Error("data gambar tidak valid");
         }
         DATA_KEYS.forEach(function (k) {
           var s = parsed.data[k];
@@ -1477,7 +1484,13 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
         dataFile.value = "";
         return;
       }
-      location.reload();
+      if (!Array.isArray(parsed.images)) { location.reload(); return; }
+      imgImportAll(parsed.images).then(function () {
+        location.reload();
+      }).catch(function (e) {
+        dataMsg.textContent = "Import gambar gagal: " + ((e && e.message) || "terjadi kesalahan");
+        dataFile.value = "";
+      });
     };
     reader.readAsText(f);
   });
@@ -4106,6 +4119,49 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       imgSay("Semua gambar dihapus");
     }).catch(imgFail);
   });
+
+  /* Import/Export gambar */
+  var imgBlobToData = function (blob) {
+    return new Promise(function (resolve, reject) {
+      var r = new FileReader();
+      r.onload = function () { resolve(String(r.result)); };
+      r.onerror = function () { reject(new Error("gambar tidak bisa dibaca")); };
+      r.readAsDataURL(blob);
+    });
+  };
+  var imgExportAll = function () {
+    return imgTx("readonly", function (s) { return s.getAll(); }).then(function (rows) {
+      rows = (rows || []).sort(function (a, b) { return a.id - b.id; });
+      return Promise.all(rows.map(function (r) {
+        return imgBlobToData(r.blob).then(function (data) {
+          return { name: r.name, type: r.type, time: r.time, data: data };
+        });
+      }));
+    });
+  };
+  var imgValid = function (arr) {
+    return Array.isArray(arr) && arr.length <= IMG_MAX_COUNT && arr.every(function (x) {
+      return x && typeof x.name === "string" && typeof x.type === "string" && /^image\//.test(x.type) &&
+        typeof x.data === "string" && /^data:image\/[a-z0-9.+-]+;base64,/i.test(x.data);
+    });
+  };
+  var imgFromData = function (x) {
+    var bin = atob(x.data.slice(x.data.indexOf(",") + 1));
+    var bytes = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return new Blob([bytes], { type: x.type });
+  };
+  var imgImportAll = function (arr) {
+    return Promise.resolve().then(function () {
+      var rows = arr.map(function (x) {
+        return { name: x.name, type: x.type, blob: imgFromData(x), time: typeof x.time === "number" ? x.time : Date.now() };
+      });
+      return imgTx("readwrite", function (s) {
+        s.clear();
+        rows.forEach(function (r) { s.add(r); });
+      });
+    });
+  };
 
   imgRender().catch(imgFail);
 
