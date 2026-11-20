@@ -110,8 +110,10 @@ code, samp { font-family: var(--font-mono); font-size: 0.9em; overflow-wrap: any
 summary { display: list-item; min-height: 2.75rem; padding: 0.5rem 0; font-weight: 600; cursor: pointer; }
 ul { padding-inline-start: 1.25rem; }
 li { margin-bottom: 0.25rem; }
-p > button + button { margin-inline-start: 0.5rem; }
-header > button + button { margin-inline-start: 0.5rem; }
+p:has(> button) { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+header { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+header > h1 { flex: 0 0 100%; margin-bottom: 0.5rem; }
+header > nav[role="tablist"] { flex: 0 0 100%; margin-top: 0.5rem; }
 
 dialog {
   width: min(24rem, calc(100% - 2rem));
@@ -195,7 +197,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <!-- Header button -->
 <button type="button" id="theme-toggle"><span id="theme-icon" aria-hidden="true">☾</span> <span id="theme-label">Mode Gelap</span></button>
 <button type="button" id="help-open" aria-haspopup="dialog"><span aria-hidden="true">?</span> <span>Help</span></button>
-<button type="button" id="data-open" aria-haspopup="dialog"><span aria-hidden="true">🖫</span> <span>Import/Export</span></button>
+<button type="button" id="data-open" aria-haspopup="dialog"><span aria-hidden="true">💾</span> <span>Import/Export</span></button>
 <button type="button" id="purge-open" aria-haspopup="dialog"><span aria-hidden="true">🗑</span> <span>Purge</span></button>
 <!-- List semua tab -->
 <nav role="tablist" aria-label="Tab">
@@ -4417,7 +4419,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
   var restoreInputs = function () {
     var data = readStore();
     Array.prototype.forEach.call(document.querySelectorAll("main input, main select, main textarea:not([readonly])"), function (el) {
-      if (!Object.prototype.hasOwnProperty.call(data, el.id) || typeof data[el.id] !== "string") return;
+      if (!el.id || !Object.prototype.hasOwnProperty.call(data, el.id) || typeof data[el.id] !== "string") return;
       if (el.tagName === "SELECT") {
         var exists = Array.prototype.some.call(el.options, function (o) { return o.value === data[el.id]; });
         if (exists) el.value = data[el.id];
