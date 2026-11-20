@@ -129,7 +129,7 @@ dialog::backdrop { background: rgba(0, 0, 0, 0.5); }
 dialog ul {list-style: none; padding-left: 0; }
 dialog a { display: inline-block; padding: 0.25rem 0; }
 
-#note-images, #tax-images {
+#note-images, #tax-images, #pilot-images {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
   gap: 1rem;
@@ -1186,6 +1186,14 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><button type="button" id="clear-note">Clear</button></p>
 </fieldset>
 
+<fieldset>
+<legend>Upload Image</legend>
+<p><input type="file" id="pi-file" data-raw accept="image/*" multiple aria-label="Pilih gambar"></p>
+<p><button type="button" id="pi-paste">Paste dari clipboard</button> <button type="button" id="pi-delete-all">Hapus semua</button></p>
+<p id="pi-msg" role="status"></p>
+<div id="pi-list"></div>
+</fieldset>
+
 <p><strong>Note:</strong></p>
 <ul>
 <li>Hitung di kolom <em>Input</em>, hasilnya akan muncul otomatis di <em>Result</em></li>
@@ -1206,6 +1214,9 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li class="red"><code>%</code> hanya membagi angka di depannya dengan 100. Untuk menambah persen tulis lengkap: <code>200 + 200 * 10%</code> = 220, bukan <code>200 + 10%</code> yang hasilnya 200.1</li>
 <li>Hasil di atas 1,000 ditampilkan: <code>K</code> ribu, <code>M</code> juta, <code>B</code> miliar, <code>T</code> triliun (dalam kurung)</li>
 <li>Jika salah tulis, Result otomatis menampilkan <em>error message</em>, misalnya kurung kurang, karakter tidak dikenal, atau tidak bisa dibagi nol</li>
+<li>Upload Image: pilih gambar lewat tombol <em>Choose File</em> (boleh banyak sekaligus), atau tekan <strong>Ctrl+V</strong> di tab Pilot setelah copy atau screenshot ke clipboard, atau klik <em>Paste dari clipboard</em></li>
+<li>Gambar disimpan di browser ini (maks 10 MB per gambar, maks 100 gambar). Klik gambar untuk membuka ukuran penuh, <em>Unduh</em> untuk menyimpan, <em>Hapus</em> untuk menghapus satu gambar</li>
+<li class="red">Gambar tidak ikut tombol <em>Purge</em> dan tidak ikut <em>Import/Export</em></li>
 <li>Contoh: <code>1.5b * 65%</code> hasilnya <samp>975,000,000 (975 M)</samp>, <code>(5m + 250k) * 2</code> hasilnya <samp>10,500,000 (10.5 M)</samp>, <code>100 / 8</code> hasilnya <samp>12.5</samp></li>
 </ul>
 </section>
@@ -3904,6 +3915,199 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     el.dispatchEvent(new Event("input", { bubbles: true }));
     el.focus();
   });
+
+  /* Pilot: Upload Image (disimpan di IndexedDB) */
+  var IMG_DB = "bdo-game-pilot-images";
+  var IMG_STORE = "images";
+  var IMG_MAX_BYTES = 10 * 1024 * 1024;
+  var IMG_MAX_COUNT = 100;
+  var imgList = document.getElementById("pi-list");
+  var imgMsg = document.getElementById("pi-msg");
+  var imgFile = document.getElementById("pi-file");
+  var imgUrls = [];
+  var imgDb = null;
+  var imgSay = function (t) { imgMsg.textContent = t; };
+  var imgFail = function (e) { imgSay((e && e.message) || "Terjadi kesalahan"); };
+
+  var imgOpen = function () {
+    return new Promise(function (resolve, reject) {
+      if (imgDb) { resolve(imgDb); return; }
+      if (!window.indexedDB) { reject(new Error("Browser tidak mendukung penyimpanan gambar")); return; }
+      var req;
+      try { req = indexedDB.open(IMG_DB, 1); } catch (e) { reject(new Error("Penyimpanan gambar diblokir browser")); return; }
+      req.onupgradeneeded = function () { req.result.createObjectStore(IMG_STORE, { keyPath: "id", autoIncrement: true }); };
+      req.onsuccess = function () { imgDb = req.result; resolve(imgDb); };
+      req.onerror = function () { reject(new Error("Penyimpanan gambar diblokir browser")); };
+    });
+  };
+  var imgTx = function (mode, fn) {
+    return imgOpen().then(function (db) {
+      return new Promise(function (resolve, reject) {
+        var tx = db.transaction(IMG_STORE, mode);
+        var req = fn(tx.objectStore(IMG_STORE));
+        tx.oncomplete = function () { resolve(req ? req.result : undefined); };
+        tx.onerror = function () { reject(new Error("Gagal mengakses penyimpanan gambar")); };
+        tx.onabort = function () { reject(new Error("Gagal mengakses penyimpanan gambar")); };
+      });
+    });
+  };
+
+  var imgSize = function (n) {
+    return n >= 1048576 ? (n / 1048576).toFixed(1) + " MB" : Math.max(1, Math.round(n / 1024)) + " KB";
+  };
+  var imgExt = function (type) {
+    return (type.split("/")[1] || "png").replace(/\+.*$/, "").replace("jpeg", "jpg");
+  };
+  var imgName = function (f, i, n) {
+    if (f.name && !/^image\.[a-z0-9]+$/i.test(f.name)) return f.name;
+    var d = new Date();
+    var p = function (x) { return String(x).padStart(2, "0"); };
+    return "clipboard-" + d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate()) + "-" +
+      p(d.getHours()) + p(d.getMinutes()) + p(d.getSeconds()) +
+      (n > 1 ? "-" + (i + 1) : "") + "." + imgExt(f.type);
+  };
+
+  var imgRender = function () {
+    return imgTx("readonly", function (s) { return s.getAll(); }).then(function (rows) {
+      imgUrls.forEach(function (u) { URL.revokeObjectURL(u); });
+      imgUrls = [];
+      imgList.textContent = "";
+      rows = rows || [];
+      if (!rows.length) {
+        var empty = document.createElement("p");
+        empty.textContent = "Belum ada gambar";
+        imgList.appendChild(empty);
+        return;
+      }
+      rows.sort(function (a, b) { return b.id - a.id; });
+      var grid = document.createElement("div");
+      grid.id = "pilot-images";
+      rows.forEach(function (r) {
+        var url = URL.createObjectURL(r.blob);
+        imgUrls.push(url);
+        var fig = document.createElement("figure");
+        var link = document.createElement("a");
+        link.href = url;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        var img = document.createElement("img");
+        img.src = url;
+        img.alt = r.name;
+        img.loading = "lazy";
+        link.appendChild(img);
+        var cap = document.createElement("figcaption");
+        var strong = document.createElement("strong");
+        strong.textContent = r.name;
+        cap.appendChild(strong);
+        cap.appendChild(document.createTextNode(" (" + imgSize(r.blob.size) + ", " + new Date(r.time).toLocaleString("id-ID") + ")"));
+        var row = document.createElement("p");
+        var dl = document.createElement("a");
+        dl.href = url;
+        dl.download = r.name;
+        dl.textContent = "Unduh";
+        var del = document.createElement("button");
+        del.type = "button";
+        del.textContent = "Hapus";
+        del.setAttribute("data-id", String(r.id));
+        del.setAttribute("aria-label", "Hapus " + r.name);
+        row.appendChild(dl);
+        row.appendChild(document.createTextNode(" "));
+        row.appendChild(del);
+        fig.appendChild(link);
+        fig.appendChild(cap);
+        fig.appendChild(row);
+        grid.appendChild(fig);
+      });
+      imgList.appendChild(grid);
+    });
+  };
+
+  var imgAdd = function (files) {
+    var list = Array.prototype.slice.call(files).filter(function (f) { return /^image\//.test(f.type); });
+    if (!list.length) { imgSay("Tidak ada gambar yang bisa ditambahkan"); return Promise.resolve(); }
+    var ok = list.filter(function (f) { return f.size <= IMG_MAX_BYTES; });
+    var tooBig = list.length - ok.length;
+    var take = [];
+    return imgTx("readonly", function (s) { return s.count(); }).then(function (count) {
+      take = ok.slice(0, Math.max(0, IMG_MAX_COUNT - count));
+      return imgTx("readwrite", function (s) {
+        take.forEach(function (f, i) {
+          s.add({ name: imgName(f, i, take.length), type: f.type, blob: f, time: Date.now() });
+        });
+      });
+    }).then(imgRender).then(function () {
+      var msg = take.length + " gambar ditambahkan";
+      if (tooBig) msg += ", " + tooBig + " dilewati (maks 10 MB per gambar)";
+      if (take.length < ok.length) msg += ", " + (ok.length - take.length) + " dilewati (maks " + IMG_MAX_COUNT + " gambar)";
+      imgSay(msg);
+    });
+  };
+
+  imgFile.addEventListener("change", function () {
+    var files = imgFile.files;
+    if (!files || !files.length) return;
+    imgAdd(files).catch(imgFail).then(function () { imgFile.value = ""; });
+  });
+
+  /* Ctrl+V di tab Pilot: ambil gambar dari clipboard */
+  document.addEventListener("paste", function (ev) {
+    if (document.getElementById("panel-pilot").hidden) return;
+    var cd = ev.clipboardData;
+    if (!cd || !cd.files || !cd.files.length) return;
+    var imgs = Array.prototype.filter.call(cd.files, function (f) { return /^image\//.test(f.type); });
+    if (!imgs.length) return;
+    var tg = ev.target;
+    var inField = tg && (tg.tagName === "INPUT" || tg.tagName === "TEXTAREA");
+    if (inField && cd.getData("text/plain")) return;
+    ev.preventDefault();
+    imgAdd(imgs).catch(imgFail);
+  });
+
+  /* Tombol Paste dari clipboard */
+  document.getElementById("pi-paste").addEventListener("click", function () {
+    if (!navigator.clipboard || !navigator.clipboard.read) {
+      imgSay("Browser tidak mendukung tombol ini, tekan Ctrl+V di tab Pilot");
+      return;
+    }
+    navigator.clipboard.read().then(function (items) {
+      var jobs = [];
+      items.forEach(function (it) {
+        var t = it.types.filter(function (x) { return /^image\//.test(x); })[0];
+        if (t) {
+          jobs.push(it.getType(t).then(function (b) {
+            return new File([b], "image." + imgExt(t), { type: t });
+          }));
+        }
+      });
+      if (!jobs.length) { imgSay("Tidak ada gambar di clipboard"); return; }
+      return Promise.all(jobs).then(imgAdd);
+    }).catch(function (e) {
+      imgSay(e && e.message && /penyimpanan|Gagal mengakses/.test(e.message)
+        ? e.message
+        : "Browser tidak mengizinkan baca clipboard, tekan Ctrl+V di tab Pilot");
+    });
+  });
+
+  /* Hapus satu gambar */
+  imgList.addEventListener("click", function (ev) {
+    var btn = ev.target.closest ? ev.target.closest("button[data-id]") : null;
+    if (!btn) return;
+    var id = Number(btn.getAttribute("data-id"));
+    imgTx("readwrite", function (s) { s.delete(id); }).then(imgRender).then(function () {
+      imgSay("Gambar dihapus");
+    }).catch(imgFail);
+  });
+
+  /* Hapus semua gambar */
+  document.getElementById("pi-delete-all").addEventListener("click", function () {
+    if (!imgList.querySelector("figure")) { imgSay("Belum ada gambar"); return; }
+    if (!window.confirm("Hapus semua gambar?")) return;
+    imgTx("readwrite", function (s) { s.clear(); }).then(imgRender).then(function () {
+      imgSay("Semua gambar dihapus");
+    }).catch(imgFail);
+  });
+
+  imgRender().catch(imgFail);
 
   /* Simpan input di localStorage */
   var STORE_KEY = "bdo-game-pilot:inputs";
