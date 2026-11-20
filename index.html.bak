@@ -125,6 +125,7 @@ dialog {
 }
 dialog::backdrop { background: rgba(0, 0, 0, 0.5); }
 #verify-dialog { width: min(40rem, calc(100% - 2rem)); }
+#data-msg:empty { display: none; }
 dialog ul {list-style: none; padding-left: 0; }
 dialog a { display: inline-block; padding: 0.25rem 0; }
 
@@ -194,6 +195,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <!-- Header button -->
 <button type="button" id="theme-toggle"><span id="theme-icon" aria-hidden="true">☾</span> <span id="theme-label">Mode Gelap</span></button>
 <button type="button" id="help-open" aria-haspopup="dialog"><span aria-hidden="true">?</span> <span>Help</span></button>
+<button type="button" id="data-open" aria-haspopup="dialog"><span aria-hidden="true">💾</span> <span>Import/Export</span></button>
 <button type="button" id="purge-open" aria-haspopup="dialog"><span aria-hidden="true">🗑</span> <span>Purge</span></button>
 <!-- List semua tab -->
 <nav role="tablist" aria-label="Tab">
@@ -1223,6 +1225,12 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <h2 id="purge-title">Purge</h2>
 <p><button type="button" id="purge-reset">Reset</button> <button type="button" id="purge-clear">Clear</button></p>
 </dialog>
+<dialog id="data-dialog" aria-labelledby="data-title">
+<h2 id="data-title">Import/Export</h2>
+<p><button type="button" id="data-import">Import</button> <button type="button" id="data-export">Export</button></p>
+<p id="data-msg" role="status"></p>
+<input type="file" id="data-file" accept="application/json,.json" hidden>
+</dialog>
 <dialog id="verify-dialog" aria-labelledby="verify-title">
 <h2 id="verify-title">Verifikasi (ChatGPT, Claude, Gemini)</h2>
 <p>Copy prompt di bawah, lalu paste ke ChatGPT, Claude, atau Gemini untuk verifikasi</p>
@@ -1357,6 +1365,111 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
   };
   document.getElementById("purge-reset").addEventListener("click", function () { purgeAll("reset"); });
   document.getElementById("purge-clear").addEventListener("click", function () { purgeAll("clear"); });
+
+  /* Import/Export (data tersimpan di localStorage) */
+  var DATA_KEYS = ["bdo-game-pilot:inputs", "bdo-game-pilot:kpi", "bdo-game-pilot:tab", "theme"];
+  var dataDlg = document.getElementById("data-dialog");
+  var dataMsg = document.getElementById("data-msg");
+  var dataFile = document.getElementById("data-file");
+  var closeData = function () {
+    if (typeof dataDlg.close === "function") dataDlg.close();
+    else dataDlg.removeAttribute("open");
+  };
+  document.getElementById("data-open").addEventListener("click", function () {
+    if (dataDlg.open) return;
+    dataMsg.textContent = "";
+    if (typeof dataDlg.showModal === "function") dataDlg.showModal();
+    else dataDlg.setAttribute("open", "");
+  });
+  dataDlg.addEventListener("click", function (ev) {
+    if (ev.target !== dataDlg) return;
+    var r = dataDlg.getBoundingClientRect();
+    var inside = ev.clientX >= r.left && ev.clientX <= r.right && ev.clientY >= r.top && ev.clientY <= r.bottom;
+    if (!inside) closeData();
+  });
+
+  document.getElementById("data-export").addEventListener("click", function () {
+    var data = {};
+    DATA_KEYS.forEach(function (k) {
+      try {
+        var s = localStorage.getItem(k);
+        if (s !== null) data[k] = s;
+      } catch (e) {}
+    });
+    var json = JSON.stringify({ app: "bdo-game-pilot", version: 1, exported: new Date().toISOString(), data: data }, null, 2);
+    var d = new Date();
+    var pad = function (n) { return String(n).padStart(2, "0"); };
+    var name = "bdo-game-pilot-" + d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + ".json";
+    var url = URL.createObjectURL(new Blob([json], { type: "application/json" }));
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    dataMsg.textContent = "Export berhasil: " + name;
+  });
+
+  document.getElementById("data-import").addEventListener("click", function () {
+    dataMsg.textContent = "";
+    dataFile.click();
+  });
+  dataFile.addEventListener("change", function () {
+    var f = dataFile.files && dataFile.files[0];
+    if (!f) return;
+    if (f.size > 5 * 1024 * 1024) {
+      dataMsg.textContent = "Import gagal: file terlalu besar";
+      dataFile.value = "";
+      return;
+    }
+    var reader = new FileReader();
+    reader.onerror = function () {
+      dataMsg.textContent = "Import gagal: file tidak bisa dibaca";
+      dataFile.value = "";
+    };
+    reader.onload = function () {
+      var clean = {};
+      try {
+        var parsed = JSON.parse(String(reader.result));
+        if (!parsed || parsed.app !== "bdo-game-pilot" || !parsed.data || typeof parsed.data !== "object" || Array.isArray(parsed.data)) {
+          throw new Error("file bukan hasil export BDO Game Pilot");
+        }
+        DATA_KEYS.forEach(function (k) {
+          var s = parsed.data[k];
+          if (s === undefined) return;
+          if (typeof s !== "string") throw new Error("data '" + k + "' tidak valid");
+          if (k === "bdo-game-pilot:inputs") {
+            var o = JSON.parse(s);
+            if (!o || typeof o !== "object" || Array.isArray(o)) throw new Error("data input tidak valid");
+          } else if (k === "bdo-game-pilot:kpi") {
+            if (!Array.isArray(JSON.parse(s))) throw new Error("data KPI tidak valid");
+          } else if (k === "theme") {
+            if (s !== "light" && s !== "dark") throw new Error("data tema tidak valid");
+          } else if (k === "bdo-game-pilot:tab") {
+            if (!document.getElementById(s) || s.indexOf("tab-") !== 0) throw new Error("data tab tidak valid");
+          }
+          clean[k] = s;
+        });
+      } catch (e) {
+        dataMsg.textContent = "Import gagal: " + (e instanceof SyntaxError ? "file bukan JSON yang valid" : e.message);
+        dataFile.value = "";
+        return;
+      }
+      try {
+        DATA_KEYS.forEach(function (k) {
+          if (Object.prototype.hasOwnProperty.call(clean, k)) localStorage.setItem(k, clean[k]);
+          else localStorage.removeItem(k);
+        });
+      } catch (e) {
+        dataMsg.textContent = "Import gagal: storage browser penuh atau diblokir";
+        dataFile.value = "";
+        return;
+      }
+      location.reload();
+    };
+    reader.readAsText(f);
+  });
 
   /* Tabs */
   var TAB_KEY = "bdo-game-pilot:tab";
