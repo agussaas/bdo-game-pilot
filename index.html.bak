@@ -259,9 +259,12 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><label for="h-rate">TL per jam (note):</label> <input type="text" inputmode="decimal" id="h-rate" name="rate" value="11,000"></p>
 <p><label><input type="checkbox" id="h-drop-on" name="drop-on" aria-controls="h-drop h-drate"> 100% Drop Amount (Blessing of Old Moon Scroll, [Event] Golden Blessing of Agris):</label> <input type="text" inputmode="decimal" id="h-drop" name="drop" value="1" disabled aria-label="Jumlah item 100% Drop Amount yang digunakan, masing-masing 1 jam"></p>
 <p><label for="h-drate">TL/hr dengan Agris (note):</label> <input type="text" inputmode="decimal" id="h-drate" name="drate" value="19,000" disabled></p>
+<p><label><input type="checkbox" id="h-target-on" name="target-on" aria-controls="h-target"> Target (opsional):</label> <input type="text" id="h-target" name="target" value="9 H" disabled aria-label="Target (format H dan M)"></p>
 <p><button type="button" id="reset-hourly">Reset</button> <button type="button" id="clear-hourly">Clear</button></p>
 </fieldset>
 <p><label for="h-out">Progress:</label> <textarea id="h-out" name="progress" rows="1" cols="50" readonly></textarea></p>
+<p><label for="h-need">Target TL:</label> <textarea id="h-need" name="need" rows="1" cols="50" readonly></textarea></p>
+<p><label for="h-gap">Kurang TL:</label> <textarea id="h-gap" name="gap" rows="1" cols="50" readonly></textarea></p>
 <p><button type="button" id="verify-hourly-open" aria-haspopup="dialog">Verifikasi (ChatGPT, Claude, Gemini)</button></p>
 <p><strong>Contoh:</strong></p>
 <ul>
@@ -269,12 +272,13 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li><em>TL per jam sesuai patokan yang ada di note: <code>11,000</code></em></li>
 <li>Progress: <samp>8 Hours 49 Minutes 5 Seconds</samp></li>
 <li>Jika <em>100% Drop Amount</em> dicentang (<code>digunakan 1x</code>) dengan patokan TL/hr dengan Agris (<code>19,000</code>); Progress: <samp>8 Hours 5 Minutes 27 Seconds</samp></li>
+<li>Jika <em>Target</em> dicentang dan diisi <code>9 H</code>: Target TL <samp>99,000 TL</samp>, Kurang TL <samp>2,000 TL</samp></li>
 </ul>
 <p><strong>Note:</strong></p>
 <ul>
 <li><em>100% Drop Amount</em>: centang jika memakai <em>Blessing of Old Moon Scroll</em> atau <em>[Event] Golden Blessing of Agris</em>, lalu isi total berapa yang digunakan dan patokan <em>TL/hr dengan Agris-nya</em></li>
 <li class="red">Buff <em>Blessing of Old Moon Scroll</em> dan <em>[Event] Golden Blessing of Agris</em> efeknya seperti memakai Agris 1 jam</li>
-</ul>
+<li><em>Target</em> (opsional): centang lalu isi target dengan format <code>H</code> (jam) dan <code>M</code> (menit), misal <code>9 H</code>, <code>7 H 4 M</code>, atau <code>45 M</code>. Hasilnya <em>Target TL</em> yang dibutuhkan untuk target itu dan <em>Kurang TL</em> dari Total TL, otomatis berubah saat Total TL diubah</li></ul>
 <details>
 <summary>Perhitungan</summary>
 <p><label for="h-d1">Jumlah item dikali TL/hr dengan Agris <strong>(maks TL Agris)</strong></label></p>
@@ -295,6 +299,17 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><textarea id="h-s4" name="h-s4" rows="1" cols="50" readonly></textarea></p>
 <p><label for="h-s5">Sisa total detik dibagi <code>60</code> <strong class="red">(detik)</strong></label></p>
 <p><textarea id="h-s5" name="h-s5" rows="1" cols="50" readonly></textarea></p>
+<fieldset id="h-tg" hidden>
+<legend>Target</legend>
+<p><label for="h-g0">Target diubah ke jam: jam ditambah menit dibagi <code>60</code> <strong>(target dalam jam)</strong></label></p>
+<p><textarea id="h-g0" name="h-g0" rows="1" cols="50" readonly></textarea></p>
+<p><label for="h-g1">Target dalam jam dikali TL per jam <strong>(jika 100% Drop Amount dicentang: jam sebanyak item dihitung dengan TL/hr dengan Agris, sisanya dengan TL per jam)</strong></label></p>
+<p><textarea id="h-g1" name="h-g1" rows="1" cols="50" readonly></textarea></p>
+<p><label for="h-g2">Target TL <em>dibulatkan ke atas</em> <strong class="red">(Target TL)</strong></label></p>
+<p><textarea id="h-g2" name="h-g2" rows="1" cols="50" readonly></textarea></p>
+<p><label for="h-g3">Target TL dikurangi Total TL <strong class="red">(Kurang TL, ≤ 0 berarti target tercapai)</strong></label></p>
+<p><textarea id="h-g3" name="h-g3" rows="1" cols="50" readonly></textarea></p>
+</fieldset>
 </details>
 </div>
 </section>
@@ -314,16 +329,19 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><label for="a-normal">TL/hr tanpa Agris (note):</label> <input type="text" inputmode="decimal" id="a-normal" name="normal" value="11,000"></p>
 <p><label for="a-current">Agris yang digunakan selama shift:</label> <input type="text" inputmode="decimal" id="a-current" name="current" value="55,000"></p>
 <p><label><input type="checkbox" id="a-drop-on" name="drop-on" aria-controls="a-drop"> 100% Drop Amount (Blessing of Old Moon Scroll, [Event] Golden Blessing of Agris):</label> <input type="text" inputmode="decimal" id="a-drop" name="drop" value="1" disabled aria-label="Jumlah item 100% Drop Amount yang digunakan, masing-masing 1 jam"></p>
+<p><label><input type="checkbox" id="a-target-on" name="target-on" aria-controls="a-target"> Target (opsional):</label> <input type="text" id="a-target" name="target" value="9 H" disabled aria-label="Target (format H dan M)"></p>
 <p><button type="button" id="reset-agris">Reset</button> <button type="button" id="clear-agris">Clear</button></p>
 </fieldset>
 <p><label for="a-out">Total Time:</label> <textarea id="a-out" name="total-time" rows="1" cols="40" readonly></textarea></p>
 <p><label for="a-with">Time with Agris:</label> <textarea id="a-with" name="time-with-agris" rows="1" cols="40" readonly></textarea></p>
 <p><label for="a-without">Time without Agris:</label> <textarea id="a-without" name="time-without-agris" rows="1" cols="40" readonly></textarea></p>
+<p><label for="a-need">Target TL:</label> <textarea id="a-need" name="need" rows="1" cols="40" readonly></textarea></p>
+<p><label for="a-gap">Kurang TL:</label> <textarea id="a-gap" name="gap" rows="1" cols="40" readonly></textarea></p>
 <p><button type="button" id="verify-agris-open" aria-haspopup="dialog">Verifikasi (ChatGPT, Claude, Gemini)</button></p>
 <p><strong>Note:</strong></p>
 <ul>
 <li>Harus ada patokan <em>Agris yang digunakan</em> dan <em>total TL</em> per jam</li>
-<li class="red"><em>100% Drop Amount</em>: centang jika memakai <em>Blessing of Old Moon Scroll</em> atau <em>[Event] Golden Blessing of Agris</em>, tiap buff berdurasi 1 jam dan efeknya seperti memakai Agris 1 jam</li>
+<li><em>Target</em> (opsional): centang lalu isi target dengan format <code>H</code> (jam) dan <code>M</code> (menit), misal <code>9 H</code>, <code>7 H 4 M</code>, atau <code>45 M</code>. Hasilnya <em>Target TL</em> yang dibutuhkan untuk target itu (memakai Agris yang tersedia dulu, sisanya patokan tanpa Agris) dan <em>Kurang TL</em> dari Total TL, otomatis berubah saat Total TL diubah</li><li class="red"><em>100% Drop Amount</em>: centang jika memakai <em>Blessing of Old Moon Scroll</em> atau <em>[Event] Golden Blessing of Agris</em>, tiap buff berdurasi 1 jam dan efeknya seperti memakai Agris 1 jam</li>
 </ul>
 <div id="note-images">
 <figure>
@@ -345,6 +363,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li>Total Time: <samp>8 Hours 45 Minutes 0 Seconds</samp></li>
 <li>Time with Agris: <samp>1 Hours 43 Minutes 7 Seconds</samp></li>
 <li>Time without Agris: <samp>7 Hours 1 Minutes 52 Seconds</samp></li>
+<li>Jika <em>Target</em> dicentang dan diisi <code>9 H</code>: Target TL <samp>112,750 TL</samp>, Kurang TL <samp>2,750 TL</samp></li>
 <li>Jika <em>100% Drop Amount</em> dicentang (<code>digunakan 1x</code>): Total Time: <samp>8 Hours 1 Minutes 21 Seconds</samp>, Time with Agris: <samp>2 Hours 43 Minutes 7 Seconds</samp>, Time without Agris: <samp>5 Hours 18 Minutes 14 Seconds</samp></li>
 </ul>
 <details>
@@ -393,6 +412,19 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <p><textarea id="a-o3" name="a-o3" rows="1" cols="50" readonly></textarea></p>
 <p><label for="a-o4">Sisa total detik dibagi <code>60</code> <strong class="red">(detik)</strong></label></p>
 <p><textarea id="a-o4" name="a-o4" rows="1" cols="50" readonly></textarea></p>
+</fieldset>
+<fieldset id="a-tg" hidden>
+<legend>Target</legend>
+<p><label for="a-g0">Target diubah ke jam: jam ditambah menit dibagi <code>60</code> <strong>(target dalam jam)</strong></label></p>
+<p><textarea id="a-g0" name="a-g0" rows="1" cols="50" readonly></textarea></p>
+<p><label for="a-g1">Agris yang digunakan dibagi Agris per jam, ditambah jam 100% Drop Amount <strong>(maks jam Agris)</strong></label></p>
+<p><textarea id="a-g1" name="a-g1" rows="1" cols="50" readonly></textarea></p>
+<p><label for="a-g2">Target dalam jam dibandingkan dengan Maks jam Agris, lalu dihitung TL-nya <strong>(≤: target × TL/hr dengan Agris, >: Maks TL Agris + sisa jam × TL/hr tanpa Agris)</strong></label></p>
+<p><textarea id="a-g2" name="a-g2" rows="1" cols="50" readonly></textarea></p>
+<p><label for="a-g3">Target TL <em>dibulatkan ke atas</em> <strong class="red">(Target TL)</strong></label></p>
+<p><textarea id="a-g3" name="a-g3" rows="1" cols="50" readonly></textarea></p>
+<p><label for="a-g4">Target TL dikurangi Total TL <strong class="red">(Kurang TL, ≤ 0 berarti target tercapai)</strong></label></p>
+<p><textarea id="a-g4" name="a-g4" rows="1" cols="50" readonly></textarea></p>
 </fieldset>
 </details>
 </div>
@@ -1080,13 +1112,14 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <option value="LAIN2">LAIN2</option>
 </select></p>
 <p id="lo-lain-row" hidden><label for="lo-lain">Keterangan LAIN2:</label> <select id="lo-lain" name="lain">
-<option value="Used" selected>Used</option>
-<option value="Kosong">Kosong</option>
+<option value="USED" selected>USED</option>
+<option value="KOSONG">KOSONG</option>
 <option value="IT">IT</option>
+<option value="LISTRIK">LISTRIK</option>
 <option value="MT">MT</option>
 <option value="TR">TR</option>
-<option value="Authen">Authen</option>
-<option value="Kajian">Kajian</option>
+<option value="REAUTHEN">REAUTHEN</option>
+<option value="KAJIAN">KAJIAN</option>
 </select></p>
 <p id="lo-progress-row"><label for="lo-progress">Progress:</label> <input type="text" id="lo-progress" name="progress" value=""></p>
 <p><button type="button" id="reset-logout">Reset</button> <button type="button" id="clear-logout">Clear</button></p>
@@ -1098,13 +1131,14 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li>Pilih <em>Pilot</em> untuk otomatis mengisi Nama, Divisi, dan No Absen</li>
 <li><em>Type Job: LAIN2</em> dipakai untuk di luar jam order:
 <ul>
-<li><code>Used</code>: owner masih login atau main</li>
-<li><code>Kosong</code>: jamkos, tidak ada orderan</li>
-<li><code>IT</code>: kendala teknis, lampu mati, PC bermasalah, dll</li>
+<li><code>USED</code>: owner masih login atau main</li>
+<li><code>KOSONG</code>: jamkos, tidak ada orderan</li>
+<li><code>IT</code>: kendala teknis, PC bermasalah, dll</li>
+<li><code>LISTRIK</code>: pemadaman listrik atau MCB ngetrip</li>
 <li><code>MT</code>: BDO lagi maintenance</li>
 <li><code>TR</code>: lagi bantu anak training</li>
-<li><code>Authen</code>: tidak bisa login karena masih authen</li>
-<li><code>Kajian</code>: jika ada pengajian</li>
+<li><code>REAUTHEN</code>: tidak bisa login karena masih authen</li>
+<li><code>KAJIAN</code>: jika ada pengajian</li>
 </ul>
 </li>
 <li><em>No Order</em> untuk jamkos formatnya <code>141</code> diikuti nomor PC <em>dua digit</em>, sampai PC 12:
@@ -1233,21 +1267,22 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li><code>-</code> kurang</li>
 <li><code>*</code> kali (boleh juga <code>x</code> atau <code>×</code>)</li>
 <li><code>/</code> bagi (boleh juga <code>÷</code>)</li>
-<li><code>^</code> pangkat, contoh <code>2^3</code> = 8</li>
+<li><code>^</code> pangkat (boleh juga <code>**</code>), contoh <code>2^3</code> = 8</li>
 <li><code>%</code> persen, contoh <code>15%</code> = 0.15</li>
 <li><code>( )</code> kurung</li>
 </ul>
 </li>
 <li>Urutan perhitungan: kurung dulu, lalu <code>%</code> dan <code>^</code>, lalu <code>*</code> dan <code>/</code>, terakhir <code>+</code> dan <code>-</code></li>
 <li>Satuan ditulis langsung setelah angka tanpa spasi: <code>k</code> (ribu), <code>m</code> (juta), <code>b</code> (miliar), <code>t</code> (triliun), contoh <code>500k</code>, <code>1.5m</code>, <code>2b</code></li>
-<li>Angka memakai titik sebagai desimal (<code>12.5</code>). Koma dianggap pemisah ribuan, jadi <code>1,000,000</code> sama dengan <code>1000000</code></li>
+<li>Angka memakai titik sebagai desimal (<code>12.5</code>). Koma dengan tepat 3 angka di belakangnya dianggap pemisah ribuan, jadi <code>1,000,000</code> sama dengan <code>1000000</code>. Notasi ilmiah juga bisa, misal <code>1e3</code> = 1000</li>
+<li>Fungsi JavaScript Math, ditulis dengan kurung (huruf besar kecil bebas, awalan <code>Math.</code> boleh): <code>abs</code>, <code>sqrt</code>, <code>cbrt</code>, <code>pow</code>, <code>exp</code>, <code>expm1</code>, <code>log</code>, <code>log2</code>, <code>log10</code>, <code>log1p</code>, <code>sin</code>, <code>cos</code>, <code>tan</code>, <code>asin</code>, <code>acos</code>, <code>atan</code>, <code>atan2</code>, <code>sinh</code>, <code>cosh</code>, <code>tanh</code>, <code>asinh</code>, <code>acosh</code>, <code>atanh</code>, <code>floor</code>, <code>ceil</code>, <code>round</code>, <code>trunc</code>, <code>sign</code>, <code>min</code>, <code>max</code>, <code>hypot</code>, <code>fround</code>, <code>clz32</code>, <code>imul</code>, <code>random</code>. Sudut untuk <code>sin</code>, <code>cos</code>, <code>tan</code> memakai radian</li>
+<li>Konstanta: <code>pi</code>, <code>e</code>, <code>ln2</code>, <code>ln10</code>, <code>log2e</code>, <code>log10e</code>, <code>sqrt2</code>, <code>sqrt1_2</code></li>
+<li class="red">Pemisah argumen fungsi: <code>;</code> atau koma, misal <code>max(5; 10)</code>. Hati-hati, <code>max(1,500)</code> tanpa spasi dibaca <code>1,500</code> (seribu lima ratus), jadi pakai <code>;</code> atau beri spasi setelah koma</li>
 <li class="red"><code>%</code> hanya membagi angka di depannya dengan 100. Untuk menambah persen tulis lengkap: <code>200 + 200 * 10%</code> = 220, bukan <code>200 + 10%</code> yang hasilnya 200.1</li>
 <li>Hasil di atas 1,000 ditampilkan: <code>K</code> ribu, <code>M</code> juta, <code>B</code> miliar, <code>T</code> triliun (dalam kurung)</li>
 <li>Jika salah tulis, Result otomatis menampilkan <em>error message</em>, misalnya kurung kurang, karakter tidak dikenal, atau tidak bisa dibagi nol</li>
-<li>Upload Image: pilih gambar lewat tombol <em>Choose File</em> (boleh banyak sekaligus), atau tekan <strong>Ctrl+V</strong> di tab Pilot setelah copy atau screenshot ke clipboard, atau klik <em>Paste dari clipboard</em></li>
-<li>Gambar disimpan di browser ini (maks 10 MB per gambar, maks 100 gambar). Klik gambar untuk membuka ukuran penuh, <em>Unduh</em> untuk menyimpan, <em>Hapus</em> untuk menghapus satu gambar</li>
-<li class="red">Gambar tidak ikut tombol <em>Purge</em>, tetapi ikut <em>Import/Export</em> (file export bisa besar jika gambarnya banyak)</li>
 <li>Contoh: <code>1.5b * 65%</code> hasilnya <samp>975,000,000 (975 M)</samp>, <code>(5m + 250k) * 2</code> hasilnya <samp>10,500,000 (10.5 M)</samp>, <code>100 / 8</code> hasilnya <samp>12.5</samp></li>
+<li>Contoh fungsi: <code>sqrt(144)</code> hasilnya <samp>12</samp>, <code>max(5m; 250k * 30)</code> hasilnya <samp>7,500,000 (7.5 M)</samp>, <code>round(100 / 3)</code> hasilnya <samp>33</samp>, <code>hypot(3; 4)</code> hasilnya <samp>5</samp></li>
 </ul>
 </section>
 
@@ -1402,6 +1437,10 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     Array.prototype.forEach.call(document.querySelectorAll('main button[id^="' + prefix + '-"]'), function (b) {
       b.click();
     });
+    /* Gambar Pilot tidak punya default, jadi Reset dan Clear sama: hapus semua */
+    imgTx("readwrite", function (s) { s.clear(); }).then(imgRender).then(function () {
+      imgSay("");
+    }).catch(imgFail);
     closePurge();
   };
   document.getElementById("purge-reset").addEventListener("click", function () { purgeAll("reset"); });
@@ -1441,7 +1480,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     var json = JSON.stringify({ app: "bdo-game-pilot", version: 2, exported: new Date().toISOString(), data: data, images: images }, null, 2);
     var d = new Date();
     var pad = function (n) { return String(n).padStart(2, "0"); };
-    var name = "bdo-game-pilot-" + d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + ".json";
+    var name = "bdo-game-pilot-" + pad(d.getDate()) + "-" + pad(d.getMonth() + 1) + "-" + d.getFullYear() + "_" + pad(d.getHours()) + "-" + pad(d.getMinutes()) + "-" + pad(d.getSeconds()) + ".json";
     var url = URL.createObjectURL(new Blob([json], { type: "application/json" }));
     var a = document.createElement("a");
     a.href = url;
@@ -1450,7 +1489,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     a.click();
     document.body.removeChild(a);
     setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
-    dataMsg.textContent = "Export berhasil: " + name + " (" + images.length + " gambar)";
+    dataMsg.textContent = "Export berhasil: " + name + " (" + images.length + " image)";
     }).catch(function (e) {
       dataMsg.textContent = "Export gagal: " + ((e && e.message) || "terjadi kesalahan");
     });
@@ -1661,6 +1700,25 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       );
     }
     lines.push("", "Hasil dari tool:", v("h-out"));
+    if (!document.getElementById("h-tg").hidden) {
+      lines.push(
+        "",
+        "Target (opsional, dicentang): " + v("h-target") + " (format H = jam, M = menit)",
+        "Rumus target:",
+        "- Target diubah ke jam = (jam × 60 + menit) ÷ 60",
+        "- Jika 100% Drop Amount tidak dicentang: Target TL = target jam × TL per jam",
+        "- Jika dicentang: jika target jam ≤ jumlah item, Target TL = target jam × TL/hr dengan Agris; jika target jam > jumlah item, Target TL = (jumlah item × TL/hr dengan Agris) + (target jam − jumlah item) × TL per jam",
+        "- Target TL dibulatkan ke atas (ceil)",
+        "- Kurang TL = Target TL − Total TL (0 atau kurang berarti target tercapai)",
+        "Hasil target dari tool:",
+        "- Target TL: " + v("h-need")
+      );
+      if (v("h-gap")) lines.push("- Kurang TL: " + v("h-gap"));
+      ["h-g0", "h-g1", "h-g2", "h-g3"].map(v).filter(function (s) { return s; }).forEach(function (s, i) {
+        lines.push("  Langkah target " + (i + 1) + ": " + s);
+      });
+      lines.push("Tolong verifikasi juga perhitungan target ini dengan menghitung ulang dari data input.");
+    }
     if (steps.length) {
       lines.push("", "Langkah perhitungan dari tool:");
       steps.forEach(function (s, i) { lines.push((i + 1) + ". " + s); });
@@ -1731,6 +1789,26 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       .concat(group("Konversi Total Time:", "a-t", 4))
       .concat(group("Konversi Time with Agris:", "a-w", 4))
       .concat(group("Konversi Time without Agris:", "a-o", 4));
+    if (!document.getElementById("a-tg").hidden) {
+      lines.push(
+        "",
+        "Target (opsional, dicentang): " + v("a-target") + " (format H = jam, M = menit)",
+        "Rumus target:",
+        "- Target diubah ke jam = (jam × 60 + menit) ÷ 60",
+        "- Maks jam Agris = (Agris yang digunakan selama shift ÷ Agris per jam) + jumlah item 100% Drop Amount",
+        "- Jika target jam ≤ maks jam Agris: Target TL = target jam × TL/hr dengan Agris",
+        "- Jika target jam > maks jam Agris: Target TL = (maks jam Agris × TL/hr dengan Agris) + (target jam − maks jam Agris) × TL/hr tanpa Agris",
+        "- Target TL dibulatkan ke atas (ceil)",
+        "- Kurang TL = Target TL − Total TL (0 atau kurang berarti target tercapai)",
+        "Hasil target dari tool:",
+        "- Target TL: " + v("a-need")
+      );
+      if (v("a-gap")) lines.push("- Kurang TL: " + v("a-gap"));
+      ["a-g0", "a-g1", "a-g2", "a-g3", "a-g4"].map(v).filter(function (s) { return s; }).forEach(function (s, i) {
+        lines.push("  Langkah target " + (i + 1) + ": " + s);
+      });
+      lines.push("Tolong verifikasi juga perhitungan target ini dengan menghitung ulang dari data input.");
+    }
     lines.push(
       "",
       "Yang ingin saya ketahui:",
@@ -2264,6 +2342,80 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     ], 5);
   };
 
+  /* 2b. Progress hourly tanpa Agris: Target (opsional, format H dan M) */
+  var parseTargetHM = function (id) {
+    var s = document.getElementById(id).value.replace(/,/g, "");
+    if (!/^\s*(?:\d+\s*[hm][a-z]*\s*)+$/i.test(s)) return null;
+    var hh = 0;
+    var mm = 0;
+    Array.from(s.matchAll(/(\d+)\s*([hm])/gi)).forEach(function (m) {
+      if (m[2].toLowerCase() === "h") hh += Number(m[1]);
+      else mm += Number(m[1]);
+    });
+    var minutes = hh * 60 + mm;
+    if (!(minutes > 0)) return null;
+    var hours = minutes / 60;
+    return {
+      hours: hours,
+      step: hh + " × 60 + " + mm + " = " + minutes + " ; " + minutes + " ÷ 60 = " + Number(hours.toPrecision(12))
+    };
+  };
+
+  var calcHourlyTarget = function () {
+    var box = document.getElementById("h-tg");
+    var ids = ["h-need", "h-gap", "h-g0", "h-g1", "h-g2", "h-g3"];
+    var hide = function () {
+      box.hidden = true;
+      ids.forEach(function (id) { put(id, null); });
+    };
+    if (!document.getElementById("h-target-on").checked) { hide(); return; }
+
+    var totalRaw = readNum("h-total");
+    var p = Number(readNum("h-rate"));
+    var tg = parseTargetHM("h-target");
+    var dropOn = document.getElementById("h-drop-on").checked;
+    var dropRaw = readNum("h-drop");
+    var dropItems = dropOn ? Number(dropRaw) : 0;
+    var dRate = Number(readNum("h-drate"));
+
+    if (!tg || !(p > 0) || (dropOn && (dropRaw === "" || dropItems < 0 || !(dRate > 0)))) {
+      hide();
+      put("h-need", "Invalid input (contoh target: 7 H 5 M).");
+      return;
+    }
+
+    var target = tg.hours;
+    var tgText = Number(target.toPrecision(12));
+    var useDrop = dropOn && target <= dropItems;
+    var rawNeed = Number((useDrop ? target * dRate : dropItems * dRate + (target - dropItems) * p).toPrecision(12));
+    var expr = useDrop
+      ? tgText + " × " + dRate
+      : dropOn
+        ? dropItems + " × " + dRate + " + (" + tgText + " − " + dropItems + ") × " + p
+        : tgText + " × " + p;
+    var need = Math.ceil(rawNeed);
+
+    box.hidden = false;
+    put("h-need", need.toLocaleString("en-US") + " TL");
+    put("h-g0", tg.step);
+    put("h-g1", (dropOn ? tgText + (useDrop ? " ≤ " : " > ") + dropItems + " → " : "") + expr + " = " + rawNeed);
+    put("h-g2", "ceil(" + rawNeed + ") = " + need);
+
+    if (totalRaw === "") {
+      put("h-gap", null);
+      put("h-g3", null);
+      return;
+    }
+    var have = Number(totalRaw);
+    var gap = Number((need - have).toPrecision(12));
+    put("h-gap", gap > 0
+      ? gap.toLocaleString("en-US") + " TL"
+      : gap === 0
+        ? "0 TL (target tercapai)"
+        : "0 TL (target tercapai, lebih " + (-gap).toLocaleString("en-US") + " TL)");
+    put("h-g3", need + " − " + have + " = " + gap);
+  };
+
   /* 3. Progress hourly dengan Agris */
   var calcAgris = function () {
     var out = document.getElementById("a-out");
@@ -2355,6 +2507,67 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     fill("a-t", breakdown(hoursWithAgris + hoursWithoutAgris), 4);
     fill("a-w", breakdown(hoursWithAgris), 4);
     fill("a-o", breakdown(hoursWithoutAgris), 4);
+  };
+
+  /* 3b. Progress hourly dengan Agris: Target (opsional, format H dan M) */
+  var calcAgrisTarget = function () {
+    var box = document.getElementById("a-tg");
+    var ids = ["a-need", "a-gap", "a-g0", "a-g1", "a-g2", "a-g3", "a-g4"];
+    var hide = function () {
+      box.hidden = true;
+      ids.forEach(function (id) { put(id, null); });
+    };
+    if (!document.getElementById("a-target-on").checked) { hide(); return; }
+
+    var totalRaw = readNum("a-total");
+    var agrisRate = Number(readNum("a-rate"));
+    var cost = Number(readNum("a-cost"));
+    var normalRate = Number(readNum("a-normal"));
+    var current = Number(readNum("a-current"));
+    var tg = parseTargetHM("a-target");
+    var dropOn = document.getElementById("a-drop-on").checked;
+    var dropRaw = readNum("a-drop");
+    var dropItems = dropOn ? Number(dropRaw) : 0;
+
+    if (!tg || !(agrisRate > 0) || !(cost > 0) || !(normalRate > 0) || (dropOn && (dropRaw === "" || dropItems < 0))) {
+      hide();
+      put("a-need", "Invalid input (contoh target: 7 H 5 M).");
+      return;
+    }
+
+    var target = tg.hours;
+    var tgText = Number(target.toPrecision(12));
+    var agrisHours = current / cost;
+    var maxHours = agrisHours + dropItems;
+    var within = target <= maxHours;
+    var rawNeed = Number((within
+      ? target * agrisRate
+      : maxHours * agrisRate + (target - maxHours) * normalRate).toPrecision(12));
+    var expr = within
+      ? tgText + " × " + agrisRate
+      : maxHours + " × " + agrisRate + " + (" + tgText + " − " + maxHours + ") × " + normalRate;
+    var need = Math.ceil(rawNeed);
+
+    box.hidden = false;
+    put("a-need", need.toLocaleString("en-US") + " TL");
+    put("a-g0", tg.step);
+    put("a-g1", current + " ÷ " + cost + " = " + agrisHours + " ; " + agrisHours + " + " + dropItems + " = " + maxHours);
+    put("a-g2", tgText + (within ? " ≤ " : " > ") + maxHours + " → " + expr + " = " + rawNeed);
+    put("a-g3", "ceil(" + rawNeed + ") = " + need);
+
+    if (totalRaw === "") {
+      put("a-gap", null);
+      put("a-g4", null);
+      return;
+    }
+    var have = Number(totalRaw);
+    var gap = Number((need - have).toPrecision(12));
+    put("a-gap", gap > 0
+      ? gap.toLocaleString("en-US") + " TL"
+      : gap === 0
+        ? "0 TL (target tercapai)"
+        : "0 TL (target tercapai, lebih " + (-gap).toLocaleString("en-US") + " TL)");
+    put("a-g4", need + " − " + have + " = " + gap);
   };
 
   /* 4. Total progress hourly */
@@ -4019,19 +4232,48 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
   /* 15. Pilot: Calculator */
   var CALC_SUFFIX = { k: 1e3, m: 1e6, b: 1e9, t: 1e12 };
 
+  /* Daftar fungsi dan konstanta Math (huruf kecil -> nama asli) */
+  var CALC_MATH = {};
+  Object.getOwnPropertyNames(Math).forEach(function (k) {
+    var t = typeof Math[k];
+    if (t === "function" || t === "number") CALC_MATH[k.toLowerCase()] = k;
+  });
+
   var calcEval = function (text) {
-    var src = text.toLowerCase().replace(/,/g, "").replace(/[x×]/g, "*").replace(/÷/g, "/");
+    var src = text.toLowerCase().replace(/×/g, "*").replace(/÷/g, "/");
     var tokens = [];
     var i = 0;
     while (i < src.length) {
       var ch = src.charAt(i);
       if (/\s/.test(ch)) { i++; continue; }
-      var m = /^(\d+\.?\d*|\.\d+)([kmbt])?/.exec(src.slice(i));
+      var rest = src.slice(i);
+      var m = /^(\d{1,3}(?:,\d{3})+(?!\d)(?:\.\d*)?|\d+\.?\d*|\.\d+)(?:e([+-]?\d+))?([kmbt])?/.exec(rest);
       if (m) {
         var after = src.charAt(i + m[0].length);
-        if (/[a-z]/.test(after)) throw new Error("Satuan tidak dikenal: '" + after + "'");
-        tokens.push({ n: Number(m[1]) * (m[2] ? CALC_SUFFIX[m[2]] : 1) });
+        if (/[a-wyz_]/.test(after)) throw new Error("Satuan tidak dikenal: '" + after + "'");
+        var num = Number(m[1].replace(/,/g, "") + (m[2] !== undefined ? "e" + m[2] : ""));
+        tokens.push({ n: num * (m[3] ? CALC_SUFFIX[m[3]] : 1) });
         i += m[0].length;
+      } else if (/[a-z_]/.test(ch)) {
+        var w = /^[a-z_][a-z0-9_]*(?:\.[a-z_][a-z0-9_]*)?/.exec(rest)[0];
+        var key = w.indexOf("math.") === 0 ? w.slice(5) : w;
+        if (Object.prototype.hasOwnProperty.call(CALC_MATH, key)) {
+          var real = CALC_MATH[key];
+          if (typeof Math[real] === "function") tokens.push({ f: Math[real], name: real });
+          else tokens.push({ n: Math[real] });
+          i += w.length;
+        } else if (ch === "x") {
+          tokens.push({ o: "*" });
+          i++;
+        } else {
+          throw new Error("Fungsi atau konstanta tidak dikenal: '" + w + "'");
+        }
+      } else if (ch === "*" && src.charAt(i + 1) === "*") {
+        tokens.push({ o: "^" });
+        i += 2;
+      } else if (ch === "," || ch === ";") {
+        tokens.push({ o: "," });
+        i++;
       } else if ("+-*/^()%".indexOf(ch) !== -1) {
         tokens.push({ o: ch });
         i++;
@@ -4047,6 +4289,19 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       var t = tokens[pos];
       if (!t) throw new Error("Operasi belum lengkap");
       if (t.n !== undefined) { pos++; return t.n; }
+      if (t.f) {
+        pos++;
+        if (!isOp("(")) throw new Error("Fungsi '" + t.name + "' harus diikuti kurung, contoh " + t.name + "(...)");
+        pos++;
+        var args = [];
+        if (!isOp(")")) {
+          args.push(expr());
+          while (isOp(",")) { pos++; args.push(expr()); }
+        }
+        if (!isOp(")")) throw new Error("Kurung tutup ) kurang");
+        pos++;
+        return t.f.apply(null, args);
+      }
       if (t.o === "(") {
         pos++;
         var v = expr();
@@ -4097,7 +4352,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     var result = expr();
     if (pos < tokens.length) {
       var t = tokens[pos];
-      throw new Error(t.o === ")" ? "Kurung buka ( kurang" : "Operasi tidak valid dekat '" + (t.o !== undefined ? t.o : t.n) + "'");
+      throw new Error(t.o === ")" ? "Kurung buka ( kurang" : "Operasi tidak valid dekat '" + (t.o !== undefined ? t.o : t.f ? t.name : t.n) + "'");
     }
     return result;
   };
@@ -4193,12 +4448,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       imgUrls = [];
       imgList.textContent = "";
       rows = rows || [];
-      if (!rows.length) {
-        var empty = document.createElement("p");
-        empty.textContent = "Belum ada gambar";
-        imgList.appendChild(empty);
-        return;
-      }
+      if (!rows.length) return;
       rows.sort(function (a, b) { return b.id - a.id; });
       var grid = document.createElement("div");
       grid.id = "pilot-images";
@@ -4225,8 +4475,8 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
         dl.href = url;
         dl.download = r.name;
         dl.textContent = "Unduh";
-        var del = document.createElement("button");
-        del.type = "button";
+        var del = document.createElement("a");
+        del.href = "#";
         del.textContent = "Hapus";
         del.setAttribute("data-id", String(r.id));
         del.setAttribute("aria-label", "Hapus " + r.name);
@@ -4256,10 +4506,10 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
         });
       });
     }).then(imgRender).then(function () {
-      var msg = take.length + " gambar ditambahkan";
-      if (tooBig) msg += ", " + tooBig + " dilewati (maks 10 MB per gambar)";
-      if (take.length < ok.length) msg += ", " + (ok.length - take.length) + " dilewati (maks " + IMG_MAX_COUNT + " gambar)";
-      imgSay(msg);
+      var skipped = [];
+      if (tooBig) skipped.push(tooBig + " gambar dilewati (maks 10 MB per gambar)");
+      if (take.length < ok.length) skipped.push((ok.length - take.length) + " gambar dilewati (maks " + IMG_MAX_COUNT + " gambar)");
+      imgSay(skipped.join(", "));
     });
   };
 
@@ -4310,20 +4560,21 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 
   /* Hapus satu gambar */
   imgList.addEventListener("click", function (ev) {
-    var btn = ev.target.closest ? ev.target.closest("button[data-id]") : null;
+    var btn = ev.target.closest ? ev.target.closest("a[data-id]") : null;
     if (!btn) return;
+    ev.preventDefault();
     var id = Number(btn.getAttribute("data-id"));
     imgTx("readwrite", function (s) { s.delete(id); }).then(imgRender).then(function () {
-      imgSay("Gambar dihapus");
+      imgSay("");
     }).catch(imgFail);
   });
 
   /* Hapus semua gambar */
   document.getElementById("pi-delete-all").addEventListener("click", function () {
-    if (!imgList.querySelector("figure")) { imgSay("Belum ada gambar"); return; }
+    if (!imgList.querySelector("figure")) return;
     if (!window.confirm("Hapus semua gambar?")) return;
     imgTx("readwrite", function (s) { s.clear(); }).then(imgRender).then(function () {
-      imgSay("Semua gambar dihapus");
+      imgSay("");
     }).catch(imgFail);
   });
 
@@ -4468,8 +4719,8 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
   /* Live update */
   [
     ["form-stopwatch", calcStopwatch],
-    ["form-hourly", calcHourly],
-    ["form-agris", calcAgris],
+    ["form-hourly", function () { calcHourly(); calcHourlyTarget(); }],
+    ["form-agris", function () { calcAgris(); calcAgrisTarget(); }],
     ["form-total", calcTotal],
     ["form-buff", calcBuff],
     ["form-tax", calcTax],
