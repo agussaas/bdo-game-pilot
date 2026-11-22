@@ -1254,6 +1254,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 </ul>
 <p><em>Use at your own risk!</em></p>
 <img alt="GitHub License" src="https://img.shields.io/github/license/agussaas/bdo-game-pilot">
+<br />
 <p><button type="button" id="help-close">Tutup</button></p>
 </dialog>
 
@@ -1407,7 +1408,6 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     if (!inside) closePurge();
   });
   var purgeAll = function (prefix) {
-    if (!window.confirm("Jika semua data sudah di backup silahkan lanjut, jika belum backup dulu")) return;
     Array.prototype.forEach.call(document.querySelectorAll('main button[id^="' + prefix + '-"]'), function (b) {
       b.click();
     });
