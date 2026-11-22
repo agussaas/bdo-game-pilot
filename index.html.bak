@@ -6,11 +6,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
+<title>BDO Game Pilot</title>
 <meta name="description" content="Ascendant game pilot BDO calculator">
+
+<!-- External -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=JetBrains+Mono:wght@400&amp;display=swap">
-<title>BDO Game Pilot</title>
 
 <!-- Favicon -->
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -19,6 +21,7 @@
 <link rel="manifest" href="site.webmanifest">
 
 <style>
+
 /* Fallback warna untuk browser tanpa light-dark() */
 :root { --bg: #ffffff; --fg: #1a1a1a; --ctl: #f3f3f3; --bd: #6b6b6b; --sel-bg: #1a1a1a; --sel-fg: #ffffff; }
 .up { color: #0b6b2b; }
@@ -68,6 +71,7 @@ body {
   font: 0.9375rem/1.6 var(--font-ui);
   overflow-wrap: break-word;
 }
+
 header, main { width: 100%; max-width: 52rem; margin-inline: auto; }
 h1 { margin: 0 0 1rem; font-size: clamp(1.25rem, 1rem + 1.2vw, 1.75rem); line-height: 1.2; }
 h1 a { color: inherit; text-decoration: none; }
@@ -138,6 +142,7 @@ dialog a { display: inline-block; padding: 0.25rem 0; }
   gap: 1rem;
   margin: 0.5rem 0 1rem;
 }
+
 input[type="range"] { padding: 0; border: 0; background: transparent; }
 input[type="checkbox"] { display: inline-block; width: 1.1rem; height: 1.1rem; min-height: 0; margin: 0 0.35rem 0 0; padding: 0; vertical-align: middle; }
 input:disabled, select:disabled, textarea:disabled { opacity: 0.55; cursor: not-allowed; }
@@ -183,7 +188,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
   document.addEventListener("DOMContentLoaded", function () {
     var d = document.createElement("p");
     d.setAttribute("role", "alert");
-    d.textContent = "Browser kamu belum diupdate. Perbarui browser (Chrome, Edge, Firefox, atau Safari terbaru) supaya semua tab dapat berjalan dengan baik.";
+    d.textContent = "Browser kamu belum diupdate";
     document.body.insertBefore(d, document.body.firstChild);
   });
 })();
@@ -191,7 +196,8 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 </head>
 
 <body>
-<noscript><p role="alert">Halaman ini butuh JavaScript supaya semua tab dapat berjalan.</p></noscript>
+<!-- Browser check -->
+<noscript><p role="alert">Halaman ini butuh JavaScript</p></noscript>
 
 <!-- Header title -->
 <header>
@@ -202,6 +208,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <button type="button" id="help-open" aria-haspopup="dialog"><span aria-hidden="true">?</span> <span>Help</span></button>
 <button type="button" id="data-open" aria-haspopup="dialog"><span aria-hidden="true">💾</span> <span>Import/Export</span></button>
 <button type="button" id="purge-open" aria-haspopup="dialog"><span aria-hidden="true">🗑</span> <span>Purge</span></button>
+
 <!-- List semua tab -->
 <nav role="tablist" aria-label="Tab">
 <button type="button" role="tab" id="tab-stopwatch" aria-controls="panel-stopwatch" aria-selected="true">Google Stopwatch</button>
@@ -892,6 +899,11 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <ul>
 <li>1 Jam <code>500</code> Coral</li>
 </ul>
+<p><strong>Aetherion</strong></p>
+<ul>
+<li>1 Jam LS2 <code>10,000</code> TL</li>
+<li>1 Jam LS2 Agris <code>17,000</code> TL</li>
+</ul>
 <p><strong>Tenebraum</strong></p>
 <ul>
 <li>1 Jam LS2 <code>10,000</code> TL</li>
@@ -1232,6 +1244,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 </section>
 
 </main>
+<!-- Help dialog -->
 <dialog id="help-dialog" aria-labelledby="help-title">
 <h2 id="help-title">Help</h2>
 <ul>
@@ -1240,18 +1253,25 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li><a href="http://t.me/Agus_HK059" target="_blank" rel="noopener noreferrer">AGUS</a></li>
 </ul>
 <p><em>Use at your own risk!</em></p>
+<img alt="GitHub License" src="https://img.shields.io/github/license/agussaas/bdo-game-pilot">
 <p><button type="button" id="help-close">Tutup</button></p>
 </dialog>
+
+<!-- Purge dialog -->
 <dialog id="purge-dialog" aria-labelledby="purge-title">
 <h2 id="purge-title">Purge</h2>
 <p><button type="button" id="purge-reset">Reset</button> <button type="button" id="purge-clear">Clear</button></p>
 </dialog>
+
+<!-- Import/Export dialog -->
 <dialog id="data-dialog" aria-labelledby="data-title">
 <h2 id="data-title">Import/Export</h2>
 <p><button type="button" id="data-import">Import</button> <button type="button" id="data-export">Export</button></p>
 <p id="data-msg" role="status"></p>
 <input type="file" id="data-file" accept="application/json,.json" hidden>
 </dialog>
+
+<!-- Verify dialog -->
 <dialog id="verify-dialog" aria-labelledby="verify-title">
 <h2 id="verify-title">Verifikasi (ChatGPT, Claude, Gemini)</h2>
 <p>Copy prompt di bawah, lalu paste ke ChatGPT, Claude, atau Gemini untuk verifikasi</p>
@@ -1387,7 +1407,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     if (!inside) closePurge();
   });
   var purgeAll = function (prefix) {
-    if (!window.confirm("Semua input dan semua gambar di tab Pilot akan dihapus. Lanjut?")) return;
+    if (!window.confirm("Jika semua data sudah di backup silahkan lanjut, jika belum backup dulu")) return;
     Array.prototype.forEach.call(document.querySelectorAll('main button[id^="' + prefix + '-"]'), function (b) {
       b.click();
     });
@@ -4072,7 +4092,30 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       logThis("[FAILED] Progress tidak ditemukan");
     }
 
-    // H. Parse Keterangan
+    // H. Parse Agris yang digunakan
+    var matchAgris = rawText.match(/(?:^|\n)[ \t]*Agris\s+yang\s+digunakan[ \t]*:[ \t]*(.+)/i);
+    if (matchAgris) {
+      document.getElementById("rp-agris").value = matchAgris[1].trim();
+      logThis("[OK] Agris yang digunakan: " + matchAgris[1].trim());
+    } else {
+      logThis("[FAILED] Agris yang digunakan tidak ditemukan");
+    }
+
+    // I. Parse Crystal (Replace crystal untuk HOURLY, Broken crystal untuk FARM)
+    var matchCrystal = rawText.match(/(?:^|\n)[ \t]*(?:Replace|Broken)\s+crystal[ \t]*:[ \t]*(.+)/i);
+    if (matchCrystal) {
+      var crystalText = matchCrystal[1].trim();
+      if (crystalText && crystalText !== "-") {
+        document.getElementById("rp-crystal").value = crystalText;
+        logThis("[OK] Crystal: " + crystalText);
+      } else {
+        logThis("[WARN] Crystal kosong");
+      }
+    } else {
+      logThis("[FAILED] Crystal tidak ditemukan");
+    }
+
+    // J. Parse Keterangan
     var matchKet = rawText.match(/(?:^|\n)[ \t]*Keterangan\s*:\s*\n?([\s\S]*?)(?=\n\s*(?:Class\s*:|Character\s*:|Grinding Spot\s*:|Agris[^\n:]*:|Kendala\s*:|Note\s*:|======|$))/i);
     if (matchKet) {
       var ketText = matchKet[1].trim();
@@ -4087,7 +4130,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       logThis("[FAILED] Keterangan tidak ditemukan");
     }
 
-    // I. Parse Kendala
+    // K. Parse Kendala
     var matchKendala = rawText.match(/(?:^|\n)[ \t]*Kendala\s*:\s*\n?([\s\S]*?)(?=\n\s*(?:Class\s*:|Character\s*:|Grinding Spot\s*:|Agris[^\n:]*:|Keterangan\s*:|Note\s*:|======|$))/i);
     if (matchKendala) {
       var kendalaText = matchKendala[1].trim();
@@ -4102,7 +4145,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       logThis("[FAILED] Kendala tidak ditemukan");
     }
 
-    // J. Parse Note
+    // L. Parse Note
     var matchNote = rawText.match(/(?:^|\n)[ \t]*Note[ \t]*:[ \t]*\n?([\s\S]*)/i);
     if (matchNote) {
       var noteContent = matchNote[1].trim();
@@ -4117,30 +4160,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       logThis("[FAILED] Note tidak ditemukan");
     }
 
-    // J2. Parse Agris yang digunakan
-    var matchAgris = rawText.match(/(?:^|\n)[ \t]*Agris\s+yang\s+digunakan[ \t]*:[ \t]*(.+)/i);
-    if (matchAgris) {
-      document.getElementById("rp-agris").value = matchAgris[1].trim();
-      logThis("[OK] Agris yang digunakan: " + matchAgris[1].trim());
-    } else {
-      logThis("[FAILED] Agris yang digunakan tidak ditemukan");
-    }
-
-    // J3. Parse Crystal (Replace crystal untuk HOURLY, Broken crystal untuk FARM)
-    var matchCrystal = rawText.match(/(?:^|\n)[ \t]*(?:Replace|Broken)\s+crystal[ \t]*:[ \t]*(.+)/i);
-    if (matchCrystal) {
-      var crystalText = matchCrystal[1].trim();
-      if (crystalText && crystalText !== "-") {
-        document.getElementById("rp-crystal").value = crystalText;
-        logThis("[OK] Crystal: " + crystalText);
-      } else {
-        logThis("[WARN] Crystal kosong");
-      }
-    } else {
-      logThis("[FAILED] Crystal tidak ditemukan");
-    }
-
-    // K. Simpan ke localStorage
+    // M. Simpan ke localStorage
     calcLaporan();
     var storeData = readStore();
     var inputs = document.querySelectorAll("#form-laporan input, #form-laporan select, #form-laporan textarea");
