@@ -6,6 +6,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
+<meta name="description" content="Ascendant game pilot BDO calculator">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=JetBrains+Mono:wght@400&amp;display=swap">
@@ -190,7 +191,9 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 </head>
 
 <body>
-  <!-- Header title -->
+<noscript><p role="alert">Halaman ini butuh JavaScript supaya semua tab dapat berjalan.</p></noscript>
+
+<!-- Header title -->
 <header>
 <h1><a href="./">BDO Game Pilot</a></h1>
 
@@ -729,7 +732,6 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li><em>Item RNG</em> (opsional): centang dulu untuk mengaktifkan, lalu isi nama item, harga item, dan qty. Klik <em>Tambah item</em> untuk baris baru</li>
 <li>Harga item bisa diisi angka biasa, pemisah ribuan, atau akhiran <code>k</code>, <code>m</code>, <code>b</code>. Qty kosong dihitung <code>1</code>. Baris yang harganya kosong diabaikan</li>
 <li><em>Total item</em> adalah jumlah semua harga dikali qty. <em>Sisa RNG</em> adalah bagian RNG dikurangi total item, jika negatif berarti total item melebihi bagian RNG</li>
-<li class="red">Isi tabel Item RNG tersimpan di browser dan ikut <em>Import/Export</em>. Tombol <em>Reset</em> dan <em>Clear</em> mengembalikan tabel ke satu baris kosong</li>
 <li>Sisa compen di luar bagian TL adalah bagian dari <em>RNG</em></li>
 </ul>
 <p><strong>Contoh:</strong></p>
@@ -1035,26 +1037,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <div id="form-login">
 <fieldset>
 <legend>Login</legend>
-<p><label for="lg-pilot">Pilot:</label> <select id="lg-pilot" name="pilot" aria-label="Pilih data pilot (Login)">
-<option value="agus" selected>AGUS</option>
-<option value="ali">ALI</option>
-<option value="anas">ANAS</option>
-<option value="arsif">ARSIF</option>
-<option value="azwary">AZWARY</option>
-<option value="bobby">BOBBY</option>
-<option value="denis">DENIS</option>
-<option value="fajar">FAJAR</option>
-<option value="faris">FARIS</option>
-<option value="faza">FAZA</option>
-<option value="heri">HERI</option>
-<option value="insan">INSAN</option>
-<option value="jibril">JIBRIL</option>
-<option value="mosa">MOSA</option>
-<option value="nafis">NAFIS</option>
-<option value="rei">REI</option>
-<option value="revi">REVI</option>
-<option value="custom">Edit (custom)</option>
-</select></p>
+<p><label for="lg-pilot">Pilot:</label> <select id="lg-pilot" name="pilot" aria-label="Pilih data pilot (Login)"></select></p>
 <p><label for="lg-nama">Nama:</label> <input type="text" id="lg-nama" name="nama" value="AGUS"></p>
 <p><label for="lg-divisi">Divisi:</label> <select id="lg-divisi" name="divisi">
 <option value="ASCENDANT" selected>ASCENDANT</option>
@@ -1073,26 +1056,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <div id="form-logout">
 <fieldset>
 <legend>Logout</legend>
-<p><label for="lo-pilot">Pilot:</label> <select id="lo-pilot" name="pilot" aria-label="Pilih data pilot (Logout)">
-<option value="agus" selected>AGUS</option>
-<option value="ali">ALI</option>
-<option value="anas">ANAS</option>
-<option value="arsif">ARSIF</option>
-<option value="azwary">AZWARY</option>
-<option value="bobby">BOBBY</option>
-<option value="denis">DENIS</option>
-<option value="fajar">FAJAR</option>
-<option value="faris">FARIS</option>
-<option value="faza">FAZA</option>
-<option value="heri">HERI</option>
-<option value="insan">INSAN</option>
-<option value="jibril">JIBRIL</option>
-<option value="mosa">MOSA</option>
-<option value="nafis">NAFIS</option>
-<option value="rei">REI</option>
-<option value="revi">REVI</option>
-<option value="custom">Edit (custom)</option>
-</select></p>
+<p><label for="lo-pilot">Pilot:</label> <select id="lo-pilot" name="pilot" aria-label="Pilih data pilot (Logout)"></select></p>
 <p><label for="lo-login">No Login:</label> <input type="text" id="lo-login" name="login" value=""></p>
 <p><label for="lo-order">No Order:</label> <input type="text" inputmode="numeric" id="lo-order" name="order" value=""></p>
 <p><label for="lo-nama">Nama:</label> <input type="text" id="lo-nama" name="nama" value="AGUS"></p>
@@ -1158,26 +1122,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <div id="form-laporan">
 <fieldset>
 <legend>Input</legend>
-<p><label for="rp-pilot">Pilot:</label> <select id="rp-pilot" name="pilot" aria-label="Pilih data pilot (Laporan)">
-<option value="agus" selected>AGUS</option>
-<option value="ali">ALI</option>
-<option value="anas">ANAS</option>
-<option value="arsif">ARSIF</option>
-<option value="azwary">AZWARY</option>
-<option value="bobby">BOBBY</option>
-<option value="denis">DENIS</option>
-<option value="fajar">FAJAR</option>
-<option value="faris">FARIS</option>
-<option value="faza">FAZA</option>
-<option value="heri">HERI</option>
-<option value="insan">INSAN</option>
-<option value="jibril">JIBRIL</option>
-<option value="mosa">MOSA</option>
-<option value="nafis">NAFIS</option>
-<option value="rei">REI</option>
-<option value="revi">REVI</option>
-<option value="custom">Edit (custom)</option>
-</select></p>
+<p><label for="rp-pilot">Pilot:</label> <select id="rp-pilot" name="pilot" aria-label="Pilih data pilot (Laporan)"></select></p>
 <fieldset class="import-box">
 <legend>Import</legend>
 <p><textarea id="rp-import-text" rows="4" cols="40" placeholder="Paste laporan di sini"></textarea></p>
@@ -1228,7 +1173,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 <li>Field yang dikosongkan akan tampil <code>-</code> di output, kecuali Progress, TL, Class, dan Agris yang selalu mengikuti isi form</li>
 <li>Keterangan, Kendala, dan Note: tulis hanya satu per baris, jika kosong: <code>-</code></li>
 <li class="red">Form import laporan hanya support <em>HOURLY</em> dan <em>FARM</em></li>
-<li class="red">Bagian <em>No Login</em>, <em>Nama</em>, <em>Divisi</em>, <em>No Absen</em>, <em>Agris yang digunakan</em>, <em>Crystal (Replace/Broken)</em> tidak di parse di form load import</li></ul>
+<li class="red">Bagian <em>No Login</em>, <em>Nama</em>, <em>Divisi</em>, dan <em>No Absen</em> tidak di parse di form load import</li></ul>
 </section>
 
 <!-- Pilot -->
@@ -1274,10 +1219,10 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 </li>
 <li>Urutan perhitungan: kurung dulu, lalu <code>%</code> dan <code>^</code>, lalu <code>*</code> dan <code>/</code>, terakhir <code>+</code> dan <code>-</code></li>
 <li>Satuan ditulis langsung setelah angka tanpa spasi: <code>k</code> (ribu), <code>m</code> (juta), <code>b</code> (miliar), <code>t</code> (triliun), contoh <code>500k</code>, <code>1.5m</code>, <code>2b</code></li>
-<li>Angka memakai titik sebagai desimal (<code>12.5</code>). Koma dengan tepat 3 angka di belakangnya dianggap pemisah ribuan, jadi <code>1,000,000</code> sama dengan <code>1000000</code>. Notasi ilmiah juga bisa, misal <code>1e3</code> = 1000</li>
-<li>Fungsi JavaScript Math, ditulis dengan kurung (huruf besar kecil bebas, awalan <code>Math.</code> boleh): <code>abs</code>, <code>sqrt</code>, <code>cbrt</code>, <code>pow</code>, <code>exp</code>, <code>expm1</code>, <code>log</code>, <code>log2</code>, <code>log10</code>, <code>log1p</code>, <code>sin</code>, <code>cos</code>, <code>tan</code>, <code>asin</code>, <code>acos</code>, <code>atan</code>, <code>atan2</code>, <code>sinh</code>, <code>cosh</code>, <code>tanh</code>, <code>asinh</code>, <code>acosh</code>, <code>atanh</code>, <code>floor</code>, <code>ceil</code>, <code>round</code>, <code>trunc</code>, <code>sign</code>, <code>min</code>, <code>max</code>, <code>hypot</code>, <code>fround</code>, <code>clz32</code>, <code>imul</code>, <code>random</code>. Sudut untuk <code>sin</code>, <code>cos</code>, <code>tan</code> memakai radian</li>
+<li>Angka memakai titik dianggap sebagai desimal (<code>12.5</code>). Koma dengan tepat 3 angka di belakangnya dianggap pemisah ribuan, jadi <code>1,000,000</code> sama dengan <code>1000000</code>. Notasi ilmiah juga bisa, misal <code>1e3</code> = 1000</li>
+<li>Untuk JavaScript, ditulis dengan kurung (awalan <code>Math.</code> juga bis): <code>abs</code>, <code>sqrt</code>, <code>cbrt</code>, <code>pow</code>, <code>exp</code>, <code>expm1</code>, <code>log</code>, <code>log2</code>, <code>log10</code>, <code>log1p</code>, <code>sin</code>, <code>cos</code>, <code>tan</code>, <code>asin</code>, <code>acos</code>, <code>atan</code>, <code>atan2</code>, <code>sinh</code>, <code>cosh</code>, <code>tanh</code>, <code>asinh</code>, <code>acosh</code>, <code>atanh</code>, <code>floor</code>, <code>ceil</code>, <code>round</code>, <code>trunc</code>, <code>sign</code>, <code>min</code>, <code>max</code>, <code>hypot</code>, <code>fround</code>, <code>clz32</code>, <code>imul</code>, <code>random</code>. Sudut untuk <code>sin</code>, <code>cos</code>, <code>tan</code> memakai radian</li>
 <li>Konstanta: <code>pi</code>, <code>e</code>, <code>ln2</code>, <code>ln10</code>, <code>log2e</code>, <code>log10e</code>, <code>sqrt2</code>, <code>sqrt1_2</code></li>
-<li class="red">Pemisah argumen fungsi: <code>;</code> atau koma, misal <code>max(5; 10)</code>. Hati-hati, <code>max(1,500)</code> tanpa spasi dibaca <code>1,500</code> (seribu lima ratus), jadi pakai <code>;</code> atau beri spasi setelah koma</li>
+<li class="red">Pemisah argumen: <code>;</code> atau koma, misal <code>max(5; 10)</code>. Hati-hati, <code>max(1,500)</code> tanpa spasi dibaca <code>1,500</code> (seribu lima ratus), jadi pakai <code>;</code> atau beri spasi setelah koma</li>
 <li class="red"><code>%</code> hanya membagi angka di depannya dengan 100. Untuk menambah persen tulis lengkap: <code>200 + 200 * 10%</code> = 220, bukan <code>200 + 10%</code> yang hasilnya 200.1</li>
 <li>Hasil di atas 1,000 ditampilkan: <code>K</code> ribu, <code>M</code> juta, <code>B</code> miliar, <code>T</code> triliun (dalam kurung)</li>
 <li>Jika salah tulis, Result otomatis menampilkan <em>error message</em>, misalnya kurung kurang, karakter tidak dikenal, atau tidak bisa dibagi nol</li>
@@ -1323,13 +1268,21 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     el.style.height = "auto";
     el.style.height = (el.scrollHeight + el.offsetHeight - el.clientHeight) + "px";
   };
-  var fitAll = function () {
+  var fitAllNow = function () {
     var list = Array.prototype.filter.call(document.querySelectorAll("textarea"), function (el) { return el.clientWidth; });
     list.forEach(function (el) { el.style.height = "auto"; });
     var heights = list.map(function (el) { return el.scrollHeight + el.offsetHeight - el.clientHeight; });
     list.forEach(function (el, k) { el.style.height = heights[k] + "px"; });
   };
-
+  var fitPending = false;
+  var fitAll = function () {
+    if (fitPending) return;
+    fitPending = true;
+    requestAnimationFrame(function () {
+      fitPending = false;
+      fitAllNow();
+    });
+  };
   /* Detik dari jam, toleran error float (mis. 31744.999999999) */
   var floorSec = function (h) { return Math.floor(h * 3600 + 1e-7); };
 
@@ -1434,6 +1387,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     if (!inside) closePurge();
   });
   var purgeAll = function (prefix) {
+    if (!window.confirm("Semua input dan semua gambar di tab Pilot akan dihapus. Lanjut?")) return;
     Array.prototype.forEach.call(document.querySelectorAll('main button[id^="' + prefix + '-"]'), function (b) {
       b.click();
     });
@@ -1522,6 +1476,9 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
         if (parsed.images !== undefined && !imgValid(parsed.images)) {
           throw new Error("data gambar tidak valid");
         }
+        if (Array.isArray(parsed.images)) {
+          try { parsed.images.forEach(imgFromData); } catch (e) { throw new Error("data gambar rusak"); }
+        }
         DATA_KEYS.forEach(function (k) {
           var s = parsed.data[k];
           if (s === undefined) return;
@@ -1601,9 +1558,18 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 
   /* 1. Google Stopwatch */
   var calcStopwatch = function () {
-    var h = String(Number(readNum("sw-h")));
-    var m = String(Number(readNum("sw-m"))).padStart(2, "0");
-    var s = String(Number(readNum("sw-s"))).padStart(2, "0");
+    var hv = Number(readNum("sw-h"));
+    var mv = Number(readNum("sw-m"));
+    var sv = Number(readNum("sw-s"));
+    var okInt = function (n, max) { return Number.isInteger(n) && n >= 0 && (max === undefined || n <= max); };
+    if (readNum("sw-h") === "" || readNum("sw-m") === "" || readNum("sw-s") === "" ||
+        !okInt(hv) || !okInt(mv, 59) || !okInt(sv, 59)) {
+      document.getElementById("sw-out").value = "Input tidak valid (jam bilangan bulat ≥ 0, menit dan detik bilangan bulat 0-59).";
+      return;
+    }
+    var h = String(hv);
+    var m = String(mv).padStart(2, "0");
+    var s = String(sv).padStart(2, "0");
     var t = h + ":" + m + ":" + s;
     var code = '(()=>{const t=' + JSON.stringify(t) + ',e=document.querySelector(\'[jsname="LQ3Xe"]\');if(!e){console.error(\'Element with selector [jsname="LQ3Xe"] was not found on this page.\');return}const s=document.title.replace(/^[\\d:\\s]+/,""),f=(e.textContent.match(/\\.\\d+$/)||[".00"])[0],o=`${t}${f}`;e.textContent=o;document.title=`${t.padStart(8,"0")} ${s.trim()}`;console.log(o)})();';
     document.getElementById("sw-out").value = code;
@@ -1643,13 +1609,14 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     if (typeof verifyDlg.close === "function") verifyDlg.close();
     else verifyDlg.removeAttribute("open");
   };
-  document.getElementById("verify-open").addEventListener("click", function () {
+  var openVerify = function (builder) {
     if (verifyDlg.open) return;
-    verifyOut.value = buildVerifyPrompt();
+    verifyOut.value = builder();
     if (typeof verifyDlg.showModal === "function") verifyDlg.showModal();
     else verifyDlg.setAttribute("open", "");
     fit(verifyOut);
-  });
+  };
+  document.getElementById("verify-open").addEventListener("click", function () { openVerify(buildVerifyPrompt); });
   document.getElementById("verify-close").addEventListener("click", closeVerify);
   verifyDlg.addEventListener("click", function (ev) {
     if (ev.target !== verifyDlg) return;
@@ -1734,13 +1701,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     );
     return lines.join("\n");
   };
-  document.getElementById("verify-hourly-open").addEventListener("click", function () {
-    if (verifyDlg.open) return;
-    verifyOut.value = buildHourlyVerifyPrompt();
-    if (typeof verifyDlg.showModal === "function") verifyDlg.showModal();
-    else verifyDlg.setAttribute("open", "");
-    fit(verifyOut);
-  });
+  document.getElementById("verify-hourly-open").addEventListener("click", function () { openVerify(buildHourlyVerifyPrompt); });
 
   /* Verifikasi Progress Hourly dengan Agris (Claude, ChatGPT, Gemini) */
   var buildAgrisVerifyPrompt = function () {
@@ -1820,13 +1781,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     );
     return lines.join("\n");
   };
-  document.getElementById("verify-agris-open").addEventListener("click", function () {
-    if (verifyDlg.open) return;
-    verifyOut.value = buildAgrisVerifyPrompt();
-    if (typeof verifyDlg.showModal === "function") verifyDlg.showModal();
-    else verifyDlg.setAttribute("open", "");
-    fit(verifyOut);
-  });
+  document.getElementById("verify-agris-open").addEventListener("click", function () { openVerify(buildAgrisVerifyPrompt); });
 
   /* Verifikasi Total Progress Hourly (Claude, ChatGPT, Gemini) */
   var buildTotalVerifyPrompt = function () {
@@ -1864,13 +1819,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     );
     return lines.join("\n");
   };
-  document.getElementById("verify-total-open").addEventListener("click", function () {
-    if (verifyDlg.open) return;
-    verifyOut.value = buildTotalVerifyPrompt();
-    if (typeof verifyDlg.showModal === "function") verifyDlg.showModal();
-    else verifyDlg.setAttribute("open", "");
-    fit(verifyOut);
-  });
+  document.getElementById("verify-total-open").addEventListener("click", function () { openVerify(buildTotalVerifyPrompt); });
 
   /* Verifikasi Total Buff (Claude, ChatGPT, Gemini) */
   var buildBuffVerifyPrompt = function () {
@@ -1918,14 +1867,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     );
     return lines.join("\n");
   };
-  document.getElementById("verify-buff-open").addEventListener("click", function () {
-    if (verifyDlg.open) return;
-    verifyOut.value = buildBuffVerifyPrompt();
-    if (typeof verifyDlg.showModal === "function") verifyDlg.showModal();
-    else verifyDlg.setAttribute("open", "");
-    fit(verifyOut);
-  });
-
+  document.getElementById("verify-buff-open").addEventListener("click", function () { openVerify(buildBuffVerifyPrompt); });
   /* Verifikasi BDO Tax Calculator (Claude, ChatGPT, Gemini) */
   var buildTaxVerifyPrompt = function () {
     var v = function (id) { return document.getElementById(id).value; };
@@ -1996,13 +1938,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     );
     return lines.join("\n");
   };
-  document.getElementById("verify-tax-open").addEventListener("click", function () {
-    if (verifyDlg.open) return;
-    verifyOut.value = buildTaxVerifyPrompt();
-    if (typeof verifyDlg.showModal === "function") verifyDlg.showModal();
-    else verifyDlg.setAttribute("open", "");
-    fit(verifyOut);
-  });
+  document.getElementById("verify-tax-open").addEventListener("click", function () { openVerify(buildTaxVerifyPrompt); });
 
   /* Verifikasi Total TL (Claude, ChatGPT, Gemini) */
   var buildTotalTLVerifyPrompt = function () {
@@ -2048,13 +1984,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     );
     return lines.join("\n");
   };
-  document.getElementById("verify-totaltl-open").addEventListener("click", function () {
-    if (verifyDlg.open) return;
-    verifyOut.value = buildTotalTLVerifyPrompt();
-    if (typeof verifyDlg.showModal === "function") verifyDlg.showModal();
-    else verifyDlg.setAttribute("open", "");
-    fit(verifyOut);
-  });
+  document.getElementById("verify-totaltl-open").addEventListener("click", function () { openVerify(buildTotalTLVerifyPrompt); });
 
   /* Verifikasi Silver (Claude, ChatGPT, Gemini) */
   var buildSilverVerifyPrompt = function () {
@@ -2148,13 +2078,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     );
     return lines.join("\n");
   };
-  document.getElementById("verify-silver-open").addEventListener("click", function () {
-    if (verifyDlg.open) return;
-    verifyOut.value = buildSilverVerifyPrompt();
-    if (typeof verifyDlg.showModal === "function") verifyDlg.showModal();
-    else verifyDlg.setAttribute("open", "");
-    fit(verifyOut);
-  });
+  document.getElementById("verify-silver-open").addEventListener("click", function () { openVerify(buildSilverVerifyPrompt); });
 
   /* Verifikasi Agris yang Digunakan (Claude, ChatGPT, Gemini) */
   var buildUsedVerifyPrompt = function () {
@@ -2200,13 +2124,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     );
     return lines.join("\n");
   };
-  document.getElementById("verify-used-open").addEventListener("click", function () {
-    if (verifyDlg.open) return;
-    verifyOut.value = buildUsedVerifyPrompt();
-    if (typeof verifyDlg.showModal === "function") verifyDlg.showModal();
-    else verifyDlg.setAttribute("open", "");
-    fit(verifyOut);
-  });
+  document.getElementById("verify-used-open").addEventListener("click", function () { openVerify(buildUsedVerifyPrompt); });
 
   /* Verifikasi Compen (Claude, ChatGPT, Gemini) */
   var buildCompenVerifyPrompt = function () {
@@ -2271,13 +2189,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     );
     return lines.join("\n");
   };
-  document.getElementById("verify-compen-open").addEventListener("click", function () {
-    if (verifyDlg.open) return;
-    verifyOut.value = buildCompenVerifyPrompt();
-    if (typeof verifyDlg.showModal === "function") verifyDlg.showModal();
-    else verifyDlg.setAttribute("open", "");
-    fit(verifyOut);
-  });
+  document.getElementById("verify-compen-open").addEventListener("click", function () { openVerify(buildCompenVerifyPrompt); });
 
   /* 2. Progress hourly tanpa Agris */
   var calcHourly = function () {
@@ -2291,7 +2203,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     var dSteps = ["h-d1", "h-d2", "h-d3", "h-d4"];
 
     if (!t || !p || t < 0 || p <= 0 || (dropOn && (dropRaw === "" || dropItems < 0 || !(dRate > 0)))) {
-      out.value = "Invalid input.";
+      out.value = "Input tidak valid.";
       fill("h-s", [], 5);
       dSteps.forEach(function (id) { put(id, null); });
       return;
@@ -2380,7 +2292,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 
     if (!tg || !(p > 0) || (dropOn && (dropRaw === "" || dropItems < 0 || !(dRate > 0)))) {
       hide();
-      put("h-need", "Invalid input (contoh target: 7 H 5 M).");
+      put("h-need", "Input tidak valid (contoh target: 7 H 5 M).");
       return;
     }
 
@@ -2431,7 +2343,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     var dropItems = dropOn ? Number(dropRaw) : 0;
 
     if (!totalTL || !agrisRate || !agrisCostPerHour || !normalRate || totalTL < 0 || agrisRate <= 0 || agrisCostPerHour <= 0 || normalRate <= 0 || (dropOn && (dropRaw === "" || dropItems < 0))) {
-      out.value = "Invalid input.";
+      out.value = "Input tidak valid.";
       withA.value = "";
       withoutA.value = "";
       document.getElementById("a-sd").value = "";
@@ -2494,7 +2406,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     var l4b = document.createElement("strong");
     l4b.textContent = enough ? "(waktu with Agris, dalam jam)" : "(waktu without Agris, dalam jam)";
     l4.appendChild(l4b);
-        document.getElementById("a-sd").value = agrisHours + " + " + dropItems + " = " + maxAgrisHours;
+    document.getElementById("a-sd").value = agrisHours + " + " + dropItems + " = " + maxAgrisHours;
     fill("a-s", [
       currentAgris + " ÷ " + agrisCostPerHour + " = " + agrisHours,
       maxAgrisHours + " × " + agrisRate + " = " + maxAgrisTL,
@@ -2531,7 +2443,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 
     if (!tg || !(agrisRate > 0) || !(cost > 0) || !(normalRate > 0) || (dropOn && (dropRaw === "" || dropItems < 0))) {
       hide();
-      put("a-need", "Invalid input (contoh target: 7 H 5 M).");
+      put("a-need", "Input tidak valid (contoh target: 7 H 5 M).");
       return;
     }
 
@@ -2598,7 +2510,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     if (!x) { out.value = ""; fill("t-s", [], 5); return; }
 
     var okT = /^\s*(?:\d+\s*[hm][a-z]*\s*)+$/i;
-    if (!okT.test(i) || !okT.test(x)) { out.value = "Invalid input."; fill("t-s", [], 5); return; }
+    if (!okT.test(i) || !okT.test(x)) { out.value = "Input tidak valid."; fill("t-s", [], 5); return; }
     var totalMinutes = p(i) + p(x);
     var hours = Math.floor(totalMinutes / 60);
     var minutes = totalMinutes % 60;
@@ -2613,6 +2525,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       totalMinutes + " mod 60 = " + minutes
     ], 5);
   };
+  
   /* 5. Buff counter */
   var DURATION_UNITS = { h: 3600, m: 60, s: 1 };
   var PRICE_SUFFIXES = { k: 1000, m: 1000000, b: 1000000000 };
@@ -2786,7 +2699,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
 
     if (isNaN(price)) throw new Error("'" + text + "' bukan harga yang valid");
     if (price <= 0) throw new Error("harga harus lebih dari nol");
-    if (price > 1e15) throw new Error("harga terlalu besar");
+    if (price > 1e13) throw new Error("harga terlalu besar (maks 10 T)");
     return { value: value, mult: mult, price: Math.trunc(price) };
   };
 
@@ -2940,7 +2853,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     var b = readNum("tl-end");
 
     if (a === "" || b === "" || Number(a) < 0 || Number(b) < 0) {
-      out.value = "Invalid input.";
+      out.value = "Input tidak valid.";
       hidePrice();
       put("tl-s1", null);
       return;
@@ -3118,7 +3031,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     cell(name);
     cell(field("p", "Harga item", r.p, "contoh 450m"));
     cell(qty);
-    cell(field("sub", "Subtotal item", "", "hasil otomatis", true));
+    cell(field("sub", "Subtotal item", "", "result", true));
     cell(del);
     cpBody.appendChild(tr);
   };
@@ -3283,7 +3196,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
         if (!isOn(o[0])) return;
         if (document.getElementById(o[0] + "-m-on").checked) {
           var entries = text(o[0] + "-m").split(/\s+/).filter(function (s) { return s; });
-          if (!entries.length) throw new Error("missing " + o[1] + " (manual)");
+          if (!entries.length) throw new Error(o[1] + " (manual) belum diisi");
           var amounts = entries.map(function (s) { return parseSilver(s, o[1] + " (manual)", true).amount; });
           var manualSum = sum(amounts);
           document.getElementById(o[0]).value = manualSum.toLocaleString("en-US");
@@ -3407,7 +3320,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     if (a === "" || b === "" || c === "" ||
         Number(a) < 0 || Number(b) < 0 || Number(c) < 0 ||
         !isFinite(Number(a)) || !isFinite(Number(b)) || !isFinite(Number(c))) {
-      fail("Invalid input.");
+      fail("Input tidak valid.");
       return;
     }
 
@@ -3554,7 +3467,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
         var isInput = r.mode === f[0];
         el.readOnly = !isInput;
         el.classList.toggle("result", !isInput);
-        el.placeholder = isInput ? "isi " + f[1] : "hasil otomatis";
+        el.placeholder = isInput ? "isi " + f[1] : "result";
         el.setAttribute("aria-label", f[1] + " baris " + (i + 1) + (isInput ? " (input)" : " (hasil)"));
         if (!isInput) el.value = o[f[0]] === null ? "" : o[f[0]].toFixed(2);
         else if (document.activeElement !== el) el.value = r[f[0]];
@@ -3757,13 +3670,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     );
     return lines.join("\n");
   };
-  document.getElementById("verify-kpi-open").addEventListener("click", function () {
-    if (verifyDlg.open) return;
-    verifyOut.value = buildKpiVerifyPrompt();
-    if (typeof verifyDlg.showModal === "function") verifyDlg.showModal();
-    else verifyDlg.setAttribute("open", "");
-    fit(verifyOut);
-  });
+  document.getElementById("verify-kpi-open").addEventListener("click", function () { openVerify(buildKpiVerifyPrompt); });
 
   kpiBuild();
 
@@ -3772,13 +3679,17 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     agus: { nama: "AGUS", divisi: "ASCENDANT", absen: "HK059" },
     ali: { nama: "ALI", divisi: "ASCENDANT", absen: "HK098" },
     anas: { nama: "ANAS", divisi: "ASCENDANT", absen: "HK018" },
+    andre: { nama: "ANDRE", divisi: "ASCENDANT", absen: "HK089" },
     arsif: { nama: "ARSIF", divisi: "ASCENDANT", absen: "HK052" },
     azwary: { nama: "AZWARY", divisi: "ASCENDANT", absen: "HK076" },
     bobby: { nama: "BOBBY", divisi: "ASCENDANT", absen: "HK064" },
+    daffa: { nama: "DAFFA", divisi: "ASCENDANT", absen: "HK122" },
     denis: { nama: "DENIS", divisi: "ASCENDANT", absen: "HK111" },
+    fairuz: { nama: "FAIRUZ", divisi: "ASCENDANT", absen: "HK117" },
     fajar: { nama: "FAJAR", divisi: "ASCENDANT", absen: "HK092" },
     faris: { nama: "FARIS", divisi: "ASCENDANT", absen: "ST002" },
     faza: { nama: "FAZA", divisi: "ASCENDANT", absen: "HK022" },
+    febri: { nama: "FEBRI", divisi: "ASCENDANT", absen: "HK096" },
     heri: { nama: "HERI", divisi: "ASCENDANT", absen: "HK084" },
     insan: { nama: "INSAN", divisi: "ASCENDANT", absen: "HK093" },
     jibril: { nama: "JIBRIL", divisi: "ASCENDANT", absen: "HK019" },
@@ -3787,6 +3698,24 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
     rei: { nama: "REI", divisi: "ASCENDANT", absen: "HK120" },
     revi: { nama: "REVI", divisi: "ASCENDANT", absen: "HK058" }
   };
+
+  /* Dropdown pilot Login, Logout, Laporan dibuat dari PILOTS */
+  ["lg-pilot", "lo-pilot", "rp-pilot"].forEach(function (id) {
+    var sel = document.getElementById(id);
+    sel.textContent = "";
+    Object.keys(PILOTS).forEach(function (k) {
+      var o = document.createElement("option");
+      o.value = k;
+      o.textContent = PILOTS[k].nama;
+      if (k === "agus") o.defaultSelected = true;
+      sel.appendChild(o);
+    });
+    var c = document.createElement("option");
+    c.value = "custom";
+    c.textContent = "Edit (custom)";
+    sel.appendChild(c);
+    sel.value = "agus";
+  });
 
   var calcLogin = function () {
     var v = function (id) { return document.getElementById(id).value.trim(); };
@@ -4188,9 +4117,31 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       logThis("[FAILED] Note tidak ditemukan");
     }
 
+    // J2. Parse Agris yang digunakan
+    var matchAgris = rawText.match(/(?:^|\n)[ \t]*Agris\s+yang\s+digunakan[ \t]*:[ \t]*(.+)/i);
+    if (matchAgris) {
+      document.getElementById("rp-agris").value = matchAgris[1].trim();
+      logThis("[OK] Agris yang digunakan: " + matchAgris[1].trim());
+    } else {
+      logThis("[FAILED] Agris yang digunakan tidak ditemukan");
+    }
+
+    // J3. Parse Crystal (Replace crystal untuk HOURLY, Broken crystal untuk FARM)
+    var matchCrystal = rawText.match(/(?:^|\n)[ \t]*(?:Replace|Broken)\s+crystal[ \t]*:[ \t]*(.+)/i);
+    if (matchCrystal) {
+      var crystalText = matchCrystal[1].trim();
+      if (crystalText && crystalText !== "-") {
+        document.getElementById("rp-crystal").value = crystalText;
+        logThis("[OK] Crystal: " + crystalText);
+      } else {
+        logThis("[WARN] Crystal kosong");
+      }
+    } else {
+      logThis("[FAILED] Crystal tidak ditemukan");
+    }
+
     // K. Simpan ke localStorage
     calcLaporan();
-
     var storeData = readStore();
     var inputs = document.querySelectorAll("#form-laporan input, #form-laporan select, #form-laporan textarea");
     inputs.forEach(function (el) {
@@ -4203,6 +4154,7 @@ try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved 
       }
     });
     writeStore(storeData);
+    fitAll();
   };
 
   // Event listener button Load & Clear Import
